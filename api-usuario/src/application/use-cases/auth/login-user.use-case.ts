@@ -1,15 +1,12 @@
 import { JwtAdapter } from "../../../config/jwt";
+import { AuthResponseDto } from "../../../domain/dtos/auth/auth-response.dto";
 import { LoginUserDto } from "../../../domain/dtos/auth/login-user.dto";
 import { CustomError } from "../../../domain/errors/custom.error";
 import { AuthRepository } from "../../../domain/repositories/auth.repository";
 
 interface UserToken {
     token: string;
-    user: {
-        // id: string;
-        name: string;
-        email: string;
-    };
+    usuario: AuthResponseDto
 }
 
 // tipo de dato
@@ -35,15 +32,11 @@ export class LoginUser implements LoginUserUseCase {
 
         // Token
         const token = await this.signToken({ id: user.id }, '5h'); // generamos el token con el id
-        if ( !token ) throw CustomError.internalServer('Error generating token');
+        if ( !token ) throw CustomError.internalServer('Error generando token');
     
         return {
             token: token, // retornamos el token
-            user: {
-                // id: user.id,
-                name: user.name,
-                email: user.email,
-            }
+            usuario: user
         };
     }
 }

@@ -1,28 +1,44 @@
-import { Validators } from "../../../config";
-
+import { IsBoolean, IsEmail, IsNotEmpty, IsNumber, IsOptional, 
+    IsPositive, IsString, MinLength 
+} from 'class-validator';
 export class RegisterUserDto{
 
-    private constructor(
-        public name: string,
-        public email: string,
-        // public password: string,
-    ){
-        
-    }
+    @IsNumber()
+    @IsPositive({ message: 'Coloque un grado académico válido' })
+    id_grado_academico: number;
 
-    static create(object:{ [key:string]:any }):[string?, RegisterUserDto?]{
-        const {name, email, password} = object;
-        
-        // Validaciones
-        if (!name) return ['Missing name', undefined];
-        if (!email) return ['Missing email']; // no es necesario colocar undefined, porque RegisterUserDto es opcional
-        if (!Validators.email.test(email)) return ['Email is not valid'];
-        // if (!password) return ['Missing password'];
-        // if (password.length < 6) return ['Password to short'];
-        
-        return [ 
-            undefined,
-            new RegisterUserDto(name, email.toLowerCase())
-        ]
-    }
+    @IsString()
+    @IsNotEmpty({ message: 'El nombre es requerido' })
+    nombre: string;
+
+    @IsString()
+    @IsNotEmpty({ message: 'El apellido es requerido' })
+    apellido: string;
+
+    @IsEmail({}, { message: 'Correo inválido' })
+    correo: string;
+
+    @IsString()
+    @MinLength(6, { message: 'La contraseña debe tener mínimo 6 caracteres.' })
+    contrasenia: string;
+
+    @IsString()
+    @IsNotEmpty({ message: 'La descripción es requerida.' })
+    descripcion: string;
+
+    @IsBoolean()
+    @IsOptional()
+    rol_tesista?: boolean;
+
+    @IsBoolean()
+    @IsOptional()
+    rol_asesor?: boolean;
+
+    @IsBoolean()
+    @IsOptional()
+    rol_colaborador?: boolean;
+
+    @IsString()
+    @IsOptional()
+    orcid?: string;
 }

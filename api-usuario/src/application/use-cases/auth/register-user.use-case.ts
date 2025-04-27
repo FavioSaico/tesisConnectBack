@@ -1,4 +1,5 @@
 import { JwtAdapter } from "../../../config/jwt";
+import { AuthResponseDto } from "../../../domain/dtos/auth/auth-response.dto";
 import { RegisterUserDto } from "../../../domain/dtos/auth/register-user.dto";
 import { CustomError } from "../../../domain/errors/custom.error";
 import { AuthRepository } from "../../../domain/repositories/auth.repository";
@@ -6,11 +7,7 @@ import { AuthRepository } from "../../../domain/repositories/auth.repository";
 // definimos este tipo de datos que retornará el caso de uso de registro
 interface UserToken {
     token: string;
-    user: {
-        // id: number;
-        name: string;
-        email: string;
-    };
+    usuario: AuthResponseDto
 }
 
 // tipo de dato para el método que genera el token
@@ -42,10 +39,7 @@ export class RegisterUser implements RegisterUserUseCase {
     
         return {
             token: token, // retornamos el token
-            user: {
-                name: user.name,
-                email: user.email,
-            }
+            usuario: user
         };
     }
 }

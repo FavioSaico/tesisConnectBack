@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { DomainUsuario } from "../../../../domain/entities/usuario";
 
 @Entity()
@@ -8,26 +8,108 @@ export class Usuario extends DomainUsuario{
   id: number;
 
   @Column({
-    length: 100,
+    type: 'int'
   })
-  name: string;
+  id_grado_academico: number
 
-  @Column()
-  email: string;
+  // por defecto siempre activo
+  // para manejar la eliminación
+  @Column({
+    type: 'boolean',
+    default: true
+  })
+  estado_activo?: boolean
 
+  // activo dentro de la plataforma
+  @Column({
+    type: 'enum',
+    enum: ['activo','inactivo', 'suspendido'],
+    default: 'inactivo'
+  })
+  estado_cuenta: string;
 
-  toDomain(): DomainUsuario {
-    return new DomainUsuario(this.id, this.name, this.email);
-  }
+  @Column({
+    type: 'varchar',
+    nullable: true // puede aceptar nulos
+  })
+  orcid?: string
 
-  static fromDomain(user: DomainUsuario): Usuario {
-    const entityUsuario = new Usuario(
-      user.id,
-      user.name,
-      user.email
-    );
-    
-    return entityUsuario;
-  }
+  @Column({
+    type: 'varchar',
+    length: 100,
+    nullable: false
+  })
+  nombre: string
+
+  @Column({
+    type: 'varchar',
+    length: 100,
+    nullable: false
+  })
+  apellido: string
+
+  @Column({
+    type: 'varchar',
+    nullable: false,
+    unique: true // debe ser única
+  })
+  correo: string
+
+  @Column({
+    type: 'varchar',
+    nullable: false
+  })
+  contrasenia: string
+
+  @Column({
+    type: 'text',
+    nullable: false
+  })
+  descripcion: string
+
+  @Column({
+    type: 'boolean',
+    default: false
+  })
+  rol_tesista: boolean
+
+  @Column({
+    type: 'boolean',
+    default: false
+  })
+  rol_asesor: boolean
+
+  @Column({
+    type: 'boolean',
+    default: false
+  })
+  rol_colaborador: boolean
+
+  @CreateDateColumn()
+  fecha_registro: Date
+
+  @UpdateDateColumn()
+  fecha_actualizacion: Date
+
+  // RELACIONA DE UNO A MUCHOS
+
+  // Entidad Productos
+  // Definimos un campo para la relación de 1 a muchos
+  // una marca tiene muchos productos
+  // @ManyToOne(
+  //   () => Brand,
+  //   (Brand) => Brand.id,
+  //   { cascade: false, eager: true }
+  // )
+  // @JoinColumn({ name: 'id_brand' })
+  // brand: Brand;
+
+  // Entidad Marca
+  // @OneToMany(
+  //   () => Product,
+  //   ( product ) => product.id,
+  //   {  onDelete: 'CASCADE' }
+  // )
+  // product: Product
 
 }

@@ -2,6 +2,9 @@
 import { Router } from "express";
 import { AuthController } from "./controller";
 import { AuthDatasourceImpl, AuthRepositoryImpl } from "../../infrastructure";
+import { AuthMiddleware } from "../middleware/auth.middleware";
+import { RegisterUserDto } from "../../domain";
+import { LoginUserDto } from "../../domain/dtos/auth/login-user.dto";
 // import { AuthMiddleware } from "../middleware/auth.middleware";
 
 export class AuthRoutes{
@@ -17,10 +20,10 @@ export class AuthRoutes{
 
         try {
             // aquí solo apuntamos a nuestros controladores
-            router.post('/login', controller.loginUser);
+            router.post('/login',[AuthMiddleware.validateRequest(LoginUserDto)], controller.loginUser);
 
             
-            router.post('/register', controller.registerUser);
+            router.post('/register',[AuthMiddleware.validateRequest(RegisterUserDto)], controller.registerUser);
             // router.get('/',[AuthMiddleware.validateJWT], controller.getUsers );
         } catch (error) {
             console.log(error)
