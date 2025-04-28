@@ -16,8 +16,9 @@ Pasos para ejecutar el proyecto:
   JWT_SEED=semillaParaJWT
 ```
 
-4. Ejecutar el comando `npm run dev`.
-5. Prueba los endpoints y envía los datos correspondientes:
+4. Ejecutar el comando `npm run dev` para levantar el proyecto.
+5. Ejecutar una petición GET al endpoint `/api/seed/gradoAcademico` para llenar la tabla de Grado Académico.
+6. Prueba los endpoints y envía los datos correspondientes:
   - `/api/auth/login`.
 
   ```
@@ -43,4 +44,4 @@ Pasos para ejecutar el proyecto:
 
 
 Documentación:
-- Documentación de [TypeORM](https://typeorm.io)
+- [TypeORM](https://typeorm.io)

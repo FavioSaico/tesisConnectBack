@@ -37,7 +37,6 @@ export class AuthDatasourceImpl implements AuthDatasource{
 
             return new AuthResponseDto(
                 usuario.id,
-                usuario.id_grado_academico,
                 usuario.nombre,
                 usuario.apellido,
                 usuario.correo,
@@ -45,7 +44,8 @@ export class AuthDatasourceImpl implements AuthDatasource{
                 usuario.rol_tesista,
                 usuario.rol_asesor,
                 usuario.rol_colaborador,
-                usuario.orcid
+                usuario.orcid,
+                usuario.grado_academico
             );
 
         } catch (error) {
@@ -63,7 +63,6 @@ export class AuthDatasourceImpl implements AuthDatasource{
         try {
             // 1. Verificar si el correo existe
             const usuario = await this.usuarioRepository.findOneBy({correo:correo});
-
             
             if(!usuario){
                 throw CustomError.badRequest('Usuario no existe')
@@ -75,7 +74,6 @@ export class AuthDatasourceImpl implements AuthDatasource{
             
             return new AuthResponseDto(
                 usuario.id,
-                usuario.id_grado_academico,
                 usuario.nombre,
                 usuario.apellido,
                 usuario.correo,
@@ -83,7 +81,8 @@ export class AuthDatasourceImpl implements AuthDatasource{
                 usuario.rol_tesista,
                 usuario.rol_asesor,
                 usuario.rol_colaborador,
-                usuario.orcid
+                usuario.orcid,
+                usuario.grado_academico
             );
 
         } catch (error) {

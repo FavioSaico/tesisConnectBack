@@ -2,6 +2,7 @@
 
 import { Router } from "express"; // importamos Rputer de express
 import { AuthRoutes } from "./auth/routes";
+import { SeedRoutes } from "./seed/router";
 
 export class AppRoutes{
 
@@ -10,6 +11,7 @@ export class AppRoutes{
         const router = Router();
         
         router.use('/api/auth', AuthRoutes.routes);
+        router.use('/api/seed', SeedRoutes.routes);
 
         // agregar más rutas
         // router.use('/api/products');

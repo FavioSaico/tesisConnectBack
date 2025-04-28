@@ -1,5 +1,6 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { DomainUsuario } from "../../../../domain/entities/usuario";
+import { GradoAcademico } from './grado-academico.entity';
 
 @Entity()
 export class Usuario extends DomainUsuario{
@@ -93,23 +94,12 @@ export class Usuario extends DomainUsuario{
 
   // RELACIONA DE UNO A MUCHOS
 
-  // Entidad Productos
-  // Definimos un campo para la relación de 1 a muchos
-  // una marca tiene muchos productos
-  // @ManyToOne(
-  //   () => Brand,
-  //   (Brand) => Brand.id,
-  //   { cascade: false, eager: true }
-  // )
-  // @JoinColumn({ name: 'id_brand' })
-  // brand: Brand;
-
-  // Entidad Marca
-  // @OneToMany(
-  //   () => Product,
-  //   ( product ) => product.id,
-  //   {  onDelete: 'CASCADE' }
-  // )
-  // product: Product
-
+  // solo un grado academico por usuario
+  @ManyToOne(
+    () => GradoAcademico,
+    (gradoAcademico) => gradoAcademico.id,
+    { cascade: false, eager: true }
+  )
+  @JoinColumn({ name: 'id_grado_academico' })
+  grado_academico: GradoAcademico;
 }
