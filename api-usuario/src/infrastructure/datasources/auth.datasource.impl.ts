@@ -35,6 +35,8 @@ export class AuthDatasourceImpl implements AuthDatasource{
                 contrasenia: this.hashPassword(contrasenia)
             });
 
+            const usuarioRegistrado = await this.usuarioRepository.findOneBy({correo:correo});
+
             return new AuthResponseDto(
                 usuario.id,
                 usuario.nombre,
@@ -45,7 +47,7 @@ export class AuthDatasourceImpl implements AuthDatasource{
                 usuario.rol_asesor,
                 usuario.rol_colaborador,
                 usuario.orcid,
-                usuario.grado_academico
+                usuarioRegistrado.grado_academico
             );
 
         } catch (error) {
