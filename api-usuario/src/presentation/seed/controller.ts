@@ -1,6 +1,7 @@
-import { AppDataSource, GradoAcademico } from "../../infrastructure/database/mysql";
+import { AppDataSource, GradoAcademico, Especialidad } from "../../infrastructure/database/mysql";
 import { Request, Response } from "express"
 import { GRADOACADEMICO_SEED } from "../../infrastructure/database/seed/data/grado-academico.seed";
+import { ESPECIALIDADES_SEED } from "../../infrastructure/database/seed/data/Especialidad.seed";
 
 export class SeedController{
   
@@ -40,6 +41,36 @@ export class SeedController{
     } catch (error) {
       throw error
     }
-  }
+  };
+
+  registerEspecialidades = async (req: Request, res: Response): Promise<any> => {
+    const especialidadRepository = AppDataSource.getRepository(Especialidad);
+    const query = especialidadRepository.createQueryBuilder('especialidad');
+    
+    try {
+      await query.delete().where({}).execute();
+  
+      const especialidades = ESPECIALIDADES_SEED;
+      const insertPromises: Promise<any>[] = [];
+  
+      for (const especialidad of especialidades) {
+        if (!especialidad.nombre) {
+          throw new Error("El nombre de la especialidad no puede ser nulo o vacío");
+        }
+  
+        const record = especialidadRepository.create(especialidad);
+        insertPromises.push(especialidadRepository.save(record));
+      }
+  
+      const data = await Promise.all(insertPromises);
+      return res.json(data);
+  
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: error.message });
+    }
+  };
+
+
 
 }

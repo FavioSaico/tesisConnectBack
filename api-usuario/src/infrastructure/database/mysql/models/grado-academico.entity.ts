@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { DomainGradoAcademico } from "../../../../domain/entities/grado-academico";
+import { DomainGradoAcademico } from "../../../../domain/entities/GradoAcademico";
 import { Usuario } from "./usuario.entity";
 
 @Entity()

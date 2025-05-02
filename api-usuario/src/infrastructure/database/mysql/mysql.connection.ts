@@ -3,6 +3,7 @@ import { DataSource } from "typeorm"
 import { Usuario } from "./models/usuario.entity"
 import { envs } from "../../../config/envs";
 import { GradoAcademico } from './models/grado-academico.entity';
+import { Especialidad } from "./models/especialidad.entity";
 
 export const AppDataSource = new DataSource({
     type: "mysql",
@@ -13,7 +14,7 @@ export const AppDataSource = new DataSource({
     database: envs.MYSQL_DB_NAME,
     synchronize: true,
     logging: false,
-    entities: [Usuario, GradoAcademico],
+    entities: [Usuario, GradoAcademico,Especialidad],
     migrations: [],
     subscribers: [],
 });
