@@ -12,6 +12,7 @@ export class SeedRoutes{
     try {
         // aquí solo apuntamos a nuestros controladores
         router.get('/gradoAcademico', controller.registerGradoAcademico);
+        router.get('/especialidades', controller.registerEspecialidades);
 
     } catch (error) {
         console.log(error)
