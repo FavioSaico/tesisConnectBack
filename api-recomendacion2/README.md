@@ -2,9 +2,8 @@
 
 Pasos para ejecutar el proyecto:
 
-1. Ejecutar el comando `npm i`.
-2. Crear la base de datos `tesisconnect` en MySQL.
-3. Crear archivo `.env`:
+1. Crear la base de datos `tesisconnect` en MySQL.
+2. Crear archivo `.env`:
 
 ```
   PORT=3000
@@ -16,9 +15,9 @@ Pasos para ejecutar el proyecto:
   JWT_SEED=semillaParaJWT
 ```
 
-4. Ejecutar el comando `npm run dev` para levantar el proyecto.
-5. Ejecutar una petición GET al endpoint `/api/seed/gradoAcademico` para llenar la tabla de Grado Académico.
-6. Prueba los endpoints y envía los datos correspondientes:
+3. Ejecutar el comando `uvicorn src.main:app --reload` para levantar el proyecto.
+4. Ejecutar una petición GET al endpoint `/api/seed/gradoAcademico` para llenar la tabla de Grado Académico.
+5. Prueba los endpoints y envía los datos correspondientes:
   - `/api/auth/login`.
 
   ```
