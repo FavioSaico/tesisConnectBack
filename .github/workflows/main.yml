@@ -11,8 +11,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout del código
         uses: actions/checkout@v3
+
+      - name: Obtener short SHA
+        id: vars
+        run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -41,5 +45,5 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker build -t southamerica-west1-docker.pkg.dev/metal-node-424103-e4/repo-image-docker/api-usuario:latest ./api-usuario
-          docker push southamerica-west1-docker.pkg.dev/metal-node-424103-e4/repo-image-docker/api-usuario:latest
+          docker build -t southamerica-east1-docker.pkg.dev/metal-node-424103-e4/repo-image-docker/api-usuario:${SHORT_SHA} ./api-usuario
+          docker push southamerica-east1-docker.pkg.dev/metal-node-424103-e4/repo-image-docker/api-usuario:${SHORT_SHA}
