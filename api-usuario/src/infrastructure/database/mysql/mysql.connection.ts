@@ -5,18 +5,24 @@ import { envs } from "../../../config/envs";
 import { GradoAcademico } from './models/grado-academico.entity';
 import { Especialidad } from "./models/Especialidad.entity";
 
+
+const isProduction = envs.NODE_ENV === 'production';
+
 export const AppDataSource = new DataSource({
     type: "mysql",
-    host: "localhost",
-    port: envs.MYSQL_PORT,
+    host: isProduction ? undefined : envs.MYSQL_HOST,
+    port: isProduction ? undefined : envs.MYSQL_PORT,
     username: envs.MYSQL_USER,
     password: envs.MYSQL_PASS,
     database: envs.MYSQL_DB_NAME,
-    synchronize: true,
+    synchronize: isProduction ? false : true,
     logging: false,
     entities: [Usuario, GradoAcademico,Especialidad],
     migrations: [],
     subscribers: [],
+    ...(isProduction && {
+      socketPath: `/cloudsql/${envs.MYSQL_INSTANCE_CLOUD}`,
+    }),
 });
 
 

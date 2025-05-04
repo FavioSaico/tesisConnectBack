@@ -1,5 +1,6 @@
 import * as express from 'express';
 import { Router } from 'express';
+import * as cors from "cors";
 
 // Interfaz para definir las opciones que le pasamos al constructor del server
 // es un objeto
@@ -35,6 +36,19 @@ export class Server {
         this.app.use(express.json()) // serializamos la data como JSON, para peticion tipo raw
         this.app.use(express.urlencoded({extended:true})) // serializamos la data como JSON, para peticiones en x-www-form-urlencoded
 
+        // CORS
+        // const  whitelist = ['*', 'http://localhost:3000']
+        // const  corsOptions = {
+        //     origin: function (origin, callback) {
+        //         if (whitelist.indexOf(origin) !== -1) {
+        //             callback(null, true)
+        //         } else {
+        //             callback(new Error('Not allowed by CORS'))
+        //         }
+        //     }
+        // }
+        this.app.use(cors())
+        this.app.options('*', cors())
 
         // agreamos las rutas al server
         this.app.use(this.routes)
