@@ -10,19 +10,22 @@ const isProduction = envs.NODE_ENV === 'production';
 
 export const AppDataSource = new DataSource({
     type: "mysql",
-    host: isProduction ? undefined : envs.MYSQL_HOST,
-    port: isProduction ? undefined : envs.MYSQL_PORT,
+    // host: isProduction ? undefined : envs.MYSQL_HOST,
+    // port: isProduction ? undefined : envs.MYSQL_PORT,
+    host: envs.MYSQL_HOST,
+    port: envs.MYSQL_PORT,
     username: envs.MYSQL_USER,
     password: envs.MYSQL_PASS,
     database: envs.MYSQL_DB_NAME,
-    synchronize: isProduction ? false : true,
+    synchronize: true,
+    // synchronize: isProduction ? false : true,
     logging: false,
     entities: [Usuario, GradoAcademico,Especialidad],
     migrations: [],
     subscribers: [],
-    ...(isProduction && {
-      socketPath: `/cloudsql/${envs.MYSQL_INSTANCE_CLOUD}`,
-    }),
+    // ...(isProduction && {
+    //   socketPath: `/cloudsql/${envs.MYSQL_INSTANCE_CLOUD}`, // Para Cloud Run
+    // }),
 });
 
 
