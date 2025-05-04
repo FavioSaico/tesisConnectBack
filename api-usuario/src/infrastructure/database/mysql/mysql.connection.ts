@@ -3,7 +3,7 @@ import { DataSource } from "typeorm"
 import { Usuario } from "./models/usuario.entity"
 import { envs } from "../../../config/envs";
 import { GradoAcademico } from './models/grado-academico.entity';
-import { Especialidad } from "./models/especialidad.entity";
+import { Especialidad } from "./models/Especialidad.entity";
 
 export const AppDataSource = new DataSource({
     type: "mysql",
