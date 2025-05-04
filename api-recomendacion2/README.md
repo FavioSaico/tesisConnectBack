@@ -2,8 +2,7 @@
 
 Pasos para ejecutar el proyecto:
 
-1. Crear la base de datos `tesisconnect` en MySQL.
-2. Crear archivo `.env`:
+1. Crear archivo `.env`:
 
 ```
   PORT=3000
@@ -15,32 +14,20 @@ Pasos para ejecutar el proyecto:
   JWT_SEED=semillaParaJWT
 ```
 
-3. Ejecutar el comando `uvicorn src.main:app --reload` para levantar el proyecto.
-4. Ejecutar una petición GET al endpoint `/api/seed/gradoAcademico` para llenar la tabla de Grado Académico.
-5. Prueba los endpoints y envía los datos correspondientes:
-  - `/api/auth/login`.
+2. Crea la tabla en la base de datos tesisconnect;
 
-  ```
-    {
-      "id_grado_academico": 1,    
-      "nombre": "Juan",
-      "apellido": "Perez",
-      "correo": "juan@gmail.com",
-      "contrasenia": "123456",
-      "descripcion": "IA",
-      "rol_asesor": true
-    }
-  ```
+```
+USE TESISCONNECT;
 
-  - `/api/auth/register`.
+CREATE TABLE rankings (
+    id_usuario INT NOT NULL,
+    id_asesor INT NOT NULL,
+    puntaje FLOAT NOT NULL
+);
+```
 
-  ```
-    { 
-      "correo": "favio4@gmail.com",
-      "contrasenia": "123456"
-    }
-  ```
+3. Ejecutar el comando `pip install -r requirements.txt` para instalar las dependencias
+4. Ejecutar el comando `uvicorn src.main:app --reload` para levantar el proyecto.
+5. Una vez levantado el proyecto entrar a la siguiente ruta http://127.0.0.1:8000/docs 
+6. Probar el metodo POST y luego el metodo GET para tener las recomendaciones por cada usuario 
 
-
-Documentación:
-- [TypeORM](https://typeorm.io)

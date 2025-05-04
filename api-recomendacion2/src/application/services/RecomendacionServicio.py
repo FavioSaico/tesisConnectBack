@@ -11,10 +11,10 @@ class RecomendacionServicio:
     def _build_text_representation(self, user: Usuario):
         return " ".join([
             user.descripcion or "",
-            user.linea_investigacion or "",
-            " ".join(user.especialidades or []),
-            " ".join(user.publicaciones or [])
-        ])
+            user.lineaInvestigacion or "",
+            " ".join([especialidad.nombre for especialidad in user.especialidades]),  # Cambiado aquí
+            " ".join([publicacion.titulo for publicacion in user.publicaciones])  # Cambiado aquí
+    ])
 
     def calcular_similitudes(self):
         # Obtener tesistas y asesores desde el repositorio
