@@ -2,27 +2,18 @@ import * as express from 'express';
 import { Router } from 'express';
 import * as cors from "cors";
 
-// Interfaz para definir las opciones que le pasamos al constructor del server
-// es un objeto
 interface Options{
     port?: number;
-    routes:Router; // necesitamos rutas del tipo Router de express
+    routes:Router;
 }
 
 export class Server {
 
-    // creamos nuestra instancia de express
-    // para ello debemos installar el paquete y tambien el tipado para este paquete
     public readonly app = express();
 
     private readonly port: number; // propiedad del puerto
     private readonly routes: Router;
 
-    // No es propiamente la idea de constructor
-    // sino que la idea es que podamos pasar las configuraciones y cmabios que queremos hacer en el servidor
-    // trantando de aplicar el principio de responsabilidad única y llamar al contructor con sus propiedades y sus métodos
-    // para realizar las acciones necesarias; en lugar de hacer modificaciones internas (nuestra clase esta abierta a la expansición, 
-    // pero no a la modificación)
     constructor(options:Options){
         // destructuramos, por defecto el valor será 3100
         const {port = 3100, routes } = options;
@@ -48,10 +39,18 @@ export class Server {
         //     }
         // }
         this.app.use(cors())
-        this.app.options('*', cors())
+
+        
 
         // agreamos las rutas al server
         this.app.use(this.routes)
+
+        // this.app.options('*',(req: Request, res:Response)=>{
+        //     res.header("Access-Control-Allow-Origin", "*");
+        //     res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE");
+        //     res.header("Access-Control-Allow-Headers", "Content-Type");
+        //     res.status(204).send('Options');
+        // });
 
         //  el server escucha desde este puerto
         this.app.listen(this.port, ()=>{

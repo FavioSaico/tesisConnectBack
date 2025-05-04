@@ -5,7 +5,6 @@ import { AuthDatasourceImpl, AuthRepositoryImpl } from "../../infrastructure";
 import { AuthMiddleware } from "../middleware/auth.middleware";
 import { RegisterUserDto } from "../../domain";
 import { LoginUserDto } from "../../domain/dtos/auth/login-user.dto";
-// import { AuthMiddleware } from "../middleware/auth.middleware";
 
 export class AuthRoutes{
     
@@ -22,9 +21,9 @@ export class AuthRoutes{
             // aquí solo apuntamos a nuestros controladores
             router.post('/login',[AuthMiddleware.validateRequest(LoginUserDto)], controller.loginUser);
 
-            
             router.post('/register',[AuthMiddleware.validateRequest(RegisterUserDto)], controller.registerUser);
             // router.get('/',[AuthMiddleware.validateJWT], controller.getUsers );
+
         } catch (error) {
             console.log(error)
         }
