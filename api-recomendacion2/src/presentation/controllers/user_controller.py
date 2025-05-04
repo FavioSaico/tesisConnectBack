@@ -21,13 +21,23 @@ def update_ranking(db: Session = Depends(get_db)):
 
 @router.get("/ranking")
 def get_ranking(db: Session = Depends(get_db)):
-    # Consultamos los rankings desde la base de datos
     results = db.execute(text("""
-    SELECT A.ID AS ID_TESISTA, B.ID AS ID_ASESOR, D.PUNTAJE
-    FROM rankings AS D
-    JOIN usuarios AS A ON A.ID = D.ID_USUARIO
-    JOIN usuarios AS B ON B.ID = D.ID_ASESOR
-    ORDER BY A.ID, D.PUNTAJE DESC
-""")).fetchall()
+        SELECT A.ID AS ID_TESISTA, B.ID AS ID_ASESOR, D.PUNTAJE
+        FROM rankings AS D
+        JOIN usuarios AS A ON A.ID = D.ID_USUARIO
+        JOIN usuarios AS B ON B.ID = D.ID_ASESOR
+        WHERE A.ID <> B.ID
+        ORDER BY A.ID, D.PUNTAJE DESC
+    """)).fetchall()
 
-    return results
+    # Convertimos los resultados a diccionarios
+    rankings = [
+        {
+            "id_tesista": row[0],
+            "id_asesor": row[1],
+            "puntaje": row[2]
+        }
+        for row in results
+    ]
+
+    return rankings
