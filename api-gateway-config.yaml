@@ -1,0 +1,158 @@
+swagger: '2.0'
+info: 
+  version: '1.0.0'
+  title: api-bonik
+  description: This api login and register user
+host: api-bonik.apigateway.probable-axon-424104-t6.cloud.goog # link base
+# basepath: /apis/user # 
+schemes:
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /api/auth/login:
+    post:
+      description: post user login
+      operationId: postLoginUser
+      summary: loginuser
+      x-google-backend:
+        address: https://api-usuario-609569711189.southamerica-east1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+      x-google-extensions:
+        - type: cors
+          method: "*"
+          origin: ["*"]
+          responseHeaders: ["Content-Type"]
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      deprecated: false
+      responses:
+        '200':
+          description: A successful response
+          headers:
+            Access-Control-Allow-Headers:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Origin:
+              type: "string"
+    options:
+      operationId: optionsLoginUser
+      summary: CORS preflight
+      responses:
+        '204':
+          description: No content
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-google-backend:
+        address: https://api-usuario-609569711189.southamerica-east1.run.app
+      x-google-extensions:
+        - type: cors
+          origin: ["*"]
+          method: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+          responseHeader: ["Content-Type"]
+  /api/auth/register:
+    post:
+      description: Creates a new user
+      operationId: postRegisterUser
+      summary: registeruser
+      x-google-backend:
+        address: https://api-usuario-609569711189.southamerica-east1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+      x-google-extensions:
+        - type: cors
+          method: "*"
+          origin: ["*"]
+          responseHeaders: ["Content-Type"]
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      deprecated: false
+      responses:
+        '200':
+          description: A successful response
+          headers:
+            Access-Control-Allow-Headers:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Origin:
+              type: "string"
+    options:
+      operationId: optionsRegisterUser
+      summary: CORS preflight
+      responses:
+        '204':
+          description: No content
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-google-backend:
+        address: https://api-usuario-609569711189.southamerica-east1.run.app
+      x-google-extensions:
+        - type: cors
+          origin: ["*"]
+          method: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+          responseHeader: ["Content-Type"]
+  /api/seed/gradoAcademico:
+    get:
+      description: Crear grados academidos
+      operationId: getSeedGradoAcademido
+      summary: SeedGradoAcademido
+      x-google-backend:
+        address: https://api-usuario-609569711189.southamerica-east1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+      x-google-extensions:
+        - type: cors
+          method: "*"
+          origin: ["*"]
+          responseHeaders: ["Content-Type"]
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      deprecated: false
+      responses:
+        '200':
+          description: A successful response
+          headers:
+            Access-Control-Allow-Headers:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Origin:
+              type: "string"
+    options:
+      operationId: optionsSeedGradoAcademido
+      summary: CORS preflight
+      responses:
+        '204':
+          description: No content
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-google-backend:
+        address: https://api-usuario-609569711189.southamerica-east1.run.app
+      x-google-extensions:
+        - type: cors
+          origin: ["*"]
+          method: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+          responseHeader: ["Content-Type"]
