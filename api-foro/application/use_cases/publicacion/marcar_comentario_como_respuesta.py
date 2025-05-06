@@ -1,4 +1,6 @@
 from domain.services.servicio_foro_academico import ServicioForoAcademico
+from domain.entities.publicacion import Publicacion
+from domain.entities.comentario import Comentario
 
 class MarcarComentarioComoRespuestaUseCase:
     def __init__(self, publicacion_repo, comentario_repo):
@@ -15,7 +17,8 @@ class MarcarComentarioComoRespuestaUseCase:
             raise ValueError("Comentario no encontrado.")
 
         ServicioForoAcademico.MarcarComentarioComoRespuesta(publicacion, comentario)
+        print(publicacion.idEstado)
 
         self.publicacion_repo.actualizar(publicacion)
 
-        return {"mensaje": "Comentario marcado como respuesta correctamente."}
+        return {"mensaje": "Publicación cambio a estado solucionada. Comentario agregado como respuesta."}

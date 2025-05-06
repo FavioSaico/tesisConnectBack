@@ -13,7 +13,7 @@ class CrearPublicacionUseCase:
             idCategoria=data.idCategoria,
             titulo=data.titulo,
             contenido=data.contenido,
-            fechaCreacion=datetime.now(datetime.timezone.utc),
+            fechaCreacion=datetime.utcnow(),
             visible=True,
             idEstado=data.idEstado,
             idComentarioRespuesta=data.idComentarioRespuesta

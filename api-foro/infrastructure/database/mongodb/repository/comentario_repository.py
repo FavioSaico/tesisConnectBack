@@ -3,48 +3,39 @@ from typing import Optional
 from pymongo.collection import Collection
 from domain.entities.comentario import Comentario
 from infrastructure.database.mongodb.models.comentario_model import ComentarioModel
+from application.mappers.comentario_mapper import documento_a_entidad, entidad_a_modelo
 from bson import ObjectId
 
 class RepositorioComentario:
     def __init__(self, coleccion: Collection):
         self.coleccion = coleccion
 
-    def crear(self, comentario: Comentario) -> str:
-        nueva = ComentarioModel(
-            contenido=comentario.contenido,
-            idUsuario=comentario.idUsuario,
-            idPublicacion=comentario.idPublicacion,
-            idComentarioPadre=comentario.idComentarioPadre,
-            fechaCreacion=comentario.fechaCreacion,
-            visible=comentario.visible,
-        ).model_dump()
+    def crear(self, comentario: Comentario) -> Comentario:
+        nueva = entidad_a_modelo(comentario).model_dump(exclude={"idComentario"}) # Forzar a Mongo a generar el id
         resultado = self.coleccion.insert_one(nueva)
-        documento = self.coleccion.find_one({"_id": resultado.inserted_id})
-        comentario.id = str(documento["_id"])
+        comentario.idComentario = str(resultado.inserted_id)
         return comentario
 
-    def obtener_por_id(self, id_comentario: str):
+    def obtener_por_id(self, id_comentario: str) -> Comentario:
         documento = self.coleccion.find_one({
             "_id": ObjectId(id_comentario),
             "visible": True
         })
         if not documento:
             return None
-        documento["id"] = str(documento["_id"])
-        del documento["_id"]
-        
-        return ComentarioModel(**documento)
+        return documento_a_entidad(documento)
 
     def eliminar(self, id_comentario: str) -> bool:
-        comentario = self.coleccion.find_one({
+        documento = self.coleccion.find_one({
             "_id": ObjectId(id_comentario),
             "visible": True
         })
-
-        if comentario:
-            resultado = self.coleccion.update_one(
-                {"_id": comentario["_id"]},
-                {"$set": {"visible": False}}
-            )
-            return resultado.modified_count == 1
-        return False
+        if not documento:
+            return False
+        comentario = documento_a_entidad(documento)
+        comentario.eliminar()
+        resultado = self.coleccion.update_one(
+            {"_id": ObjectId(id_comentario)},
+            {"$set": {"visible": comentario.visible}}
+        )
+        return resultado.modified_count == 1

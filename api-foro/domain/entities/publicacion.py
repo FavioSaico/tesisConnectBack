@@ -26,3 +26,6 @@ class Publicacion:
 
     def eliminar(self):
         self.visible = False
+    
+    def cambiar_estado(self, id_estado: int):
+        self.idEstado = id_estado

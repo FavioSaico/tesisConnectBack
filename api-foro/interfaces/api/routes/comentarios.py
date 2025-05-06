@@ -19,7 +19,7 @@ def crear_comentario(dto: CrearComentarioDTO, repo = Depends(obtener_repositorio
     try:
         use_case = CrearComentarioUseCase(repo)
         comentario = use_case.ejecutar(dto)
-        return {"mensaje": "Comentario creado", "id": comentario.id}
+        return {"mensaje": "Comentario creado", "id": comentario.idComentario}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
@@ -29,7 +29,7 @@ def obtener_comentario(id: str, repo = Depends(obtener_repositorio)):
         use_case = ObtenerComentarioUseCase(repo)
         comentario = use_case.ejecutar(id)
         return {
-            "id": comentario.id,
+            "idComentario": comentario.idComentario,
             "contenido": comentario.contenido,
             "idUsuario": comentario.idUsuario,
             "idPublicacion": comentario.idPublicacion,

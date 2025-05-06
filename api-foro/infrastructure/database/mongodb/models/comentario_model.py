@@ -9,4 +9,4 @@ class ComentarioModel(BaseModel):
     idComentarioPadre: Optional[str] = None
     fechaCreacion: Optional[datetime] = None
     visible: bool = True
-    id: Optional[str] = None
+    idComentario: Optional[str] = None

@@ -14,6 +14,6 @@ class CrearComentarioUseCase:
             idComentarioPadre = data.idComentarioPadre,
             fechaCreacion =datetime.utcnow(),
             visible = True,
-            id = None
+            idComentario = None
         )
         return self.comentario_repo.crear(comentario)

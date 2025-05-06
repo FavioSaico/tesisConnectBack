@@ -8,8 +8,8 @@ from shared.dtos.publicacion_dto import CrearPublicacionDTO
 from application.use_cases.publicacion.crear_publicacion import CrearPublicacionUseCase
 from application.use_cases.publicacion.obtener_publicacion import ObtenerPublicacionUseCase
 from application.use_cases.publicacion.eliminar_publicacion import EliminarPublicacionUseCase
-from application.use_cases.publicacion.marcar_publicacion_resuelta import MarcarPublicacionResueltaUseCase
 from application.use_cases.publicacion.marcar_comentario_como_respuesta import MarcarComentarioComoRespuestaUseCase
+from application.use_cases.publicacion.desmarcar_comentario_como_respuesta import DesmarcarComentarioComoRespuestaUseCase
 
 router = APIRouter()
 
@@ -69,6 +69,16 @@ def eliminar_publicacion(id: int, db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@router.post("/publicaciones/{id_publicacion}/desmarcar_respuesta")
+def marcar_comentario_como_respuesta(id_publicacion: int, db: Session = Depends(get_db)):
+    publicacion_repo = PublicacionRepository(db)
+    use_case = DesmarcarComentarioComoRespuestaUseCase(publicacion_repo)
+    try:
+        resultado = use_case.ejecutar(id_publicacion)
+        return resultado
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
 def obtener_repositorio():
     coleccion = get_mongo_collection("comentarios")
     return RepositorioComentario(coleccion)
@@ -77,7 +87,6 @@ def obtener_repositorio():
 def marcar_comentario_como_respuesta(id_publicacion: int, id_comentario: str, db: Session = Depends(get_db), comentario_repo = Depends(obtener_repositorio)):
     publicacion_repo = PublicacionRepository(db)
     use_case = MarcarComentarioComoRespuestaUseCase(publicacion_repo, comentario_repo)
-
     try:
         resultado = use_case.ejecutar(id_publicacion, id_comentario)
         return resultado

@@ -10,14 +10,14 @@ class Comentario:
         idComentarioPadre: Optional[str] = None,
         fechaCreacion: Optional[datetime] = None,
         visible: bool = True,
-        id: Optional[str] = None,
+        idComentario: Optional[str] = None,
     ):
-        self.id = id
+        self.idComentario = idComentario
         self.contenido = contenido
         self.idUsuario = idUsuario
         self.idPublicacion = idPublicacion
         self.idComentarioPadre = idComentarioPadre
-        self.fechaCreacion = fechaCreacion or datetime.utcnow()
+        self.fechaCreacion = fechaCreacion
         self.visible = visible
 
     def eliminar(self):
