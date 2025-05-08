@@ -13,13 +13,5 @@ class RepositorioRecomendacion(ABC):
         pass
 
     @abstractmethod
-    def obtener_recomendaciones_por_fecha(self, fecha: date):
-        pass
-
-    @abstractmethod
-    def obtener_recomendaciones_por_tipo(self, tipo: str):
-        pass
-
-    @abstractmethod
-    def obtener_recomendaciones_por_fecha_y_tipo(self, fecha: date, tipo: str):
+    def obtener_recomendaciones_por_id(self, id_investigador: int):
         pass
