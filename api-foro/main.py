@@ -1,6 +1,5 @@
 from fastapi import FastAPI
-from interfaces.api.routes import publicaciones
-from interfaces.api.routes import comentarios
+from presentation.routes import publicaciones, comentarios
 
 app = FastAPI()
 

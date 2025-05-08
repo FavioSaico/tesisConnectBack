@@ -1,5 +1,7 @@
+from domain.repositories.repositorio_comentario import RepositorioComentario
+
 class ObtenerComentarioUseCase:
-    def __init__(self, comentario_repo):
+    def __init__(self, comentario_repo: RepositorioComentario):
         self.comentario_repo = comentario_repo
 
     def ejecutar(self, id_comentario: str):

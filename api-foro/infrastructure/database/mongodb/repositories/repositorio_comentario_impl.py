@@ -1,12 +1,12 @@
-from datetime import datetime
 from typing import Optional
 from pymongo.collection import Collection
 from domain.entities.comentario import Comentario
 from infrastructure.database.mongodb.models.comentario_model import ComentarioModel
 from application.mappers.comentario_mapper import documento_a_entidad, entidad_a_modelo
+from domain.repositories.repositorio_comentario import RepositorioComentario
 from bson import ObjectId
 
-class RepositorioComentario:
+class RepositorioComentarioImpl(RepositorioComentario):
     def __init__(self, coleccion: Collection):
         self.coleccion = coleccion
 
@@ -16,7 +16,7 @@ class RepositorioComentario:
         comentario.idComentario = str(resultado.inserted_id)
         return comentario
 
-    def obtener_por_id(self, id_comentario: str) -> Comentario:
+    def obtener_por_id(self, id_comentario: str) -> Optional[Comentario]:
         documento = self.coleccion.find_one({
             "_id": ObjectId(id_comentario),
             "visible": True

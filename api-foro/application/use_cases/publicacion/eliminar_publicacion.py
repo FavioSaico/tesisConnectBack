@@ -1,5 +1,7 @@
+from domain.repositories.repositorio_publicacion import RepositorioPublicacion
+
 class EliminarPublicacionUseCase:
-    def __init__(self, publicacion_repo):
+    def __init__(self, publicacion_repo: RepositorioPublicacion):
         self.publicacion_repo = publicacion_repo
 
     def ejecutar(self, id_publicacion: int):

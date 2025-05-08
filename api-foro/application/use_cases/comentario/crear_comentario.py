@@ -1,9 +1,10 @@
 from datetime import datetime, timezone
 from domain.entities.comentario import Comentario
-from shared.dtos.comentario_dto import CrearComentarioDTO
+from presentation.dtos.comentario_dto import CrearComentarioDTO
+from domain.repositories.repositorio_comentario import RepositorioComentario
 
 class CrearComentarioUseCase:
-    def __init__(self, comentario_repo):
+    def __init__(self, comentario_repo: RepositorioComentario):
         self.comentario_repo = comentario_repo
 
     def ejecutar(self, data: CrearComentarioDTO):

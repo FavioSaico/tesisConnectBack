@@ -1,9 +1,11 @@
 from domain.services.servicio_foro_academico import ServicioForoAcademico
 from domain.entities.publicacion import Publicacion
 from domain.entities.comentario import Comentario
+from domain.repositories.repositorio_publicacion import RepositorioPublicacion
+from domain.repositories.repositorio_comentario import RepositorioComentario
 
 class MarcarComentarioComoRespuestaUseCase:
-    def __init__(self, publicacion_repo, comentario_repo):
+    def __init__(self, publicacion_repo: RepositorioPublicacion, comentario_repo: RepositorioComentario):
         self.publicacion_repo = publicacion_repo
         self.comentario_repo = comentario_repo
 

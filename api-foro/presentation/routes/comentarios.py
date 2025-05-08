@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from infrastructure.config.mongodb import get_mongo_collection
-from infrastructure.database.mongodb.repository.comentario_repository import RepositorioComentario
-from shared.dtos.comentario_dto import CrearComentarioDTO
+from infrastructure.database.mongodb.repositories.repositorio_comentario_impl import RepositorioComentarioImpl
+from presentation.dtos.comentario_dto import CrearComentarioDTO
 from infrastructure.database.mongodb.models.comentario_model import ComentarioModel
 from application.use_cases.comentario.crear_comentario import CrearComentarioUseCase
 from application.use_cases.comentario.obtener_comentario import ObtenerComentarioUseCase
@@ -12,7 +12,7 @@ router = APIRouter()
 
 def obtener_repositorio():
     coleccion = get_mongo_collection("comentarios")
-    return RepositorioComentario(coleccion)
+    return RepositorioComentarioImpl(coleccion)
 
 @router.post("/comentarios")
 def crear_comentario(dto: CrearComentarioDTO, repo = Depends(obtener_repositorio)):

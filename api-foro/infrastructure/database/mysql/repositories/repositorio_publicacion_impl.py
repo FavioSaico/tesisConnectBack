@@ -1,14 +1,18 @@
+from typing import List, Optional
 from sqlalchemy.orm import Session
 from domain.entities.publicacion import Publicacion
 from infrastructure.database.mysql.models.publicacion_model import PublicacionModel
 from application.mappers.publicacion_mapper import model_a_entidad, entidad_a_model, actualizar_model
+from domain.repositories.repositorio_publicacion import RepositorioPublicacion
 
-class PublicacionRepository:
+class RepositorioPublicacionImpl(RepositorioPublicacion):
     def __init__(self, db: Session):
         self.db = db
 
-    def obtener_todas(self):
-        return self.db.query(PublicacionModel).filter_by(visible=True).all()
+    def obtener_todas(self) -> List[Publicacion]:
+        publicaciones_db = self.db.query(PublicacionModel).filter_by(visible=True).all()
+        publicaciones = [model_a_entidad(m) for m in publicaciones_db]
+        return publicaciones
 
     def crear(self, publicacion: Publicacion) -> Publicacion:
         nueva = entidad_a_model(publicacion)
@@ -18,7 +22,7 @@ class PublicacionRepository:
         publicacion.idPublicacion = nueva.idPublicacion
         return publicacion
     
-    def obtener_por_id(self, id_publicacion: int) -> Publicacion | None:
+    def obtener_por_id(self, id_publicacion: int) -> Optional[Publicacion]:
         modelo = (
             self.db.query(PublicacionModel)
             .filter(PublicacionModel.idPublicacion == id_publicacion)
