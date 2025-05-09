@@ -5,3 +5,5 @@ sqlalchemy
 mysql-connector-python
 sentence-transformers
 scikit-learn
+python-dotenv
+pydantic-settings

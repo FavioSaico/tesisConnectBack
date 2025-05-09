@@ -1,4 +1,4 @@
-# src/main.py
+# main.py
 from fastapi import FastAPI
 from src.infrastructure.db import Base, engine
 from src.presentation.controllers.RecomendacionController import router

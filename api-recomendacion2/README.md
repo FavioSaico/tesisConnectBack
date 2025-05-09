@@ -35,7 +35,7 @@ CREATE TABLE rankings (
 ```
 
 3. Ejecutar el comando `pip install -r requirements.txt` para instalar las dependencias
-4. Ejecutar el comando `uvicorn src.main:app --reload` para levantar el proyecto.
+4. Ejecutar el comando `uvicorn main:app --reload` para levantar el proyecto.
 5. Una vez levantado el proyecto entrar a la siguiente ruta http://127.0.0.1:8000/docs 
 6. Probar el metodo POST y luego el metodo GET para tener las recomendaciones por cada usuario 
 

@@ -1,15 +1,13 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from src.config.database import settings
+from src.config.database import settings  # <--- importar la instancia, no la clase
 
-DATABASE_URL = settings.DATABASE_URL  # Definimos la URL en el archivo settings.py
+# 🔧 Usa la instancia para obtener la cadena, no la clase
+DATABASE_URL = settings.DATABASE_URL
 
-# Creación de la conexión a la base de datos
+# Crear el engine correctamente
 engine = create_engine(DATABASE_URL, echo=True)
 
-# Creación de sesiones de la base de datos
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-# Declaración de la base para los modelos
 Base = declarative_base()
