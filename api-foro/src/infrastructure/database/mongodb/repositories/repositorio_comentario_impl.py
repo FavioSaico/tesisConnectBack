@@ -1,7 +1,7 @@
-from typing import Optional
+from typing import List, Optional
 from pymongo.collection import Collection
 from domain.entities.comentario import Comentario
-from infrastructure.database.mongodb.models.comentario_model import ComentarioModel
+from infrastructure.database.mongodb.models.comentario_model import ComentarioModel 
 from application.mappers.comentario_mapper import documento_a_entidad, entidad_a_modelo
 from domain.repositories.repositorio_comentario import RepositorioComentario
 from bson import ObjectId
@@ -39,3 +39,12 @@ class RepositorioComentarioImpl(RepositorioComentario):
             {"$set": {"visible": comentario.visible}}
         )
         return resultado.modified_count == 1
+    
+    def obtener_por_publicacion(self, id_publicacion: int) -> List[Comentario]:
+        documentos = self.coleccion.find({
+            "idPublicacion": id_publicacion,
+            "visible": True
+        })
+        print(type(id_publicacion))
+        comentarios = [documento_a_entidad(doc) for doc in documentos]
+        return comentarios

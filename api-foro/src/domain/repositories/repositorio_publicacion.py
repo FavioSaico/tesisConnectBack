@@ -1,12 +1,13 @@
 from typing import List, Optional
 from abc import ABC, abstractmethod
 from domain.entities.publicacion import Publicacion
+from domain.entities.comentario import Comentario
 
 class RepositorioPublicacion(ABC):
 
     @abstractmethod
-    def obtener_todas(self) -> List[Publicacion]:
-        """Devuelve todas las publicaciones visibles."""
+    def listar(self, texto: Optional[str], id_categoria: Optional[int], id_estado: Optional[int]) -> List[Publicacion]:
+        """Devuelve las publicaciones con esa categoria, si estan visible."""
         pass
 
     @abstractmethod
@@ -28,4 +29,3 @@ class RepositorioPublicacion(ABC):
     def actualizar(self, actualizada: Publicacion) -> bool:
         """Remplaza los valores de la publicacion_db con los valores de la publicacion <actualizada>. (Excepto el idPublicacion)"""
         pass
-

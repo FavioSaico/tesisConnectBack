@@ -1,5 +1,7 @@
+import re
 from typing import List, Optional
 from sqlalchemy.orm import Session
+from sqlalchemy import and_, or_, func
 from domain.entities.publicacion import Publicacion
 from infrastructure.database.mysql.models.publicacion_model import PublicacionModel
 from application.mappers.publicacion_mapper import model_a_entidad, entidad_a_model, actualizar_model
@@ -9,10 +11,36 @@ class RepositorioPublicacionImpl(RepositorioPublicacion):
     def __init__(self, db: Session):
         self.db = db
 
-    def obtener_todas(self) -> List[Publicacion]:
-        publicaciones_db = self.db.query(PublicacionModel).filter_by(visible=True).all()
-        publicaciones = [model_a_entidad(m) for m in publicaciones_db]
-        return publicaciones
+    def listar(self, texto: Optional[str], id_categoria: Optional[int], id_estado: Optional[int]) -> List[Publicacion]:
+        query = self.db.query(PublicacionModel).filter_by(visible=True)
+        if texto:
+            texto_limpio= re.sub(r'[^\w\s]', '', texto)
+            palabras = texto_limpio.lower().split()
+            condiciones = []
+
+            def limpiar_signos(campo):
+                for signo in ['.', ',', ';', ':', '?', '!', '(', ')', '\'', '"', '/', '\\', '[', ']', '{', '}', '-', '_', '*', '=', '+']:
+                    campo = func.replace(campo, signo, ' ')
+                return campo
+
+            for palabra in palabras:
+                like_pattern = f"% {palabra} %"
+                condiciones.append(
+                    or_(
+                        func.lower(func.concat(' ', limpiar_signos(PublicacionModel.titulo), ' ')).like(like_pattern),
+                        func.lower(func.concat(' ', limpiar_signos(PublicacionModel.contenido), ' ')).like(like_pattern)
+                    )
+                )
+
+            query = query.filter(and_(*condiciones))
+
+        if id_categoria:
+            query = query.filter_by(idCategoria=id_categoria)
+        if id_estado:
+            query = query.filter_by(idEstado=id_estado)
+
+        modelos = query.all()
+        return [model_a_entidad(m) for m in modelos]
 
     def crear(self, publicacion: Publicacion) -> Publicacion:
         nueva = entidad_a_model(publicacion)

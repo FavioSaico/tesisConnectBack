@@ -15,6 +15,11 @@ class RepositorioComentario(ABC):
         pass
 
     @abstractmethod
-    def eliminar(self, id_publicacion: str) -> bool:
+    def eliminar(self, id_comentario: str) -> bool:
         """Elimina el comentario con dicho id. [.eliminar()]."""
+        pass
+    
+    @abstractmethod
+    def obtener_por_publicacion(self, id_publicacion: int) -> List[Comentario]:
+        """Devuelve una lista de comentarios visibles de la publicacion."""
         pass
