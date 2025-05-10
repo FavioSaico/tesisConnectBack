@@ -118,7 +118,7 @@ export class AuthDatasourceImpl implements AuthDatasource {
 
     async login(loginUserDto: LoginUserDto): Promise<AuthResponseDto> {
 
-        const { correo, contrasenia } = loginUserDto;
+        const { correo, contrasena } = loginUserDto;
 
         try {
             // 1. Verificar si el correo existe
@@ -129,7 +129,7 @@ export class AuthDatasourceImpl implements AuthDatasource {
             }
 
             // 2. Comparar contraseña
-            if (!this.comparePassword(contrasenia, usuario.contrasena)) {
+            if (!this.comparePassword(contrasena, usuario.contrasena)) {
                 throw CustomError.badRequest('Correo o contraseña incorrectos');
             }
 

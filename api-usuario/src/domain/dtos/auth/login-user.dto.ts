@@ -6,6 +6,6 @@ export class LoginUserDto{
     
     @IsString()
     @MinLength(6, { message: 'La contraseña debe tener mínimo 6 caracteres.' })
-    contrasenia: string;
+    contrasena: string;
 
 }
