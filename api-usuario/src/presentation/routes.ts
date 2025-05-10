@@ -4,6 +4,7 @@ import { Router } from "express"; // importamos Rputer de express
 import { AuthRoutes } from "./auth/routes";
 import { SeedRoutes } from "./seed/router";
 import { OrcidRoutes } from "./orcid/routes"; 
+import { GeneralRoutes} from "./general/routes"; 
 export class AppRoutes{
 
     static get routes(): Router{
@@ -13,6 +14,7 @@ export class AppRoutes{
         router.use('/api/auth', AuthRoutes.routes);
         router.use('/api/seed', SeedRoutes.routes);
         router.use('/api/orcid', OrcidRoutes.routes);
+        router.use('/api/general', GeneralRoutes.routes);
         
         // agregar más rutas
         // router.use('/api/products');

@@ -1,100 +1,62 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { DomainUsuario } from "../../../../domain/entities/usuario";
-import { GradoAcademico } from './grado-academico.entity';
+import { GradoAcademico } from './GradoAcademico.entity';
 
 @Entity()
-export class Usuario extends DomainUsuario{
+export class Usuario extends DomainUsuario {
 
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
-  @Column({
-    type: 'int'
-  })
-  id_grado_academico: number
+  @Column({ type: 'int' })
+  id_grado_academico: number;
 
-  // por defecto siempre activo
-  // para manejar la eliminación
-  @Column({
-    type: 'boolean',
-    default: true
-  })
-  estado_activo?: boolean
+  @Column({ type: 'boolean', default: true })
+  estado_activo?: boolean;
 
-  // activo dentro de la plataforma
   @Column({
     type: 'enum',
-    enum: ['activo','inactivo', 'suspendido'],
+    enum: ['activo', 'inactivo', 'suspendido'],
     default: 'inactivo'
   })
   estado_cuenta: string;
 
-  @Column({
-    type: 'varchar',
-    nullable: true // puede aceptar nulos
-  })
-  orcid?: string
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  orcid?: string;
 
-  @Column({
-    type: 'varchar',
-    length: 100,
-    nullable: false
-  })
-  nombre: string
+  @Column({ name: 'nombre_completo', type: 'varchar', length: 100 })
+  nombre: string;
 
-  @Column({
-    type: 'varchar',
-    length: 100,
-    nullable: false
-  })
-  apellido: string
+  @Column({ name: 'apellido_completo', type: 'varchar', length: 100 })
+  apellido: string;
 
-  @Column({
-    type: 'varchar',
-    nullable: false,
-    unique: true // debe ser única
-  })
-  correo: string
+  @Column({ name: 'correo_institucional', type: 'varchar', length: 100, unique: true })
+  correo: string;
 
-  @Column({
-    type: 'varchar',
-    nullable: false
-  })
-  contrasenia: string
+  @Column({ name: 'contrasena', type: 'varchar', length: 100 })
+  contrasenia: string;
 
-  @Column({
-    type: 'text',
-    nullable: false
-  })
-  descripcion: string
+  @Column({ type: 'text' })
+  descripcion: string;
 
-  @Column({
-    type: 'boolean',
-    default: false
-  })
-  rol_tesista: boolean
+  @Column({ name: 'linea_investigacion', type: 'text' })
+  lineaInvestigacion: string;
 
-  @Column({
-    type: 'boolean',
-    default: false
-  })
-  rol_asesor: boolean
+  @Column({ type: 'boolean', default: false })
+  rol_tesista: boolean;
 
-  @Column({
-    type: 'boolean',
-    default: false
-  })
-  rol_colaborador: boolean
+  @Column({ type: 'boolean', default: false })
+  rol_asesor: boolean;
 
-  @CreateDateColumn()
-  fecha_registro: Date
+  @Column({ type: 'boolean', default: false })
+  rol_colaborador: boolean;
 
-  @UpdateDateColumn()
-  fecha_actualizacion: Date
+  @CreateDateColumn({ name: 'fecha_registro' })
+  fecha_registro: Date;
 
-  // RELACIONA DE UNO A MUCHOS
+  @UpdateDateColumn({ name: 'fecha_update' })
+  fecha_actualizacion: Date;
 
-  // solo un grado academico por usuario
   @ManyToOne(
     () => GradoAcademico,
     (gradoAcademico) => gradoAcademico.id,
