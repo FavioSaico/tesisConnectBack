@@ -1,44 +1,105 @@
-import { IsBoolean, IsEmail, IsNotEmpty, IsNumber, IsOptional, 
-    IsPositive, IsString, MinLength 
+import {
+  IsBoolean,
+  IsEmail,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  IsString,
+  MinLength,
+  IsArray,
+  ValidateNested,
+  ArrayMinSize
 } from 'class-validator';
-export class RegisterUserDto{
+import { Type } from 'class-transformer';
 
-    @IsNumber()
-    @IsPositive({ message: 'Coloque un grado académico válido' })
-    id_grado_academico: number;
+// 🔄 Mueve esta clase arriba
+class EspecialidadDto {
+  @IsNumber()
+  @IsPositive({ message: 'ID de especialidad no válido.' })
+  idEspecialidad: number;
 
-    @IsString()
-    @IsNotEmpty({ message: 'El nombre es requerido' })
-    nombre: string;
+  @IsNumber()
+  @IsPositive({ message: 'Los años de experiencia deben ser positivos.' })
+  aniosExperiencia: number;
+}
 
-    @IsString()
-    @IsNotEmpty({ message: 'El apellido es requerido' })
-    apellido: string;
+// 🔄 También esta
+class PublicacionDto {
+  @IsString()
+  @IsNotEmpty({ message: 'El título de la publicación es requerido.' })
+  titulo: string;
 
-    @IsEmail({}, { message: 'Correo inválido' })
-    correo: string;
+  @IsString()
+  @IsNotEmpty({ message: 'La base de datos bibliográfica es requerida.' })
+  baseDatosBibliografica: string;
 
-    @IsString()
-    @MinLength(6, { message: 'La contraseña debe tener mínimo 6 caracteres.' })
-    contrasenia: string;
+  @IsString()
+  @IsNotEmpty({ message: 'La revista es requerida.' })
+  revista: string;
 
-    @IsString()
-    @IsNotEmpty({ message: 'La descripción es requerida.' })
-    descripcion: string;
+  @IsNumber()
+  @IsPositive({ message: 'El año de publicación debe ser positivo.' })
+  anioPublicacion: number;
 
-    @IsBoolean()
-    @IsOptional()
-    rol_tesista?: boolean;
+  @IsString()
+  @IsNotEmpty({ message: 'La URL de la publicación es requerida.' })
+  urlPublicacion: string;
+}
 
-    @IsBoolean()
-    @IsOptional()
-    rol_asesor?: boolean;
+export class RegisterUserDto {
+  @IsNumber()
+  @IsPositive({ message: 'Coloque un grado académico válido.' })
+  id_grado_academico: number;
 
-    @IsBoolean()
-    @IsOptional()
-    rol_colaborador?: boolean;
+  @IsString()
+  @IsNotEmpty({ message: 'El nombre completo es requerido.' })
+  nombre_completo: string; // Modificado a nombre_completo
 
-    @IsString()
-    @IsOptional()
-    orcid?: string;
+  @IsString()
+  @IsNotEmpty({ message: 'El apellido completo es requerido.' })
+  apellido_completo: string; // Modificado a apellido_completo
+
+  @IsEmail({}, { message: 'Correo institucional inválido.' })
+  correo_institucional: string; // Modificado a correo_institucional
+
+  @IsString()
+  @MinLength(6, { message: 'La contraseña debe tener mínimo 6 caracteres.' })
+  contrasena: string; // Modificado a contrasena
+
+  @IsString()
+  @IsNotEmpty({ message: 'La descripción es requerida.' })
+  descripcion: string;
+
+  @IsString()
+  @IsNotEmpty({ message: 'La línea de investigación es requerida.' })
+  linea_investigacion: string; // Nuevo campo para la línea de investigación
+
+  @IsBoolean()
+  @IsOptional()
+  rol_tesista?: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  rol_asesor?: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  rol_colaborador?: boolean;
+
+  @IsString()
+  @IsOptional()
+  orcid?: string;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => EspecialidadDto)
+  @IsOptional()
+  especialidades?: EspecialidadDto[];
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => PublicacionDto)
+  @IsOptional()
+  publicaciones?: PublicacionDto[];
 }

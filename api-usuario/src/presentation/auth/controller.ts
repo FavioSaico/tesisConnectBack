@@ -4,8 +4,6 @@ import { RegisterUser } from "../../application/use-cases/auth/register-user.use
 import { LoginUserDto } from "../../domain/dtos/auth/login-user.dto";
 import { LoginUser } from "../../application/use-cases/auth/login-user.use-case";
 import { plainToInstance } from "class-transformer";
-import { ObtenerEspecialidades } from "../../application/use-cases/general/ObtenerEspecialides.use-case";
-import { EspecialidadRepository } from '../../domain/repositories/EspecialidadRepository';
 
 
 export class AuthController {
@@ -13,7 +11,6 @@ export class AuthController {
     constructor(
         // inyectamos la abstracción (clase abstracta), no la implementación
         private readonly authRepostory: AuthRepository,
-        private readonly especialidadRepository: EspecialidadRepository,
     ) { }
 
     private handleError = (error: unknown, res: Response) => {
@@ -48,12 +45,6 @@ export class AuthController {
             .then(data => res.json(data))
             .catch(error => this.handleError(error, res));
     }
-    getEspecialidades = async (req: Request, res: Response): Promise<any> => {
-        const useCase = new ObtenerEspecialidades(this.especialidadRepository);
-        useCase.execute()
-            .then(data => res.json(data))
-            .catch(error => this.handleError(error, res));
-    };
 
 
 }

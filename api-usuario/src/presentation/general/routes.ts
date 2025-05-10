@@ -1,26 +1,24 @@
 // En este archivo se definen las rutas del endpoint auth
 import { Router } from "express";
 import { AuthController } from "./controller";
-import { EspecialidadRepositoryImpl } from '../../infrastructure/repositories/EspecialidadRepositoryImpl';
-import { EspecialidadDatasourceImpl } from '../../infrastructure/datasources/EspecialidadDatasourceImpl';
-import { GradoAcademicoRepositoryImpl } from '../../infrastructure/repositories/GradoAcademicoRepositoryImpl';
-import { GradoAcademicoDatasourceImpl } from '../../infrastructure/datasources/GradoAcademicoDatasourceImpl';
+import { GeneralDatasourceImpl } from '../../infrastructure/datasources/general.datasource.impl';
+import { GeneralRepositoryImpl } from '../../infrastructure/repositories/general.repository.impl';
 import { AuthDatasourceImpl } from "../../infrastructure";
 
-export class GeneralRoutes{
-    
-    static get routes(): Router{
-        
+export class GeneralRoutes {
+
+    static get routes(): Router {
+
         const router = Router();
         // creamos objetos de las implementaciones
         const datasource = new AuthDatasourceImpl();
-        const especialidadDatasource = new EspecialidadDatasourceImpl();
-        const especialidadRepository = new EspecialidadRepositoryImpl(especialidadDatasource);
-        const gradoAcademicoDatasource = new GradoAcademicoDatasourceImpl();
-        const gradoAcademicoRepository = new GradoAcademicoRepositoryImpl(gradoAcademicoDatasource);
+        const generalDatasource = new GeneralDatasourceImpl();
 
-        // finalmente pasamos el repository al controlador
-        const controller = new AuthController(especialidadRepository, gradoAcademicoRepository);
+        // Repository unificado
+        const generalRepository = new GeneralRepositoryImpl(generalDatasource, generalDatasource);
+
+        // Controlador con repositorio unificado
+        const controller = new AuthController(generalRepository, generalRepository);
 
         try {
             // router.get('/',[AuthMiddleware.validateJWT], controller.getUsers );
