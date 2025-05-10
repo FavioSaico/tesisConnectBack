@@ -95,8 +95,8 @@ export class AuthDatasourceImpl implements AuthDatasource {
 
             return new AuthResponseDto(
                 usuario.id,
-                usuario.nombre,
-                usuario.apellido,
+                usuario.nombres,
+                usuario.apellidos,
                 usuario.correo,
                 usuario.descripcion,
                 usuario.rol_tesista,
@@ -158,8 +158,8 @@ export class AuthDatasourceImpl implements AuthDatasource {
             // 5. Retornar respuesta
             return new AuthResponseDto(
                 usuario.id,
-                usuario.nombre,
-                usuario.apellido,
+                usuario.nombres,
+                usuario.apellidos,
                 usuario.correo,
                 usuario.descripcion,
                 usuario.rol_tesista,
