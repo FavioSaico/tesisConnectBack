@@ -8,7 +8,7 @@ import { EspecialidadUsuario } from './EspecialidadUsuario.entity';
 export class Usuario extends DomainUsuario {
 
   @PrimaryGeneratedColumn("increment", { type: "bigint" })
-  id: number; // Cambié el tipo a "string" porque 'bigint' es comúnmente tratado como string en TypeORM
+  id: number;
 
   @Column({
     type: 'int'
@@ -40,14 +40,14 @@ export class Usuario extends DomainUsuario {
     length: 100,
     nullable: false
   })
-  nombre_completo: string; // Cambié 'nombre' por 'nombre_completo'
+  nombres: string;
 
   @Column({
     type: 'varchar',
     length: 100,
     nullable: false
   })
-  apellido_completo: string; // Cambié 'apellido' por 'apellido_completo'
+  apellidos: string;
 
   @Column({
     type: 'varchar',
@@ -55,14 +55,14 @@ export class Usuario extends DomainUsuario {
     nullable: false,
     unique: true
   })
-  correo_institucional: string; // Cambié 'correo' por 'correo_institucional'
+  correo: string;
 
   @Column({
     type: 'varchar',
     length: 100,
     nullable: false
   })
-  contrasenia: string; // Cambié 'contrasenia' por 'contrasena'
+  contrasena: string; 
 
   @Column({
     type: 'text',
@@ -98,7 +98,7 @@ export class Usuario extends DomainUsuario {
     type: 'text',
     nullable: true
   })
-  linea_investigacion: string; // Añadí el campo 'linea_investigacion' para que coincida con la tabla
+  linea_investigacion: string;
 
   // RELACIONA DE UNO A MUCHOS
   @ManyToOne(

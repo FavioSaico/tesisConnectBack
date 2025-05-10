@@ -5,7 +5,6 @@ import { LoginUserDto } from "../../domain/dtos/auth/login-user.dto";
 import { LoginUser } from "../../application/use-cases/auth/login-user.use-case";
 import { plainToInstance } from "class-transformer";
 
-
 export class AuthController {
 
     constructor(
@@ -17,11 +16,11 @@ export class AuthController {
 
         if (error instanceof CustomError) {
             //retornamos el error en el response
-            return res.status(error.statusCode).json({ error: error.message });
+            return res.status(error.statusCode).json({ message: error.message });
         }
 
         console.log(error);
-        return res.status(500).json({ error: 'Internal Server Error' });
+        return res.status(500).json({ message: 'Internal Server Error' });
     }
 
     registerUser = async (req: Request, res: Response): Promise<any> => {

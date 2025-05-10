@@ -6,13 +6,14 @@ export class AuthResponseDto {
 
   constructor(
     public id: number,
-    public nombre: string,
-    public apellido: string,
+    public nombres: string,
+    public apellidos: string,
     public correo: string,
     public descripcion: string,
     public rol_tesista: boolean,
-    public rol_colaborador: boolean,
+    public rol_asesor: boolean,
     public orcid: string,
+    public linea_investigacion: string,
     public grado_academico: GradoAcademico,
     public readonly especialidades: {
       idEspecialidad: number;

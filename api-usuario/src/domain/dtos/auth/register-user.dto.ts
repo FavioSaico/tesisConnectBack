@@ -54,14 +54,14 @@ export class RegisterUserDto {
 
   @IsString()
   @IsNotEmpty({ message: 'El nombre completo es requerido.' })
-  nombre_completo: string; // Modificado a nombre_completo
+  nombres: string;
 
   @IsString()
   @IsNotEmpty({ message: 'El apellido completo es requerido.' })
-  apellido_completo: string; // Modificado a apellido_completo
+  apellidos: string;
 
   @IsEmail({}, { message: 'Correo institucional inválido.' })
-  correo_institucional: string; // Modificado a correo_institucional
+  correo: string;
 
   @IsString()
   @MinLength(6, { message: 'La contraseña debe tener mínimo 6 caracteres.' })
@@ -82,10 +82,6 @@ export class RegisterUserDto {
   @IsBoolean()
   @IsOptional()
   rol_asesor?: boolean;
-
-  @IsBoolean()
-  @IsOptional()
-  rol_colaborador?: boolean;
 
   @IsString()
   @IsOptional()

@@ -27,18 +27,18 @@ export class AuthDatasourceImpl implements AuthDatasource {
 
     // recibe un RegisterUserDto y retorna un UserEntity
     async register(registerUserDto: RegisterUserDto): Promise<AuthResponseDto> {
-        const { correo_institucional, contrasena, ...data } = registerUserDto;
+        const { correo, contrasena, ...data } = registerUserDto;
 
         try {
             // 1. Verificar si el correo existe
-            const exists = await this.usuarioRepository.findOneBy({ correo_institucional: correo_institucional });
-            if (exists) throw CustomError.badRequest('Usuario ya existe');
+            const exists = await this.usuarioRepository.findOneBy({ correo: correo });
+            if (exists) throw CustomError.badRequest('Correo ya se encuentra registrado');
 
             // 2. Encriptar la contraseña
             const usuario = await this.usuarioRepository.save({
                 ...data,
-                correo_institucional,
-                contrasenia: this.hashPassword(contrasena)
+                correo,
+                contrasena: this.hashPassword(contrasena)
             });
 
             // 3. Guardar especialidades si las hay
@@ -71,7 +71,7 @@ export class AuthDatasourceImpl implements AuthDatasource {
                 }
             }
 
-            const usuarioRegistrado = await this.usuarioRepository.findOneBy({ correo_institucional: correo_institucional });
+            const usuarioRegistrado = await this.usuarioRepository.findOneBy({ correo: correo });
 
             const especialidadesUsuario = await this.especialidadUsuarioRepository.findBy({ id_usuario: usuario.id }); // <-- corregido
 
@@ -97,11 +97,12 @@ export class AuthDatasourceImpl implements AuthDatasource {
                 usuario.id,
                 usuario.nombre,
                 usuario.apellido,
-                usuario.correo_institucional,
+                usuario.correo,
                 usuario.descripcion,
                 usuario.rol_tesista,
                 usuario.rol_asesor,
                 usuario.orcid,
+                usuario.linea_investigacion,
                 usuarioRegistrado.grado_academico,
                 especialidades,
                 publicaciones
@@ -121,14 +122,14 @@ export class AuthDatasourceImpl implements AuthDatasource {
 
         try {
             // 1. Verificar si el correo existe
-            const usuario = await this.usuarioRepository.findOneBy({ correo_institucional: correo });
+            const usuario = await this.usuarioRepository.findOneBy({ correo: correo });
 
             if (!usuario) {
-                throw CustomError.badRequest('Usuario no existe');
+                throw CustomError.badRequest('Correo no registrado');
             }
 
             // 2. Comparar contraseña
-            if (!this.comparePassword(contrasenia, usuario.contrasenia)) {
+            if (!this.comparePassword(contrasenia, usuario.contrasena)) {
                 throw CustomError.badRequest('Correo o contraseña incorrectos');
             }
 
@@ -164,6 +165,7 @@ export class AuthDatasourceImpl implements AuthDatasource {
                 usuario.rol_tesista,
                 usuario.rol_asesor,
                 usuario.orcid,
+                usuario.linea_investigacion,
                 usuario.grado_academico,
                 especialidades,
                 publicaciones
