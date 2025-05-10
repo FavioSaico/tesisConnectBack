@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { DomainUsuario } from "../../../../domain/entities/usuario";
-import { GradoAcademico } from './grado-academico.entity';
+import { GradoAcademico } from './GradoAcademico.entity';
 
 @Entity()
 export class Usuario extends DomainUsuario {

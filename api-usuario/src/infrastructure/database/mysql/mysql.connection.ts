@@ -2,7 +2,7 @@ import "reflect-metadata"
 import { DataSource } from "typeorm"
 import { Usuario } from "./models/usuario.entity"
 import { envs } from "../../../config/envs";
-import { GradoAcademico } from './models/grado-academico.entity';
+import { GradoAcademico } from './models/GradoAcademico.entity';
 import { Especialidad } from "./models/Especialidad.entity";
 
 

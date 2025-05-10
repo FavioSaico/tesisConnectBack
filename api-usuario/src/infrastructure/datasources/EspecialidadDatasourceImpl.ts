@@ -8,6 +8,7 @@ export class EspecialidadDatasourceImpl implements EspecialidadDatasource {
     const especialidades = await especialidadRepository.find();
     
     // Devuelve un array de objetos con 'id' y 'nombre'
-    return especialidades.map(e => ({ id: e.id, nombre: e.nombre }));
+    return especialidades.map(e => ({ id: e.id, nombre: e.nombre })); 
+    
   }
 }

@@ -27,8 +27,7 @@ export class AuthRoutes{
             router.post('/login',[AuthMiddleware.validateRequest(LoginUserDto)], controller.loginUser);
 
             router.post('/register',[AuthMiddleware.validateRequest(RegisterUserDto)], controller.registerUser);
-            // router.get('/',[AuthMiddleware.validateJWT], controller.getUsers );
-            router.get('/conseguir_especialidades', controller.getEspecialidades);
+
 
         } catch (error) {
             console.log(error)

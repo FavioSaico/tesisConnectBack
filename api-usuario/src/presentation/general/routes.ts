@@ -3,6 +3,8 @@ import { Router } from "express";
 import { AuthController } from "./controller";
 import { EspecialidadRepositoryImpl } from '../../infrastructure/repositories/EspecialidadRepositoryImpl';
 import { EspecialidadDatasourceImpl } from '../../infrastructure/datasources/EspecialidadDatasourceImpl';
+import { GradoAcademicoRepositoryImpl } from '../../infrastructure/repositories/GradoAcademicoRepositoryImpl';
+import { GradoAcademicoDatasourceImpl } from '../../infrastructure/datasources/GradoAcademicoDatasourceImpl';
 import { AuthDatasourceImpl } from "../../infrastructure";
 
 export class GeneralRoutes{
@@ -14,13 +16,16 @@ export class GeneralRoutes{
         const datasource = new AuthDatasourceImpl();
         const especialidadDatasource = new EspecialidadDatasourceImpl();
         const especialidadRepository = new EspecialidadRepositoryImpl(especialidadDatasource);
+        const gradoAcademicoDatasource = new GradoAcademicoDatasourceImpl();
+        const gradoAcademicoRepository = new GradoAcademicoRepositoryImpl(gradoAcademicoDatasource);
 
         // finalmente pasamos el repository al controlador
-        const controller = new AuthController(especialidadRepository);
+        const controller = new AuthController(especialidadRepository, gradoAcademicoRepository);
 
         try {
             // router.get('/',[AuthMiddleware.validateJWT], controller.getUsers );
             router.get('/especialidades', controller.getEspecialidades);
+            router.get('/gradosAcademicos', controller.getGradosAcademicos);
 
         } catch (error) {
             console.log(error)
