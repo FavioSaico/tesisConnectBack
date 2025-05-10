@@ -1,5 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 import { DomainEspecialidadUsuario } from "../../../../domain/entities/EspecialidadUsuario";
+import { Usuario } from "./usuario.entity";
+import { Especialidad } from "./Especialidad.entity";
+
+
 
 @Entity()
 export class EspecialidadUsuario extends DomainEspecialidadUsuario {
@@ -15,4 +19,12 @@ export class EspecialidadUsuario extends DomainEspecialidadUsuario {
 
   @Column({ type: 'int', nullable: false })
   anios_experiencia: number;
+
+  @ManyToOne(() => Especialidad, (especialidad) => especialidad.especialidades_usuario, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'id_especialidad' })
+  especialidad: Especialidad;
+
+  @ManyToOne(() => Usuario, (usuario) => usuario.especialidades_usuario, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'id_usuario' })
+  usuario: Usuario;
 }

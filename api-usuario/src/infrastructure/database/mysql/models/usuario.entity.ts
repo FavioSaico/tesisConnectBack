@@ -1,62 +1,106 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn, OneToMany } from "typeorm";
 import { DomainUsuario } from "../../../../domain/entities/usuario";
 import { GradoAcademico } from './GradoAcademico.entity';
+import { EspecialidadUsuario } from './EspecialidadUsuario.entity';
+
 
 @Entity()
 export class Usuario extends DomainUsuario {
 
-  @PrimaryGeneratedColumn({ type: 'bigint' })
-  id: number;
-
-  @Column({ type: 'int' })
-  id_grado_academico: number;
-
-  @Column({ type: 'boolean', default: true })
-  estado_activo?: boolean;
+  @PrimaryGeneratedColumn("increment", { type: "bigint" })
+  id: number; // Cambié el tipo a "string" porque 'bigint' es comúnmente tratado como string en TypeORM
 
   @Column({
-    type: 'enum',
-    enum: ['activo', 'inactivo', 'suspendido'],
-    default: 'inactivo'
+    type: 'int'
   })
-  estado_cuenta: string;
+  id_grado_academico: number;
 
-  @Column({ type: 'varchar', length: 100, nullable: true })
+  @Column({
+    type: 'tinyint',
+    default: 1
+  })
+  estado_activo: boolean; // Se ajusta al tipo tinyint(1), por lo general 0 es false, 1 es true
+
+  @Column({
+    type: 'varchar',
+    length: 100,
+    default: 'inactivo' // Se ajusta para coincidir con el valor predeterminado de 'inactivo'
+  })
+  estado_cuenta: string; // No necesita cambiar el tipo ya que 'varchar(100)' es adecuado
+
+  @Column({
+    type: 'varchar',
+    length: 100,
+    nullable: true
+  })
   orcid?: string;
 
-  @Column({ name: 'nombre_completo', type: 'varchar', length: 100 })
-  nombre: string;
+  @Column({
+    type: 'varchar',
+    length: 100,
+    nullable: false
+  })
+  nombre_completo: string; // Cambié 'nombre' por 'nombre_completo'
 
-  @Column({ name: 'apellido_completo', type: 'varchar', length: 100 })
-  apellido: string;
+  @Column({
+    type: 'varchar',
+    length: 100,
+    nullable: false
+  })
+  apellido_completo: string; // Cambié 'apellido' por 'apellido_completo'
 
-  @Column({ name: 'correo_institucional', type: 'varchar', length: 100, unique: true })
-  correo: string;
+  @Column({
+    type: 'varchar',
+    length: 100,
+    nullable: false,
+    unique: true
+  })
+  correo_institucional: string; // Cambié 'correo' por 'correo_institucional'
 
-  @Column({ name: 'contrasena', type: 'varchar', length: 100 })
-  contrasenia: string;
+  @Column({
+    type: 'varchar',
+    length: 100,
+    nullable: false
+  })
+  contrasenia: string; // Cambié 'contrasenia' por 'contrasena'
 
-  @Column({ type: 'text' })
+  @Column({
+    type: 'text',
+    nullable: false
+  })
   descripcion: string;
 
-  @Column({ name: 'linea_investigacion', type: 'text' })
-  lineaInvestigacion: string;
-
-  @Column({ type: 'boolean', default: false })
+  @Column({
+    type: 'tinyint',
+    default: false
+  })
   rol_tesista: boolean;
 
-  @Column({ type: 'boolean', default: false })
+  @Column({
+    type: 'tinyint',
+    default: false
+  })
   rol_asesor: boolean;
 
-  @Column({ type: 'boolean', default: false })
+  @Column({
+    type: 'tinyint',
+    default: false
+  })
   rol_colaborador: boolean;
 
-  @CreateDateColumn({ name: 'fecha_registro' })
+  @CreateDateColumn()
   fecha_registro: Date;
 
-  @UpdateDateColumn({ name: 'fecha_update' })
+  @UpdateDateColumn()
   fecha_actualizacion: Date;
 
+  @Column({
+    type: 'text',
+    nullable: true
+  })
+  linea_investigacion: string; // Añadí el campo 'linea_investigacion' para que coincida con la tabla
+
+  // RELACIONA DE UNO A MUCHOS
   @ManyToOne(
     () => GradoAcademico,
     (gradoAcademico) => gradoAcademico.id,
@@ -64,4 +108,7 @@ export class Usuario extends DomainUsuario {
   )
   @JoinColumn({ name: 'id_grado_academico' })
   grado_academico: GradoAcademico;
+
+  @OneToMany(() => EspecialidadUsuario, (especialidadUsuario) => especialidadUsuario.usuario)
+  especialidades_usuario: EspecialidadUsuario[];
 }
