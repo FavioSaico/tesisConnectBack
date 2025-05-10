@@ -30,19 +30,16 @@ export class AuthDatasourceImpl implements AuthDatasource {
         const { correo, contrasena, ...data } = registerUserDto;
 
         try {
-            // 1. Verificar si el correo existe
-            const exists = await this.usuarioRepository.findOneBy({ correo: correo });
+            const exists = await this.usuarioRepository.findOneBy({ correo });
             if (exists) throw CustomError.badRequest('Correo ya se encuentra registrado');
 
-            // 2. Encriptar la contraseña
             const usuario = await this.usuarioRepository.save({
                 ...data,
                 correo,
                 contrasena: this.hashPassword(contrasena)
             });
 
-            // 3. Guardar especialidades si las hay
-            if (registerUserDto.especialidades && registerUserDto.especialidades.length > 0) {
+            if (registerUserDto.especialidades?.length > 0) {
                 const especialidades = registerUserDto.especialidades.map((esp) =>
                     this.especialidadUsuarioRepository.create({
                         id_usuario: usuario.id,
@@ -53,8 +50,7 @@ export class AuthDatasourceImpl implements AuthDatasource {
                 await this.especialidadUsuarioRepository.save(especialidades);
             }
 
-            // 4. Guardar publicaciones si las hay
-            if (registerUserDto.publicaciones && registerUserDto.publicaciones.length > 0) {
+            if (registerUserDto.publicaciones?.length > 0) {
                 for (const pub of registerUserDto.publicaciones) {
                     const publicacion = await this.publicacionRepository.save({
                         titulo: pub.titulo,
@@ -71,12 +67,14 @@ export class AuthDatasourceImpl implements AuthDatasource {
                 }
             }
 
-            const usuarioRegistrado = await this.usuarioRepository.findOneBy({ correo: correo });
-
-            const especialidadesUsuario = await this.especialidadUsuarioRepository.findBy({ id_usuario: usuario.id }); // <-- corregido
+            const especialidadesUsuario = await this.especialidadUsuarioRepository.find({
+                where: { id_usuario: usuario.id },
+                relations: ['especialidad']
+            });
 
             const especialidades = especialidadesUsuario.map(eu => ({
                 idEspecialidad: eu.id_especialidad,
+                nombreEspecialidad: eu.especialidad?.nombre ?? '',
                 aniosExperiencia: eu.anios_experiencia
             }));
 
@@ -93,69 +91,6 @@ export class AuthDatasourceImpl implements AuthDatasource {
                 urlPublicacion: pu.publicacion.url_publicacion
             }));
 
-            return new AuthResponseDto(
-                usuario.id,
-                usuario.nombres,
-                usuario.apellidos,
-                usuario.correo,
-                usuario.descripcion,
-                usuario.rol_tesista,
-                usuario.rol_asesor,
-                usuario.orcid,
-                usuario.linea_investigacion,
-                usuarioRegistrado.grado_academico,
-                especialidades,
-                publicaciones
-            );
-
-        } catch (error) {
-            if (error instanceof CustomError) {
-                throw error
-            }
-            throw CustomError.internalServer();
-        }
-    }
-
-    async login(loginUserDto: LoginUserDto): Promise<AuthResponseDto> {
-
-        const { correo, contrasena } = loginUserDto;
-
-        try {
-            // 1. Verificar si el correo existe
-            const usuario = await this.usuarioRepository.findOneBy({ correo: correo });
-
-            if (!usuario) {
-                throw CustomError.badRequest('Correo no registrado');
-            }
-
-            // 2. Comparar contraseña
-            if (!this.comparePassword(contrasena, usuario.contrasena)) {
-                throw CustomError.badRequest('Correo o contraseña incorrectos');
-            }
-
-            // 3. Obtener especialidades
-            const especialidadesUsuario = await this.especialidadUsuarioRepository.findBy({ id_usuario: usuario.id });
-
-            const especialidades = especialidadesUsuario.map(eu => ({
-                idEspecialidad: eu.id_especialidad,
-                aniosExperiencia: eu.anios_experiencia
-            }));
-
-            // 4. Obtener publicaciones
-            const publicacionesUsuario = await this.publicacionUsuarioRepository.find({
-                where: { id_usuario: usuario.id },
-                relations: ['publicacion']
-            });
-
-            const publicaciones = publicacionesUsuario.map(pu => ({
-                titulo: pu.publicacion.titulo,
-                baseDatosBibliografica: pu.publicacion.base_datos_bibliografica,
-                revista: pu.publicacion.revista,
-                anioPublicacion: pu.publicacion.anio_publicacion,
-                urlPublicacion: pu.publicacion.url_publicacion
-            }));
-
-            // 5. Retornar respuesta
             return new AuthResponseDto(
                 usuario.id,
                 usuario.nombres,
@@ -172,11 +107,63 @@ export class AuthDatasourceImpl implements AuthDatasource {
             );
 
         } catch (error) {
+            if (error instanceof CustomError) throw error;
+            throw CustomError.internalServer();
+        }
+    }
 
-            if (error instanceof CustomError) {
-                throw error;
+    async login(loginUserDto: LoginUserDto): Promise<AuthResponseDto> {
+        const { correo, contrasena } = loginUserDto;
+
+        try {
+            const usuario = await this.usuarioRepository.findOneBy({ correo });
+            if (!usuario) throw CustomError.badRequest('Correo no registrado');
+
+            if (!this.comparePassword(contrasena, usuario.contrasena)) {
+                throw CustomError.badRequest('Correo o contraseña incorrectos');
             }
 
+            const especialidadesUsuario = await this.especialidadUsuarioRepository.find({
+                where: { id_usuario: usuario.id },
+                relations: ['especialidad']
+            });
+
+            const especialidades = especialidadesUsuario.map(eu => ({
+                idEspecialidad: eu.id_especialidad,
+                nombreEspecialidad: eu.especialidad?.nombre ?? '',
+                aniosExperiencia: eu.anios_experiencia
+            }));
+
+            const publicacionesUsuario = await this.publicacionUsuarioRepository.find({
+                where: { id_usuario: usuario.id },
+                relations: ['publicacion']
+            });
+
+            const publicaciones = publicacionesUsuario.map(pu => ({
+                titulo: pu.publicacion.titulo,
+                baseDatosBibliografica: pu.publicacion.base_datos_bibliografica,
+                revista: pu.publicacion.revista,
+                anioPublicacion: pu.publicacion.anio_publicacion,
+                urlPublicacion: pu.publicacion.url_publicacion
+            }));
+
+            return new AuthResponseDto(
+                usuario.id,
+                usuario.nombres,
+                usuario.apellidos,
+                usuario.correo,
+                usuario.descripcion,
+                usuario.rol_tesista,
+                usuario.rol_asesor,
+                usuario.orcid,
+                usuario.linea_investigacion,
+                usuario.grado_academico,
+                especialidades,
+                publicaciones
+            );
+
+        } catch (error) {
+            if (error instanceof CustomError) throw error;
             throw CustomError.internalServer();
         }
     }

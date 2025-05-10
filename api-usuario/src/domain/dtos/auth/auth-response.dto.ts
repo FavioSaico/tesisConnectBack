@@ -17,6 +17,7 @@ export class AuthResponseDto {
     public grado_academico: GradoAcademico,
     public readonly especialidades: {
       idEspecialidad: number;
+      nombreEspecialidad: string; 
       aniosExperiencia: number;
     }[],
     public readonly publicaciones: {
