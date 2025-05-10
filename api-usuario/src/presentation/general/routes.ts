@@ -1,34 +1,26 @@
 // En este archivo se definen las rutas del endpoint auth
 import { Router } from "express";
 import { AuthController } from "./controller";
-import { AuthDatasourceImpl, AuthRepositoryImpl } from "../../infrastructure";
-import { AuthMiddleware } from "../middleware/auth.middleware";
-import { RegisterUserDto } from "../../domain";
-import { LoginUserDto } from "../../domain/dtos/auth/login-user.dto";
 import { EspecialidadRepositoryImpl } from '../../infrastructure/repositories/EspecialidadRepositoryImpl';
 import { EspecialidadDatasourceImpl } from '../../infrastructure/datasources/EspecialidadDatasourceImpl';
+import { AuthDatasourceImpl } from "../../infrastructure";
 
-export class AuthRoutes{
+export class GeneralRoutes{
     
     static get routes(): Router{
         
         const router = Router();
         // creamos objetos de las implementaciones
         const datasource = new AuthDatasourceImpl();
-        const authRepository = new AuthRepositoryImpl(datasource);
         const especialidadDatasource = new EspecialidadDatasourceImpl();
         const especialidadRepository = new EspecialidadRepositoryImpl(especialidadDatasource);
 
         // finalmente pasamos el repository al controlador
-        const controller = new AuthController(authRepository,especialidadRepository);
+        const controller = new AuthController(especialidadRepository);
 
         try {
-            // aquí solo apuntamos a nuestros controladores
-            router.post('/login',[AuthMiddleware.validateRequest(LoginUserDto)], controller.loginUser);
-
-            router.post('/register',[AuthMiddleware.validateRequest(RegisterUserDto)], controller.registerUser);
             // router.get('/',[AuthMiddleware.validateJWT], controller.getUsers );
-            router.get('/conseguir_especialidades', controller.getEspecialidades);
+            router.get('/especialidades', controller.getEspecialidades);
 
         } catch (error) {
             console.log(error)

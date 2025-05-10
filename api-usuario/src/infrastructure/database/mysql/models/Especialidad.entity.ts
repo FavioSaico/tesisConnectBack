@@ -4,6 +4,9 @@ import { EspecialidadUsuario } from './EspecialidadUsuario.entity';
 
 @Entity()
 export class Especialidad extends DomainEspecialidad {
+  static find() {
+      throw new Error('Method not implemented.');
+  }
 
   @PrimaryGeneratedColumn() // Agregar columna primaria
   id: number;

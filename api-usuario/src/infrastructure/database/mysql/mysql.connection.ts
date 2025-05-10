@@ -6,7 +6,7 @@ import { GradoAcademico } from './models/grado-academico.entity';
 import { Especialidad } from "./models/Especialidad.entity";
 
 
-const isProduction = envs.NODE_ENV === 'production';
+//const isProduction = envs.NODE_ENV === 'production';
 
 export const AppDataSource = new DataSource({
     type: "mysql",
