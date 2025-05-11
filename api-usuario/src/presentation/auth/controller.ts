@@ -45,5 +45,15 @@ export class AuthController {
             .catch(error => this.handleError(error, res));
     }
 
-
+    async conseguirInformacionPorID(req: Request, res: Response) {
+        try {
+            const id = parseInt(req.params.id);
+            const result = await this.authRepostory.conseguirInformacionPorID(id);
+            return res.json(result);  // ⬅️ Devuelve el AuthResponseDto al cliente
+        } catch (error) {
+            return res.status(error.statusCode || 500).json({ message: error.message || 'Error interno del servidor' });
+        }
+    }
 }
+
+

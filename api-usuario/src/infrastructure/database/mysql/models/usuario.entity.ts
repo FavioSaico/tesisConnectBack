@@ -2,7 +2,7 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGenerat
 import { DomainUsuario } from "../../../../domain/entities/usuario";
 import { GradoAcademico } from './GradoAcademico.entity';
 import { EspecialidadUsuario } from './EspecialidadUsuario.entity';
-
+import { CarreraProfesional } from './CarreraProfesional.entity';  // Asegúrate de importar CarreraProfesional
 
 @Entity()
 export class Usuario extends DomainUsuario {
@@ -16,17 +16,22 @@ export class Usuario extends DomainUsuario {
   id_grado_academico: number;
 
   @Column({
+    type: 'int'
+  })
+  id_carrera_profesional: number;
+
+  @Column({
     type: 'tinyint',
     default: 1
   })
-  estado_activo: boolean; // Se ajusta al tipo tinyint(1), por lo general 0 es false, 1 es true
+  estado_activo: boolean;
 
   @Column({
     type: 'varchar',
     length: 100,
-    default: 'inactivo' // Se ajusta para coincidir con el valor predeterminado de 'inactivo'
+    default: 'inactivo'
   })
-  estado_cuenta: string; // No necesita cambiar el tipo ya que 'varchar(100)' es adecuado
+  estado_cuenta: string;
 
   @Column({
     type: 'varchar',
@@ -62,7 +67,7 @@ export class Usuario extends DomainUsuario {
     length: 100,
     nullable: false
   })
-  contrasena: string; 
+  contrasena: string;
 
   @Column({
     type: 'text',
@@ -111,4 +116,14 @@ export class Usuario extends DomainUsuario {
 
   @OneToMany(() => EspecialidadUsuario, (especialidadUsuario) => especialidadUsuario.usuario)
   especialidades_usuario: EspecialidadUsuario[];
+
+  // Relación ManyToOne con CarreraProfesional
+  @ManyToOne(
+    () => CarreraProfesional,
+    (carreraProfesional) => carreraProfesional.id, // Referencia a la propiedad 'usuarios' en CarreraProfesional
+    { cascade: false, eager: true }
+  )
+  @JoinColumn({ name: 'id_carrera_profesional' }) 
+  carrera_profesional: CarreraProfesional;
+
 }

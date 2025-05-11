@@ -3,6 +3,7 @@ export class DomainUsuario{
   constructor(
       public id: number,
       public id_grado_academico: number,
+      public id_carrera_profesional: number,
       public nombre: string,
       public apellido: string,
       public correo: string,

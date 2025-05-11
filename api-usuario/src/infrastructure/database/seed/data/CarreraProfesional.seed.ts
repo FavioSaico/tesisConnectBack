@@ -1,0 +1,20 @@
+export const CARRERAS_PROFESIONALES_SEED = [
+  { id: 1, nombre: "Ingeniería de Software" },
+  { id: 2, nombre: "Ingeniería en Sistemas" },
+  { id: 3, nombre: "Robótica" },
+  { id: 4, nombre: "Ingeniería Electrónica" },
+  { id: 5, nombre: "Ingeniería Eléctrica" },
+  { id: 6, nombre: "Ingeniería Mecatrónica" },
+  { id: 7, nombre: "Ingeniería Mecánica" },
+  { id: 8, nombre: "Ingeniería Industrial" },
+  { id: 9, nombre: "Ingeniería Biomédica" },
+  { id: 10, nombre: "Ingeniería de Telecomunicaciones" },
+  { id: 11, nombre: "Blockchain" },
+  { id: 12, nombre: "Gestión de Proyectos TI" },
+  { id: 13, nombre: "Emprendimiento Tecnológico" },
+  { id: 14, nombre: "Bioinformática" },
+  { id: 15, nombre: "Matemática Aplicada" },
+  { id: 16, nombre: "Estadística Aplicada" },
+  { id: 17, nombre: "Ingeniería Ambiental" },
+  { id: 18, nombre: "Medicina" }
+];
