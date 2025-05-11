@@ -46,14 +46,14 @@ class RepositorioRecomendacionImpl(RepositorioRecomendacion):
         return [Recomendacion(r.id_investigador, r.id_usuario_recomendado, r.puntaje, r.fecha, r.tipo) for r in rows]
     
     def obtener_usuarios_con_especialidades_y_publicaciones(self):
-        # Tu implementación aquí
+        # Consulta SQL para obtener los usuarios con sus especialidades y publicaciones
         query = """
         SELECT 
             u.id,
             u.descripcion,
             u.linea_investigacion AS lineaInvestigacion,
             u.rol_tesista AS rolTesista,
-            u.rol_asesor AS rolAsesor,
+            u.rol_colaborador AS rolAsesor,
             GROUP_CONCAT(e.nombre ORDER BY e.nombre) AS especialidades,
             GROUP_CONCAT(p.titulo ORDER BY p.anio_publicacion DESC) AS publicaciones
         FROM 
@@ -67,13 +67,17 @@ class RepositorioRecomendacionImpl(RepositorioRecomendacion):
         LEFT JOIN 
             Publicacion p ON pu.id_publicacion = p.id
         GROUP BY 
-            u.id, u.descripcion, u.linea_investigacion, u.rol_tesista, u.rol_asesor;
+            u.id, u.descripcion, u.linea_investigacion, u.rol_tesista, u.rol_colaborador;
         """
+        
+        # Ejecutamos la consulta
         result = self.db.execute(text(query))
-        usuarios = result.fetchall()
+        usuarios = result.fetchall()  # Obtenemos todos los registros
 
+        # Convertir los resultados en un formato adecuado (por ejemplo, una lista de diccionarios)
         usuarios_formateados = []
         for usuario in usuarios:
+            # Usamos los índices de la consulta para mapear los valores
             usuarios_formateados.append({
                 "id": usuario[0],
                 "descripcion": usuario[1],
