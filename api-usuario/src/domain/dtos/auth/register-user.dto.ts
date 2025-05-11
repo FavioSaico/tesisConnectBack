@@ -24,6 +24,7 @@ class EspecialidadDto {
   aniosExperiencia: number;
 }
 
+
 // 🔄 También esta
 class PublicacionDto {
   @IsString()
@@ -98,4 +99,8 @@ export class RegisterUserDto {
   @Type(() => PublicacionDto)
   @IsOptional()
   publicaciones?: PublicacionDto[];
+
+  @IsNumber()
+  @IsPositive({ message: 'Coloque una carrera profesional válida.' })
+  id_carrera_profesional: number;
 }

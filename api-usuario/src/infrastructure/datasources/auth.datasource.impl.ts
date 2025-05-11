@@ -91,6 +91,8 @@ export class AuthDatasourceImpl implements AuthDatasource {
                 urlPublicacion: pu.publicacion.url_publicacion
             }));
 
+            const usuarioRegistrado = await this.usuarioRepository.findOneBy({ correo: correo });
+
             return new AuthResponseDto(
                 usuario.id,
                 usuario.nombres,
@@ -101,7 +103,8 @@ export class AuthDatasourceImpl implements AuthDatasource {
                 usuario.rol_asesor,
                 usuario.orcid,
                 usuario.linea_investigacion,
-                usuario.grado_academico,
+                usuarioRegistrado.grado_academico,
+                usuarioRegistrado.carrera_profesional,
                 especialidades,
                 publicaciones
             );
@@ -158,6 +161,7 @@ export class AuthDatasourceImpl implements AuthDatasource {
                 usuario.orcid,
                 usuario.linea_investigacion,
                 usuario.grado_academico,
+                usuario.carrera_profesional,
                 especialidades,
                 publicaciones
             );
@@ -165,6 +169,64 @@ export class AuthDatasourceImpl implements AuthDatasource {
         } catch (error) {
             if (error instanceof CustomError) throw error;
             throw CustomError.internalServer();
+        }
+    }
+
+    async conseguirInformacionPorID(id: number): Promise<AuthResponseDto> {
+        try {
+            // 1. Buscar el usuario por ID
+            const usuario = await this.usuarioRepository.findOne({
+                where: { id }
+            });
+
+            if (!usuario) throw CustomError.badRequest('Usuario no encontrado');
+
+            // 2. Obtener las especialidades del usuario
+            const especialidadesUsuario = await this.especialidadUsuarioRepository.find({
+                where: { id_usuario: usuario.id },
+                relations: ['especialidad']
+            });
+
+            const especialidades = especialidadesUsuario.map(eu => ({
+                idEspecialidad: eu.id_especialidad,
+                nombreEspecialidad: eu.especialidad?.nombre ?? '',
+                aniosExperiencia: eu.anios_experiencia
+            }));
+
+            // 3. Obtener las publicaciones del usuario
+            const publicacionesUsuario = await this.publicacionUsuarioRepository.find({
+                where: { id_usuario: usuario.id },
+                relations: ['publicacion']
+            });
+
+            const publicaciones = publicacionesUsuario.map(pu => ({
+                titulo: pu.publicacion.titulo,
+                baseDatosBibliografica: pu.publicacion.base_datos_bibliografica,
+                revista: pu.publicacion.revista,
+                anioPublicacion: pu.publicacion.anio_publicacion,
+                urlPublicacion: pu.publicacion.url_publicacion
+            }));
+
+            // 4. Retornar la respuesta con la información del usuario
+            return new AuthResponseDto(
+                usuario.id,
+                usuario.nombres,
+                usuario.apellidos,
+                usuario.correo,
+                usuario.descripcion,
+                usuario.rol_tesista,
+                usuario.rol_asesor,
+                usuario.orcid,
+                usuario.linea_investigacion,
+                usuario.grado_academico,
+                usuario.carrera_profesional,
+                especialidades,
+                publicaciones
+            );
+        } catch (error) {
+            console.error('Error interno:', error); // 👉 Aquí ves el error real en consola
+            if (error instanceof CustomError) throw error;
+            throw CustomError.internalServer(); // Este es el que oculta el error si no haces el console.log
         }
     }
 }

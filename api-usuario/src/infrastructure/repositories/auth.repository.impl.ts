@@ -15,5 +15,9 @@ export class AuthRepositoryImpl implements AuthRepository{
     async login(loginUserDto: LoginUserDto):Promise<AuthResponseDto> {
         return this.authDatasource.login(loginUserDto);
     }
+
+    async conseguirInformacionPorID(id: number): Promise<AuthResponseDto> {
+        return this.authDatasource.conseguirInformacionPorID(id); // Delegación al datasource
+    }
 }
 

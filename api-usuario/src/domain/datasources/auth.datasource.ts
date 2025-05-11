@@ -7,4 +7,5 @@ export abstract class AuthDatasource{
 
     abstract login(loginUserDto: LoginUserDto):Promise<AuthResponseDto>
     abstract register(registerUserDto: RegisterUserDto):Promise<AuthResponseDto>
+    abstract conseguirInformacionPorID(id: number): Promise<AuthResponseDto>
 }
