@@ -8,14 +8,13 @@ import { plainToInstance } from "class-transformer";
 export class AuthController {
 
     constructor(
-        // inyectamos la abstracción (clase abstracta), no la implementación
         private readonly authRepostory: AuthRepository,
     ) { }
 
     private handleError = (error: unknown, res: Response) => {
 
         if (error instanceof CustomError) {
-            //retornamos el error en el response
+            
             return res.status(error.statusCode).json({ message: error.message });
         }
 
@@ -44,7 +43,7 @@ export class AuthController {
             .then(data => res.json(data))
             .catch(error => this.handleError(error, res));
     }
-
+    // ! convertir a caso de uso
     async conseguirInformacionPorID(req: Request, res: Response) {
         try {
             const id = parseInt(req.params.id);
