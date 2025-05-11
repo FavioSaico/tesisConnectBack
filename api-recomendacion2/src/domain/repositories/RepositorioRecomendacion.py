@@ -15,3 +15,7 @@ class RepositorioRecomendacion(ABC):
     @abstractmethod
     def obtener_recomendaciones_por_id(self, id_investigador: int):
         pass
+
+    @abstractmethod
+    def obtener_usuarios_con_especialidades_y_publicaciones(self):
+        pass

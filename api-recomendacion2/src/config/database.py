@@ -16,7 +16,6 @@ class Settings(BaseSettings):
     MYSQL_DB_NAME: str = Field(..., env="MYSQL_DB_NAME")
 
     PORT: int = Field(..., env="PORT")
-    JWT_SEED: str = Field(..., env="JWT_SEED")
 
     model_config = SettingsConfigDict(env_file=".env")
 
