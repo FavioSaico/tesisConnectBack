@@ -48,8 +48,11 @@ export class AuthController {
     async conseguirInformacionPorID(req: Request, res: Response) {
         try {
             const id = parseInt(req.params.id);
+            if(Number.isNaN(id)) {
+                throw CustomError.badRequest('Usuario no encontrado');
+            }
             const result = await this.authRepostory.conseguirInformacionPorID(id);
-            return res.json(result);  // ⬅️ Devuelve el AuthResponseDto al cliente
+            return res.json(result);
         } catch (error) {
             return res.status(error.statusCode || 500).json({ message: error.message || 'Error interno del servidor' });
         }
