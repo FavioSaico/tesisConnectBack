@@ -11,10 +11,10 @@ class RepositorioPublicacionImpl(RepositorioPublicacion):
     def __init__(self, db: Session):
         self.db = db
 
-    def listar(self, texto: Optional[str], id_categoria: Optional[int], id_estado: Optional[int]) -> List[Publicacion]:
+    def listar(self, texto: Optional[str], id_categoria: Optional[List[int]], id_estado: Optional[List[int]]) -> List[Publicacion]:
         query = self.db.query(PublicacionModel).filter_by(visible=True)
         if texto:
-            texto_limpio= re.sub(r'[^\w\s]', '', texto)
+            texto_limpio = re.sub(r'[^\w\s]', '', texto)
             palabras = texto_limpio.lower().split()
             condiciones = []
 
@@ -31,14 +31,11 @@ class RepositorioPublicacionImpl(RepositorioPublicacion):
                         func.lower(func.concat(' ', limpiar_signos(PublicacionModel.contenido), ' ')).like(like_pattern)
                     )
                 )
-
             query = query.filter(and_(*condiciones))
-
         if id_categoria:
-            query = query.filter_by(idCategoria=id_categoria)
+            query = query.filter(PublicacionModel.idCategoria.in_(id_categoria))
         if id_estado:
-            query = query.filter_by(idEstado=id_estado)
-
+            query = query.filter(PublicacionModel.idEstado.in_(id_estado))
         modelos = query.all()
         return [model_a_entidad(m) for m in modelos]
 

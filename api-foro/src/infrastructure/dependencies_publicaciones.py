@@ -1,6 +1,5 @@
 from sqlalchemy.orm import Session
 from fastapi import Depends
-
 from infrastructure.config.mysql import SessionLocal
 from infrastructure.config.mongodb import get_mongo_collection
 from infrastructure.database.mysql.repositories.repositorio_publicacion_impl import RepositorioPublicacionImpl
@@ -55,14 +54,23 @@ def get_marcar_respuesta_use_case(
     return MarcarComentarioComoRespuestaUseCase(publicacion_repo, comentario_repo)
 
 # Casos de uso - Comentario
-def get_crear_comentario_use_case(repo=Depends(get_repositorio_comentario)):
-    return CrearComentarioUseCase(repo)
+def get_crear_comentario_use_case(
+    publicacion_repo=Depends(get_repositorio_publicacion),
+    comentario_repo=Depends(get_repositorio_comentario)
+):
+    return CrearComentarioUseCase(comentario_repo, publicacion_repo)
 
-def get_obtener_comentario_por_id_use_case(repo=Depends(get_repositorio_comentario)):
-    return ObtenerComentarioPorIdUseCase(repo)
+def get_obtener_comentario_por_id_use_case(
+    publicacion_repo=Depends(get_repositorio_publicacion),
+    comentario_repo=Depends(get_repositorio_comentario)
+):
+    return ObtenerComentarioPorIdUseCase(comentario_repo, publicacion_repo)
 
-def get_eliminar_comentario_use_case(repo=Depends(get_repositorio_comentario)):
-    return EliminarComentarioUseCase(repo)
+def get_eliminar_comentario_use_case(
+    publicacion_repo=Depends(get_repositorio_publicacion),
+    comentario_repo=Depends(get_repositorio_comentario)
+):
+    return EliminarComentarioUseCase(comentario_repo, publicacion_repo)
 
 def get_obtener_comentarios_por_publicacion_use_case(
     publicacion_repo=Depends(get_repositorio_publicacion),

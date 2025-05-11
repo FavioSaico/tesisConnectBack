@@ -28,8 +28,6 @@ class RepositorioComentarioImpl(RepositorioComentario):
             "_id": ObjectId(id_comentario),
             "visible": True
         })
-        if not documento:
-            return False
         comentario = documento_a_entidad(documento)
         comentario.eliminar()
         resultado = self.coleccion.update_one(

@@ -12,13 +12,12 @@ class MarcarComentarioComoRespuestaUseCase:
     def ejecutar(self, id_publicacion: int, id_comentario: str):
         publicacion = self.publicacion_repo.obtener_por_id(id_publicacion)
         if not publicacion:
-            raise ValueError("La publicación no existe.")
-        if len(id_comentario) != 24 or not (comentario := self.comentario_repo.obtener_por_id(id_comentario)):
+            raise ValueError("La publicacion no existe")
+        comentario = self.comentario_repo.obtener_por_id(id_comentario)
+        if not comentario:
             raise ValueError("El comentario no existe")
         
-        if comentario.idComentarioPadre is not None:
-            comentario.idComentario=comentario.idComentarioPadre
-
+        ServicioForoAcademico.ValidarComentarioPublicacion(publicacion, comentario)
         ServicioForoAcademico.MarcarComentarioComoRespuesta(publicacion, comentario)
 
         self.publicacion_repo.actualizar(publicacion)

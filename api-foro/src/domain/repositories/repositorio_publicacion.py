@@ -6,7 +6,7 @@ from domain.entities.comentario import Comentario
 class RepositorioPublicacion(ABC):
 
     @abstractmethod
-    def listar(self, texto: Optional[str], id_categoria: Optional[int], id_estado: Optional[int]) -> List[Publicacion]:
+    def listar(self, texto: Optional[str], id_categoria: Optional [List[int]], id_estado: Optional[List[int]]) -> List[Publicacion]:
         """Devuelve las publicaciones con esa categoria, si estan visible."""
         pass
 
