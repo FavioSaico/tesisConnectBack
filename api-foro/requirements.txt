@@ -5,3 +5,4 @@ SQLAlchemy==2.0.40
 uvicorn==0.34.2
 PyMySQL==1.1.1
 python-dotenv==1.1.0
+cryptography==44.0.3

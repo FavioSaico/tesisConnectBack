@@ -42,31 +42,31 @@ class RepositorioPublicacionImpl(RepositorioPublicacion):
         modelos = query.all()
         return [model_a_entidad(m) for m in modelos]
 
-    def crear(self, publicacion: Publicacion) -> Publicacion:
+    def crear(self, publicacion: Publicacion) -> int:
         nueva = entidad_a_model(publicacion)
         self.db.add(nueva)
         self.db.commit()
         self.db.refresh(nueva)
-        publicacion.idPublicacion = nueva.idPublicacion
-        return publicacion
+        return nueva.idPublicacion
     
     def obtener_por_id(self, id_publicacion: int) -> Optional[Publicacion]:
-        modelo = (
+        publicacion_bd = (
             self.db.query(PublicacionModel)
             .filter(PublicacionModel.idPublicacion == id_publicacion)
             .filter(PublicacionModel.visible == True)
             .first()
         )
-        if not modelo:
+        if not publicacion_bd:
             return None
-        return model_a_entidad(modelo)
+        return model_a_entidad(publicacion_bd)
     
     def eliminar(self, id_publicacion: int) -> bool:
         publicacion_bd= self.db.query(PublicacionModel).filter_by(idPublicacion=id_publicacion).first()
         if publicacion_bd and publicacion_bd.visible:
             publicacion = model_a_entidad(publicacion_bd)
-            publicacion.eliminar()
+            publicacion.eliminar() # Cambia visible a False
             actualizar_model(publicacion_bd, publicacion)
+            
             self.db.commit()
             return True
         return False

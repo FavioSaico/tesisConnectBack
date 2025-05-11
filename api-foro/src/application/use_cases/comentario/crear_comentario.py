@@ -9,12 +9,13 @@ class CrearComentarioUseCase:
 
     def ejecutar(self, data: CrearComentarioDTO):
         comentario = Comentario(
+            idComentario = None,
             idUsuario = data.idUsuario,
             idPublicacion = data.idPublicacion,
             contenido = data.contenido,
             idComentarioPadre = data.idComentarioPadre,
-            fechaCreacion =datetime.utcnow(),
+            fechaCreacion =datetime.now(timezone.utc),
             visible = True,
-            idComentario = None
         )
-        return self.comentario_repo.crear(comentario)
+        id = self.comentario_repo.crear(comentario)
+        return {"mensaje": "Comentario creado", "id": id}

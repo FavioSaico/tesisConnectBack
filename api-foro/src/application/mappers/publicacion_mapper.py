@@ -1,5 +1,7 @@
+from datetime import timezone
 from domain.entities.publicacion import Publicacion
 from infrastructure.database.mysql.models.publicacion_model import PublicacionModel
+from presentation.dtos.publicacion_dto import MostrarPublicacionDTO
 
 def model_a_entidad(modelo: PublicacionModel) -> Publicacion:
     return Publicacion(
@@ -24,6 +26,16 @@ def entidad_a_model(entidad: Publicacion) -> PublicacionModel:
         fechaCreacion=entidad.fechaCreacion,
         visible=entidad.visible,
         idEstado=entidad.idEstado,
+        idComentarioRespuesta=entidad.idComentarioRespuesta
+    )
+
+def entidad_a_DTO(entidad: Publicacion) -> MostrarPublicacionDTO:
+    return MostrarPublicacionDTO(
+        idUsuario=entidad.idUsuario,
+        idCategoria=entidad.idCategoria,
+        titulo=entidad.titulo,
+        contenido=entidad.contenido,
+        fechaCreacion=entidad.fechaCreacion,
         idComentarioRespuesta=entidad.idComentarioRespuesta
     )
 

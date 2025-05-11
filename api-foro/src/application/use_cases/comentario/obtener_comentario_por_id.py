@@ -1,11 +1,12 @@
 from domain.repositories.repositorio_comentario import RepositorioComentario
+from application.mappers.comentario_mapper import entidad_a_DTO
 
 class ObtenerComentarioPorIdUseCase:
     def __init__(self, comentario_repo: RepositorioComentario):
         self.comentario_repo = comentario_repo
 
     def ejecutar(self, id_comentario: str):
-        comentario = self.comentario_repo.obtener_por_id(id_comentario)
-        if not comentario:
-            raise ValueError("Comentario no encontrado o no visible")
-        return comentario
+        if len(id_comentario) != 24 or not (comentario := self.comentario_repo.obtener_por_id(id_comentario)):
+            raise ValueError("El comentario no existe")
+
+        return entidad_a_DTO(comentario)

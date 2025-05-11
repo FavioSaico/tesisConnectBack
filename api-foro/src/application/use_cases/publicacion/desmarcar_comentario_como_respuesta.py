@@ -9,7 +9,7 @@ class DesmarcarComentarioComoRespuestaUseCase:
     def ejecutar(self, id_publicacion: int):
         publicacion: Publicacion = self.publicacion_repo.obtener_por_id(id_publicacion)
         if not publicacion:
-            raise ValueError("Publicación no encontrada.")
+            raise ValueError("La publicación no existe.")
         
         ServicioForoAcademico.DesmarcarComentarioComoRespuesta(publicacion)
 

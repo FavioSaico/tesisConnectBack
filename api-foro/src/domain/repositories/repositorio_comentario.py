@@ -5,8 +5,8 @@ from domain.entities.comentario import Comentario
 class RepositorioComentario(ABC):
 
     @abstractmethod
-    def crear(self, comentario: Comentario) -> Comentario:
-        """Crea un comentario y lo guarda en la bd"""
+    def crear(self, comentario: Comentario) -> str:
+        """Crea un comentario y lo guarda en la bd. Devuelve el id del comenntario"""
         pass
 
     @abstractmethod

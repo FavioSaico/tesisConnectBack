@@ -36,8 +36,8 @@ def listar_publicaciones(
 @router.post("/publicaciones/")
 def crear_publicacion(dto: CrearPublicacionDTO, use_case: CrearPublicacionUseCase = Depends(get_crear_publicacion_use_case)):
     try:
-        nueva = use_case.ejecutar(dto)
-        return {"mensaje": "Publicación creada", "id": nueva.idPublicacion}
+        resultado = use_case.ejecutar(dto)
+        return resultado
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -45,16 +45,7 @@ def crear_publicacion(dto: CrearPublicacionDTO, use_case: CrearPublicacionUseCas
 def obtener_publicacion(id: int, use_case: ObtenerPublicacionUseCase = Depends(get_obtener_publicacion_use_case)):
     try:
         publicacion = use_case.ejecutar(id)
-        return {
-            "idPublicacion": publicacion.idPublicacion,
-            "titulo": publicacion.titulo,
-            "contenido": publicacion.contenido,
-            "idUsuario": publicacion.idUsuario,
-            "idCategoria": publicacion.idCategoria,
-            "fechaCreacion": publicacion.fechaCreacion,
-            "idEstado": publicacion.idEstado,
-            "idComentarioRespuesta": publicacion.idComentarioRespuesta
-        }
+        return publicacion.__dict__
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
@@ -63,8 +54,8 @@ def obtener_publicacion(id: int, use_case: ObtenerPublicacionUseCase = Depends(g
 @router.delete("/publicaciones/{id}")
 def eliminar_publicacion(id: int, use_case: EliminarPublicacionUseCase = Depends(get_eliminar_publicacion_use_case)):
     try:
-        use_case.ejecutar(id)
-        return {"mensaje": "Publicación eliminada correctamente"}
+        resultado=use_case.ejecutar(id)
+        return resultado
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:

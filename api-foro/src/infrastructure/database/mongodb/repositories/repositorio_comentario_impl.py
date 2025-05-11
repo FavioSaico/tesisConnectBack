@@ -1,20 +1,18 @@
+from bson import ObjectId
 from typing import List, Optional
 from pymongo.collection import Collection
 from domain.entities.comentario import Comentario
-from infrastructure.database.mongodb.models.comentario_model import ComentarioModel 
-from application.mappers.comentario_mapper import documento_a_entidad, entidad_a_modelo
 from domain.repositories.repositorio_comentario import RepositorioComentario
-from bson import ObjectId
+from application.mappers.comentario_mapper import documento_a_entidad, entidad_a_modelo
 
 class RepositorioComentarioImpl(RepositorioComentario):
     def __init__(self, coleccion: Collection):
         self.coleccion = coleccion
 
-    def crear(self, comentario: Comentario) -> Comentario:
-        nueva = entidad_a_modelo(comentario).model_dump(exclude={"idComentario"}) # Forzar a Mongo a generar el id
+    def crear(self, comentario: Comentario) -> str:
+        nueva = entidad_a_modelo(comentario).model_dump(exclude={"idComentario"}) 
         resultado = self.coleccion.insert_one(nueva)
-        comentario.idComentario = str(resultado.inserted_id)
-        return comentario
+        return str(resultado.inserted_id)
 
     def obtener_por_id(self, id_comentario: str) -> Optional[Comentario]:
         documento = self.coleccion.find_one({
@@ -45,6 +43,4 @@ class RepositorioComentarioImpl(RepositorioComentario):
             "idPublicacion": id_publicacion,
             "visible": True
         })
-        print(type(id_publicacion))
-        comentarios = [documento_a_entidad(doc) for doc in documentos]
-        return comentarios
+        return [documento_a_entidad(doc) for doc in documentos]

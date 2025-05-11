@@ -11,8 +11,8 @@ class RepositorioPublicacion(ABC):
         pass
 
     @abstractmethod
-    def crear(self, publicacion: Publicacion) -> Publicacion:
-        """Crea una publicacion y lo guarda en la bd"""
+    def crear(self, publicacion: Publicacion) -> int:
+        """Crea una publicacion y lo guarda en la bd. Devuelve el id de la publicacion"""
         pass
 
     @abstractmethod

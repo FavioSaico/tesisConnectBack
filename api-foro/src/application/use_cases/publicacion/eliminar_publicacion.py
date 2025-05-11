@@ -7,5 +7,5 @@ class EliminarPublicacionUseCase:
     def ejecutar(self, id_publicacion: int):
         eliminado = self.publicacion_repo.eliminar(id_publicacion)
         if not eliminado:
-            raise ValueError("Publicación no encontrada")
-        return True
+            raise ValueError("La publicación no existe")
+        return {"mensaje": "Publicación eliminada correctamente"}

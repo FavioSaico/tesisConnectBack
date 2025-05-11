@@ -11,7 +11,7 @@ class PublicacionModel(Base):
     idCategoria = Column(Integer)
     titulo = Column(String(255))
     contenido = Column(String)
-    fechaCreacion = Column(DateTime)
+    fechaCreacion = Column(DateTime(timezone=True), nullable=False)
     visible = Column(Boolean, default=True)
     idEstado = Column(Integer)
     idComentarioRespuesta = Column(String, nullable=True)

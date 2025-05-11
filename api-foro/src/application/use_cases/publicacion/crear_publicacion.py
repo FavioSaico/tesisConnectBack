@@ -14,10 +14,10 @@ class CrearPublicacionUseCase:
             idCategoria=data.idCategoria,
             titulo=data.titulo,
             contenido=data.contenido,
-            fechaCreacion=datetime.utcnow(),
+            fechaCreacion=datetime.now(timezone.utc),
             visible=True,
-            idEstado=data.idEstado,
-            idComentarioRespuesta=data.idComentarioRespuesta
+            idEstado=1,
+            idComentarioRespuesta=None
         )
-        self.publicacion_repo.crear(publicacion)
-        return publicacion
+        id = self.publicacion_repo.crear(publicacion)
+        return {"mensaje": "Publicación creada", "id": id}
