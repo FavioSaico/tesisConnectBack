@@ -342,26 +342,6 @@ paths:
               type: "string"
             Access-Control-Allow-Origin:
               type: "string"
-    options:
-      operationId: optionsUserbyId
-      summary: CORS preflight
-      responses:
-        '204':
-          description: No content
-          headers:
-            Access-Control-Allow-Origin:
-              type: "string"
-            Access-Control-Allow-Methods:
-              type: "string"
-            Access-Control-Allow-Headers:
-              type: "string"
-      x-google-backend:
-        address: https://api-usuario-609569711189.us-central1.run.app
-      x-google-extensions:
-        - type: cors
-          origin: ["*"]
-          method: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
-          responseHeader: ["Content-Type"]
   /recomendaciones/por-id-y-fecha:
     get:
       description: Obtener recomendaciones de usuario por id

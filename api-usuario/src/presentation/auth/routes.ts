@@ -24,7 +24,7 @@ export class AuthRoutes{
 
             router.post('/register',[AuthMiddleware.validateRequest(RegisterUserDto)], controller.registerUser);
 
-            router.get('/informacion/:id', controller.conseguirInformacionPorID.bind(controller));
+            router.get('/informacion/:id', controller.conseguirInformacionPorID);
 
 
         } catch (error) {

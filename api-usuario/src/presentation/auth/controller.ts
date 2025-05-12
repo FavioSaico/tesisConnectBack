@@ -4,6 +4,7 @@ import { RegisterUser } from "../../application/use-cases/auth/register-user.use
 import { LoginUserDto } from "../../domain/dtos/auth/login-user.dto";
 import { LoginUser } from "../../application/use-cases/auth/login-user.use-case";
 import { plainToInstance } from "class-transformer";
+import { UserByIdUseCase } from "../../application/use-cases/auth/user-by-id.use-case";
 
 export class AuthController {
 
@@ -44,14 +45,20 @@ export class AuthController {
             .catch(error => this.handleError(error, res));
     }
     // ! convertir a caso de uso
-    async conseguirInformacionPorID(req: Request, res: Response) {
+    conseguirInformacionPorID = async (req: Request, res: Response): Promise<any> => {
         try {
             const id = parseInt(req.params.id);
+        
             if(Number.isNaN(id)) {
                 throw CustomError.badRequest('Usuario no encontrado');
             }
-            const result = await this.authRepostory.conseguirInformacionPorID(id);
-            return res.json(result);
+            
+            new UserByIdUseCase(this.authRepostory)
+            .execute(id)
+            .then(data => res.json(data))
+            .catch(error => this.handleError(error, res));
+            // const result = await this.authRepostory.conseguirInformacionPorID(id);
+            // return res.json(result);
         } catch (error) {
             return res.status(error.statusCode || 500).json({ message: error.message || 'Error interno del servidor' });
         }

@@ -224,7 +224,7 @@ export class AuthDatasourceImpl implements AuthDatasource {
                 publicaciones
             );
         } catch (error) {
-            console.error('Error interno:', error); // 👉 Aquí ves el error real en consola
+            // console.error('Error interno:', error);
             if (error instanceof CustomError) throw error;
             throw CustomError.internalServer(); // Este es el que oculta el error si no haces el console.log
         }

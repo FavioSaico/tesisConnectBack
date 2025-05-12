@@ -57,15 +57,15 @@ class RepositorioRecomendacionImpl(RepositorioRecomendacion):
             GROUP_CONCAT(e.nombre ORDER BY e.nombre) AS especialidades,
             GROUP_CONCAT(p.titulo ORDER BY p.anio_publicacion DESC) AS publicaciones
         FROM 
-            Usuario u
+            usuario u
         LEFT JOIN 
-            Especialidad_Usuario eu ON u.id = eu.id_usuario
+            especialidad_usuario eu ON u.id = eu.id_usuario
         LEFT JOIN 
-            Especialidad e ON eu.id_especialidad = e.id
+            especialidad e ON eu.id_especialidad = e.id
         LEFT JOIN 
-            Publicacion_Usuario pu ON u.id = pu.id_usuario
+            publicacion_usuario pu ON u.id = pu.id_usuario
         LEFT JOIN 
-            Publicacion p ON pu.id_publicacion = p.id
+            publicacion p ON pu.id_publicacion = p.id
         GROUP BY 
             u.id, u.descripcion, u.linea_investigacion, u.rol_tesista, u.rol_asesor;
         """
