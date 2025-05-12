@@ -308,6 +308,27 @@ paths:
               type: "string"
             Access-Control-Allow-Origin:
               type: "string"
+  /api/auth/informacion:
+    options:
+      operationId: optionsGetUserById
+      summary: CORS preflight
+      responses:
+        '204':
+          description: No content
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-google-backend:
+        address: https://api-usuario-609569711189.us-central1.run.app/api/auth/informacion
+      x-google-extensions:
+        - type: cors
+          origin: ["*"]
+          method: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+          responseHeader: ["Content-Type"]
   /api/auth/informacion/{id}:
     get:
       description: Obtener usuario por id
@@ -317,8 +338,8 @@ paths:
         - name: id
           in: path
           required: true
-          schema:
-            type: string
+          type: string
+          description: Id del usuario.
       x-google-backend:
         address: https://api-usuario-609569711189.us-central1.run.app
         path_translation: APPEND_PATH_TO_ADDRESS
@@ -342,6 +363,32 @@ paths:
               type: "string"
             Access-Control-Allow-Origin:
               type: "string"
+    options:
+      operationId: optionsGetUserById2
+      summary: CORS preflight
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+          description: Id del usuario.
+      responses:
+        '204':
+          description: No content
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-google-backend:
+        address: https://api-usuario-609569711189.us-central1.run.app
+      x-google-extensions:
+        - type: cors
+          origin: ["*"]
+          method: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+          responseHeader: ["Content-Type"]
   /recomendaciones/por-id-y-fecha:
     get:
       description: Obtener recomendaciones de usuario por id
@@ -351,8 +398,8 @@ paths:
         - name: id_investigador
           in: query
           required: true
-          schema:
-            type: string
+          type: string
+          description: Id del usuario.
       x-google-backend:
         address: https://api-recomendacion-609569711189.us-central1.run.app
         path_translation: APPEND_PATH_TO_ADDRESS
@@ -376,40 +423,26 @@ paths:
               type: "string"
             Access-Control-Allow-Origin:
               type: "string"
-  /recomendaciones/{id}:
-    get:
-      description: Generar y Obtener recomendaciones de usuario por id
-      operationId: getGenerarRecomendacionesUserById
-      summary: GetGenerarRecomendacionesUserById
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      x-google-backend:
-        address: https://api-recomendacion-609569711189.us-central1.run.app
-        path_translation: APPEND_PATH_TO_ADDRESS
-      x-google-extensions:
-        - type: cors
-          method: "*"
-          origin: ["*"]
-          responseHeaders: ["Content-Type"]
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      deprecated: false
+    options:
+      operationId: optionsGetRecomendaciones
+      summary: CORS preflight
       responses:
-        '200':
-          description: A successful response
+        '204':
+          description: No content
           headers:
-            Access-Control-Allow-Headers:
+            Access-Control-Allow-Origin:
               type: "string"
             Access-Control-Allow-Methods:
               type: "string"
-            Access-Control-Allow-Origin:
+            Access-Control-Allow-Headers:
               type: "string"
+      x-google-backend:
+        address: https://api-recomendacion-609569711189.us-central1.run.app
+      x-google-extensions:
+        - type: cors
+          origin: ["*"]
+          method: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+          responseHeader: ["Content-Type"]
   /recomendaciones:
     get:
       description: Generar todas las recomendaciones
@@ -438,3 +471,83 @@ paths:
               type: "string"
             Access-Control-Allow-Origin:
               type: "string"
+    options:
+      operationId: optionsGenerarRecomendaciones
+      summary: CORS preflight
+      responses:
+        '204':
+          description: No content
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-google-backend:
+        address: https://api-recomendacion-609569711189.us-central1.run.app
+      x-google-extensions:
+        - type: cors
+          origin: ["*"]
+          method: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+          responseHeader: ["Content-Type"]
+  /recomendaciones/{id}:
+    get:
+      description: Generar y Obtener recomendaciones de usuario por id
+      operationId: getGenerarRecomendacionesUserById
+      summary: GetGenerarRecomendacionesUserById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+          description: Id del usuario.
+      x-google-backend:
+        address: https://api-recomendacion-609569711189.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+      x-google-extensions:
+        - type: cors
+          method: "*"
+          origin: ["*"]
+          responseHeaders: ["Content-Type"]
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      deprecated: false
+      responses:
+        '200':
+          description: A successful response
+          headers:
+            Access-Control-Allow-Headers:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Origin:
+              type: "string"
+    options:
+      operationId: optionsGetRecomendaciones646478
+      summary: CORS preflight
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+          description: Id del usuario.
+      responses:
+        '204':
+          description: No content
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-google-backend:
+        address: https://api-recomendacion-609569711189.us-central1.run.app
+      x-google-extensions:
+        - type: cors
+          origin: ["*"]
+          method: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+          responseHeader: ["Content-Type"]
