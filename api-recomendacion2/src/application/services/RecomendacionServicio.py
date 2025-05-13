@@ -5,7 +5,13 @@ from src.domain.entities.Recomendacion import Recomendacion
 class RecomendacionServicio:
     def __init__(self, repositorio):
         self.repositorio = repositorio
-        self.model = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2')
+        self.model = None  # El modelo no se carga hasta que se necesite
+
+    def _cargar_modelo(self):
+        """Carga el modelo de SentenceTransformer solo cuando se necesita."""
+        if self.model is None:
+            from sentence_transformers import SentenceTransformer
+            self.model = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2')
 
     def calcular_y_guardar_recomendaciones(self, investigadores):
         # Filtrar por rol usando claves de diccionario
@@ -31,6 +37,9 @@ class RecomendacionServicio:
         self.repositorio.guardar_recomendaciones(recomendaciones)
 
     def calcular_similitudes(self, fuente, objetivo, tipo):
+        # Asegurarse de que el modelo esté cargado antes de usarlo
+        self._cargar_modelo()
+
         # Generar textos combinados para cada investigador
         textos_fuente = [self._texto_completo(f) for f in fuente]
         textos_objetivo = [self._texto_completo(o) for o in objetivo]
