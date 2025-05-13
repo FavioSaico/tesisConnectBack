@@ -11,7 +11,8 @@ class RepositorioRecomendacionImpl(RepositorioRecomendacion):
         self.db = SessionLocal()
 
     def guardar_recomendaciones(self, recomendaciones):
-        for rec in recomendaciones:
+     for rec in recomendaciones:
+        if rec.idInvestigador != rec.idUsuarioRecomendado:  # Evita guardar auto-recomendaciones
             self.db.add(RecomendacionDB(
                 id_investigador=rec.idInvestigador,
                 id_usuario_recomendado=rec.idUsuarioRecomendado,
@@ -85,3 +86,11 @@ class RepositorioRecomendacionImpl(RepositorioRecomendacion):
             })
 
         return usuarios_formateados
+        
+    def obtener_recomendaciones_por_id_y_fecha_asesor(self, id_investigador, fecha):
+        rows = self.db.query(RecomendacionDB).filter(
+            RecomendacionDB.id_investigador == id_investigador,
+            RecomendacionDB.fecha == fecha,
+            RecomendacionDB.tipo == 'asesor'
+        ).order_by(desc(RecomendacionDB.puntaje)).all()
+        return [Recomendacion(r.id_investigador, r.id_usuario_recomendado, r.puntaje, r.fecha, r.tipo) for r in rows]

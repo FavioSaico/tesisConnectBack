@@ -64,3 +64,16 @@ def procesar_y_obtener_recomendaciones(
     recomendaciones_transformadas = [RecomendacionTransformador.transformar(r) for r in recomendaciones]
     
     return {"mensaje": "Recomendaciones generadas correctamente", "recomendaciones": recomendaciones_transformadas}
+
+
+@router.get("/recomendaciones/dia-actual-por-id-asesor/{id_investigador}")
+def obtener_recomendaciones_por_id_y_fecha_asesor(
+    id_investigador: int,
+    servicio: RecomendacionServicio = Depends(get_recomendacion_servicio)
+):
+    recomendaciones = servicio.obtener_recomendaciones_por_id_y_fecha_asesor(id_investigador)
+    
+    # Usar el transformador para convertir las recomendaciones
+    recomendaciones_transformadas = [RecomendacionTransformador.transformar(r) for r in recomendaciones]
+    
+    return {"recomendaciones": recomendaciones_transformadas}
