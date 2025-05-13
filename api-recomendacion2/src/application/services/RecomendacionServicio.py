@@ -78,3 +78,6 @@ class RecomendacionServicio:
     
     def obtener_recomendaciones_por_id(self, id_investigador):
         return self.repositorio.obtener_recomendaciones_por_id(id_investigador)
+    
+    def obtener_recomendaciones_por_id_y_fecha_asesor(self, id_investigador):
+        return self.repositorio.obtener_recomendaciones_por_id_y_fecha_asesor(id_investigador, date.today())
