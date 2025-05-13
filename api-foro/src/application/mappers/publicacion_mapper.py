@@ -36,6 +36,7 @@ def entidad_a_DTO(entidad: Publicacion) -> MostrarPublicacionDTO:
         titulo=entidad.titulo,
         contenido=entidad.contenido,
         fechaCreacion=entidad.fechaCreacion,
+        idEstado=entidad.idEstado,
         idComentarioRespuesta=entidad.idComentarioRespuesta
     )
 
