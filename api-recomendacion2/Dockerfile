@@ -8,10 +8,13 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# 💡 Forzar la descarga del modelo (esto se ejecuta durante build)
+RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2')"
+
 # Copia el código del proyecto
 COPY . .
 
-# Expone el puerto 8000
+# Expone el puerto
 EXPOSE 8080
 
 # Comando para arrancar FastAPI con uvicorn
