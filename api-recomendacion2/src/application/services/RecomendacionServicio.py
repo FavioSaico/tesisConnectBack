@@ -14,37 +14,34 @@ class RecomendacionServicio:
             self.model = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2')
 
     def calcular_y_guardar_recomendaciones(self, investigadores):
-        # Filtrar por rol usando claves de diccionario
-        fuente_tesistas = [i for i in investigadores if i["rolTesista"] == 1]
-        objetivo_asesores = [i for i in investigadores if i["rolAsesor"] == 1]
-
-        fuente_asesores = [i for i in investigadores if i["rolAsesor"] == 1]
-        objetivo_tesistas = [i for i in investigadores if i["rolTesista"] == 1]
-
         hoy = date.today()
 
-        # Eliminar anteriores por tipo
+        # Eliminar recomendaciones previas
         self.repositorio.eliminar_por_fecha_y_tipo(hoy, "asesor")
         self.repositorio.eliminar_por_fecha_y_tipo(hoy, "tesista")
 
         recomendaciones = []
 
-        # Calcular similitudes y crear recomendaciones
-        recomendaciones += self.calcular_similitudes(fuente_tesistas, objetivo_asesores, "asesor")
-        recomendaciones += self.calcular_similitudes(fuente_asesores, objetivo_tesistas, "tesista")
+        # Todos los investigadores como fuente
+        todos = investigadores
+
+        #Tesistas como objetivo para recomendaciones tipo "tesista"
+        objetivo_tesistas = [i for i in investigadores if i["rolTesista"] == 1]
+        recomendaciones += self.calcular_similitudes(todos, objetivo_tesistas, "tesista")
+
+        # Asesores como objetivo para recomendaciones tipo "asesor"
+        objetivo_asesores = [i for i in investigadores if i["rolAsesor"] == 1]
+        recomendaciones += self.calcular_similitudes(todos, objetivo_asesores, "asesor")
 
         # Guardar todas las recomendaciones generadas
         self.repositorio.guardar_recomendaciones(recomendaciones)
 
     def calcular_similitudes(self, fuente, objetivo, tipo):
-        # Asegurarse de que el modelo esté cargado antes de usarlo
         self._cargar_modelo()
 
-        # Generar textos combinados para cada investigador
         textos_fuente = [self._texto_completo(f) for f in fuente]
         textos_objetivo = [self._texto_completo(o) for o in objetivo]
 
-        # Embeddings con modelo
         emb_fuente = self.model.encode(textos_fuente, convert_to_tensor=True)
         emb_objetivo = self.model.encode(textos_objetivo, convert_to_tensor=True)
 
@@ -52,11 +49,16 @@ class RecomendacionServicio:
 
         for i, emb_f in enumerate(emb_fuente):
             scores = util.cos_sim(emb_f, emb_objetivo)[0]
-            for j, score in enumerate(scores):
+            top_k = min(10, len(scores))  # máximo 10 o menos si hay menos objetivos
+
+            # Obtener índices de los top_k puntajes más altos
+            top_indices = scores.argsort(descending=True)[:top_k]
+
+            for j in top_indices:
                 recomendaciones.append(Recomendacion.crear(
                     fuente[i]["id"],
                     objetivo[j]["id"],
-                    float(score),
+                    float(scores[j]),
                     tipo
                 ))
 
