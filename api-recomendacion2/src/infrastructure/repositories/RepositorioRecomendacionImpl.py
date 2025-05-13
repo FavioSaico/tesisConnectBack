@@ -94,3 +94,12 @@ class RepositorioRecomendacionImpl(RepositorioRecomendacion):
             RecomendacionDB.tipo == 'asesor'
         ).order_by(desc(RecomendacionDB.puntaje)).all()
         return [Recomendacion(r.id_investigador, r.id_usuario_recomendado, r.puntaje, r.fecha, r.tipo) for r in rows]
+    
+    def obtener_recomendaciones_por_id_y_fecha_tesista(self, id_investigador, fecha):
+        rows = self.db.query(RecomendacionDB).filter(
+            RecomendacionDB.id_investigador == id_investigador,
+            RecomendacionDB.fecha == fecha,
+            RecomendacionDB.tipo == 'tesista'
+        ).order_by(desc(RecomendacionDB.puntaje)).all()
+        return [Recomendacion(r.id_investigador, r.id_usuario_recomendado, r.puntaje, r.fecha, r.tipo) for r in rows]    
+    

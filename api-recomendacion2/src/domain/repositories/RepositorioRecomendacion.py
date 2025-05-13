@@ -23,3 +23,9 @@ class RepositorioRecomendacion(ABC):
     @abstractmethod
     def obtener_recomendaciones_por_id_y_fecha_asesor(self, id_investigador: int):
         pass
+    
+    @abstractmethod
+    def obtener_recomendaciones_por_id_y_fecha_tesista(self, id_investigador: int):
+        pass
+    
+    
