@@ -31,6 +31,7 @@ def entidad_a_model(entidad: Publicacion) -> PublicacionModel:
 
 def entidad_a_DTO(entidad: Publicacion) -> MostrarPublicacionDTO:
     return MostrarPublicacionDTO(
+        idPublicacion=entidad.idPublicacion,
         idUsuario=entidad.idUsuario,
         idCategoria=entidad.idCategoria,
         titulo=entidad.titulo,

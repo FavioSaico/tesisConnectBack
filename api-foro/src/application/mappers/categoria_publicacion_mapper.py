@@ -10,5 +10,6 @@ def model_a_entidad(modelo: CategoriaPublicacionModel) -> CategoriaPublicacion:
 
 def entidad_a_DTO(entidad: CategoriaPublicacion) -> MostrarCategoriaPublicacionDTO:
     return MostrarCategoriaPublicacionDTO(
+        id=entidad.id,
         nombre=entidad.nombre
     )

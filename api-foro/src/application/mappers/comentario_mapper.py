@@ -28,6 +28,7 @@ def entidad_a_modelo(entidad: Comentario) -> ComentarioModel:
 
 def entidad_a_DTO(entidad: Comentario) -> MostrarComentarioDTO:
     return MostrarComentarioDTO(
+        idComentario=entidad.idComentario,
         idUsuario=entidad.idUsuario,
         idPublicacion=entidad.idPublicacion,
         contenido=entidad.contenido,

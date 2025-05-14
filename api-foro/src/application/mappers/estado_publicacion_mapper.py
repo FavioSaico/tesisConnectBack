@@ -10,5 +10,6 @@ def model_a_entidad(modelo: EstadoPublicacionModel) -> EstadoPublicacion:
 
 def entidad_a_DTO(entidad: EstadoPublicacion) -> MostrarEstadoPublicacionDTO:
     return MostrarEstadoPublicacionDTO(
+        id=entidad.id,
         tipo=entidad.tipo
     )
