@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { GetOrcidUserUseCase } from "../../application/use-cases/orcid/getorcidinfo-user.use-case";
+import { GetOrcidUserUseCase } from "../../application/use-cases/orcid/ObtenerOrcidInfo.use-case";
 import { OrcidRepository } from "../../domain/repositories/orcidRepository";
 
 export class OrcidController {
