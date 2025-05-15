@@ -7,6 +7,6 @@ export class OrcidUser {
     public readonly apellido: string,
     public readonly url_perfil: string,
     public readonly url_linkedin: string = null,
-    public readonly publicaciones: OrcidWork[] = []  
+    public readonly publicaciones: OrcidWork[] = []
   ) {}
 }
