@@ -1,10 +1,10 @@
 import smtplib
 from email.mime.text import MIMEText
-from domain.models import Notificacion
-from application.email_template import generar_html
+from src.domain.models import Notificacion
+from src.application.email_template import generar_html
 
 REMITENTE = "jhamir.cespedes@unmsm.edu.pe"
-CONTRASEÑA = "contraseña"
+CONTRASEÑA = "eyag uiys qbvp hnza"
 
 def enviar_email(notificacion: Notificacion):
     cuerpo_html = generar_html("Investigador Uno", "Título de tesis 2025", "Área", "Universidad de Prueba", "TesisConnect.com")

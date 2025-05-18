@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
-from domain.models import Notificacion
-from application.use_cases import procesar_notificacion
+from src.domain.models import Notificacion
+from src.application.use_cases import procesar_notificacion
 
 router = APIRouter()
 
