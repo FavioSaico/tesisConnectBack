@@ -3,6 +3,7 @@ from google.cloud import pubsub_v1
 from google.api_core.exceptions import AlreadyExists
 
 # Variables para emulador local
+# Esto solo para probarlo de manera local
 os.environ["PUBSUB_EMULATOR_HOST"] = "localhost:8085"
 os.environ["PUBSUB_PROJECT_ID"] = "mi-proyecto-local"
 
