@@ -6,13 +6,14 @@ WORKDIR /app
 
 # Copia los archivos necesarios
 COPY ./src ./src
+COPY ./main.py .
 COPY requirements.txt .
 
 # Instala las dependencias
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Exponer el puerto para FastAPI
+# Expone el puerto 8000
 EXPOSE 8080
 
-# Comando para iniciar Uvicorn
-CMD ["sh", "-c", "PYTHONPATH=./src uvicorn src.main:app --host 0.0.0.0 --port ${PORT:-8080}"]
+# Comando para arrancar FastAPI con uvicorn
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-8080}"]
