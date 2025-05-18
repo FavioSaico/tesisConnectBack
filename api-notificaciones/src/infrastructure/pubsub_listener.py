@@ -1,20 +1,29 @@
 import os
-import json
+from dotenv import load_dotenv
 from google.cloud import pubsub_v1
+import json
+from src.application.use_cases import procesar_notificacion
+from src.domain.models import Notificacion
+from src.config.settings import settings  # ✅ importa tus settings centralizados
+
+# Carga variables del entorno .env si existe (solo en local)
+dotenv_path = os.path.join(os.path.dirname(__file__), '..', '..', '.env')
+if os.path.exists(dotenv_path):
+    load_dotenv(dotenv_path)
+
+# Si estamos en entorno local y se define el emulador, lo usamos
+if settings.ENV == "development" and settings.PUBSUB_EMULATOR_HOST:
+    os.environ["PUBSUB_EMULATOR_HOST"] = settings.PUBSUB_EMULATOR_HOST
+    print(f"📡 Conectando al emulador de Pub/Sub en {settings.PUBSUB_EMULATOR_HOST}")
+
+# Importar después de definir la variable del emulador
+from google.cloud import pubsub_v1
+
 from src.application.use_cases import procesar_notificacion
 from src.domain.models import Notificacion
 
-# Para LOCAL: si quieres usar emulador Pub/Sub, define esta variable de entorno externamente
-# Ejemplo local: export PUBSUB_EMULATOR_HOST=localhost:8085
-#pubsub_emulator = os.getenv("PUBSUB_EMULATOR_HOST")
-#if pubsub_emulator:
-#    os.environ["PUBSUB_EMULATOR_HOST"] = pubsub_emulator  # Sólo si está definida externamente
-
-project_id = os.getenv("PUBSUB_PROJECT_ID")
-subscription_name = os.getenv("PUBSUB_SUBSCRIPTION_NAME")
-
-if not project_id or not subscription_name:
-    raise RuntimeError("Las variables de entorno PUBSUB_PROJECT_ID y PUBSUB_SUBSCRIPTION_NAME deben estar definidas")
+project_id = settings.PUBSUB_PROJECT_ID
+subscription_name = settings.PUBSUB_SUBSCRIPTION_NAME
 
 subscriber = pubsub_v1.SubscriberClient()
 subscription_path = subscriber.subscription_path(project_id, subscription_name)
@@ -37,7 +46,7 @@ def iniciar_escucha():
         streaming_pull_future.result()
     except KeyboardInterrupt:
         streaming_pull_future.cancel()
-        print("Listener detenido.")
+        print("🛑 Listener detenido.")
 
 if __name__ == "__main__":
     iniciar_escucha()
