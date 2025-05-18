@@ -27,10 +27,7 @@ Pasos para ejecutar el proyecto:
 ```
 USE TESISCONNECT;
 
-CREATE TABLE rankings (
-    id_usuario INT NOT NULL,
-    id_asesor INT NOT NULL,
-    puntaje FLOAT NOT NULL
+CREATE TABLE recomendaciones (
 );
 ```
 
