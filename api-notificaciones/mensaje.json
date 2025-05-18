@@ -1,0 +1,18 @@
+{
+  "type": "solicitudEnviada",
+  "data": {
+    "remitente": {
+      "id": "user_01",
+      "nombre": "Juan Pérez",
+      "correo": "juan@example.com"
+    },
+    "destinatario": {
+      "id": "user_02",
+      "nombre": "María López",
+      "correo": "jhordanbrayan64@gmail.com"
+    },
+    "tituloProyecto": "Algoritmo utilizando Naive Bayes para las apuestas",
+    "areaInvestigacion": "Ciencias del fracaso",
+    "universidad": "UNMSM"
+  }
+}
