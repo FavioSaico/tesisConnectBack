@@ -1,6 +1,17 @@
 from string import Template
 
-def generar_html(nombre_solicitante: str, titulo_tesis: str, area: str, universidad: str, url: str) -> str:
+def generar_html_desde_evento(evento: dict) -> str:
+    data = evento.get("data", {})
+    remitente = data.get("remitente", {})
+
+    nombre = remitente.get("nombre", "[Nombre del solicitante]")
+    titulo_tesis = data.get("tituloProyecto", "[Título de tesis]")
+    area = data.get("areaInvestigacion", "[Área de investigación]")
+    universidad = data.get("universidad", "[Universidad]")
+    id_remitente = remitente.get("id", "[ID]")
+
+    url = f"https://tesis-connect.netlify.app/profile/{id_remitente}"
+
     html = Template("""
     <html>
     <body style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
@@ -14,7 +25,7 @@ def generar_html(nombre_solicitante: str, titulo_tesis: str, area: str, universi
                 <tr><td style="padding: 8px;"><strong>Universidad:</strong></td><td>$universidad</td></tr>
             </table>
 
-            <p style="margin-top: 20px;">Puedes ver más detalles y responder a esta solicitud desde la plataforma:</p>
+            <p style="margin-top: 20px;">Puedes ver más detalles y responder a esta solicitud desde la plataforma</p>
             <a href="$url" style="display: inline-block; padding: 10px 20px; background-color: #2e86de; color: white; text-decoration: none; border-radius: 5px;">Ver solicitud</a>
 
             <p style="margin-top: 40px; font-size: 12px; color: gray;">Este es un mensaje automático generado por la plataforma TesisConnect.</p>
@@ -22,8 +33,9 @@ def generar_html(nombre_solicitante: str, titulo_tesis: str, area: str, universi
     </body>
     </html>
     """)
+
     return html.substitute(
-        nombre=nombre_solicitante,
+        nombre=nombre,
         tesis=titulo_tesis,
         area=area,
         universidad=universidad,
