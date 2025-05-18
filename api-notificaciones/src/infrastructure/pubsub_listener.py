@@ -6,9 +6,9 @@ from src.domain.models import Notificacion
 
 # Para LOCAL: si quieres usar emulador Pub/Sub, define esta variable de entorno externamente
 # Ejemplo local: export PUBSUB_EMULATOR_HOST=localhost:8085
-pubsub_emulator = os.getenv("PUBSUB_EMULATOR_HOST")
-if pubsub_emulator:
-    os.environ["PUBSUB_EMULATOR_HOST"] = pubsub_emulator  # Sólo si está definida externamente
+#pubsub_emulator = os.getenv("PUBSUB_EMULATOR_HOST")
+#if pubsub_emulator:
+#    os.environ["PUBSUB_EMULATOR_HOST"] = pubsub_emulator  # Sólo si está definida externamente
 
 project_id = os.getenv("PUBSUB_PROJECT_ID")
 subscription_name = os.getenv("PUBSUB_SUBSCRIPTION_NAME")
