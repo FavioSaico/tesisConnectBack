@@ -54,3 +54,8 @@ jobs:
         run: |
           docker build -t southamerica-east1-docker.pkg.dev/metal-node-424103-e4/repo-image-docker/api-recomendacion:${SHORT_SHA} ./api-recomendacion2
           docker push southamerica-east1-docker.pkg.dev/metal-node-424103-e4/repo-image-docker/api-recomendacion:${SHORT_SHA}
+
+      - name: Build and push Docker image api-notificaciones
+        run: |
+          docker build -t southamerica-east1-docker.pkg.dev/metal-node-424103-e4/repo-image-docker/api-notificaciones:${SHORT_SHA} ./api-notificaciones
+          docker push southamerica-east1-docker.pkg.dev/metal-node-424103-e4/repo-image-docker/api-notificaciones:${SHORT_SHA}
