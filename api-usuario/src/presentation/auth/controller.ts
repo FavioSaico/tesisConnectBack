@@ -44,7 +44,7 @@ export class AuthController {
             .then(data => res.json(data))
             .catch(error => this.handleError(error, res));
     }
-    // ! convertir a caso de uso
+    
     conseguirInformacionPorID = async (req: Request, res: Response): Promise<any> => {
         try {
             const id = parseInt(req.params.id);
