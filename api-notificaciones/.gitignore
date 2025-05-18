@@ -1,0 +1,18 @@
+# Archivos compilados de Python
+__pycache__/
+*.py[cod]
+
+# Entornos virtuales
+env/
+venv/
+
+# Archivos de configuración del sistema
+.DS_Store
+
+# Archivos temporales
+*.log
+*.tmp
+*.swp
+
+# Archivos de entorno
+.env
