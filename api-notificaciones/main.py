@@ -21,4 +21,5 @@ def startup_event():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("src.main:app", host="0.0.0.0", port=8080, reload=True)  # ✅ Usa puerto 8000 u otro definido si lo agregas a `settings`
+    port = int(os.environ.get("PORT", 8080))
+    uvicorn.run("src.main:app", host="0.0.0.0", port=port)
