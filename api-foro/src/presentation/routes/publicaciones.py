@@ -124,8 +124,11 @@ def marcar_comentario_como_respuesta(id_publicacion: int, id_comentario: str, us
 @router.get("/{id_publicacion}/comentarios")
 def obtener_comentarios_por_publicacion(id_publicacion: int, use_case: ObtenerComentariosPorPublicacionUseCase = Depends(get_obtener_comentarios_por_publicacion_use_case)):
     try:
-        comentarios = use_case.ejecutar(id_publicacion)
-        return [c.__dict__ for c in comentarios]
+        resultado = use_case.ejecutar(id_publicacion)
+        return {
+            "total": resultado["total"],
+            "comentarios": [c.__dict__ for c in resultado["comentarios"]]
+        }
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
