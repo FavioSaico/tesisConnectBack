@@ -3,6 +3,8 @@ import { Request, Response } from "express"
 import { GRADOACADEMICO_SEED } from "../../infrastructure/database/seed/data/grado-academico.seed";
 import { ESPECIALIDADES_SEED } from "../../infrastructure/database/seed/data/Especialidad.seed";
 import { CARRERAS_PROFESIONALES_SEED } from "../../infrastructure/database/seed/data/CarreraProfesional.seed";
+import { UNIVERSIDAD_SEED } from "../../infrastructure/database/seed/data/Universidad.seed";
+import { Universidad } from "../../infrastructure/database/mysql/models/Universidad.entity";
 
 export class SeedController {
 
@@ -87,6 +89,36 @@ export class SeedController {
       for (const carrera of carreras) {
         const record = carreraProfesionalRepository.create(carrera);
         insertPromises.push(carreraProfesionalRepository.save(record));
+      }
+
+      const data = await Promise.all(insertPromises);
+      return res.json(data);
+
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: error.message });
+    }
+  };
+
+  registerUniversidades = async (req: Request, res: Response): Promise<any> => {
+    const universidadRepository = AppDataSource.getRepository(Universidad);
+    const query = universidadRepository.createQueryBuilder("universidad");
+
+    try {
+      // Eliminamos todos los registros existentes
+      await query.delete().where({}).execute();
+
+      // Insertamos los nuevos registros desde el seed
+      const universidades = UNIVERSIDAD_SEED;
+      const insertPromises: Promise<any>[] = [];
+
+      for (const universidad of universidades) {
+        if (!universidad.nombre) {
+          throw new Error("El nombre de la universidad no puede ser nulo o vacío");
+        }
+
+        const record = universidadRepository.create(universidad);
+        insertPromises.push(universidadRepository.save(record));
       }
 
       const data = await Promise.all(insertPromises);

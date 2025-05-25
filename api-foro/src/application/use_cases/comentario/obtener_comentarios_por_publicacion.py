@@ -11,4 +11,9 @@ class ObtenerComentariosPorPublicacionUseCase:
     def ejecutar(self, id_publicacion: int):
         if not self.publicacion_repo.obtener_por_id(id_publicacion):
             raise ValueError("La publicación no existe")
-        return [entidad_a_DTO(doc) for doc in self.comentario_repo.obtener_por_publicacion(id_publicacion)]
+        comentarios_entidad = self.comentario_repo.obtener_por_publicacion(id_publicacion)
+        comentarios_dto = [entidad_a_DTO(doc) for doc in comentarios_entidad ]
+        return {
+            "total": len(comentarios_dto),
+            "comentarios": comentarios_dto
+        }

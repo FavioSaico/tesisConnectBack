@@ -1,4 +1,5 @@
-from datetime import date
+from datetime import date,datetime
+import pytz
 from sentence_transformers import SentenceTransformer, util
 from src.domain.entities.Recomendacion import Recomendacion
 
@@ -12,9 +13,14 @@ class RecomendacionServicio:
         if self.model is None:
             from sentence_transformers import SentenceTransformer
             self.model = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2')
+            
+    def _fecha_hoy_peru(self):
+        tz = pytz.timezone("America/Lima")
+        return datetime.now(tz).date()
+
 
     def calcular_y_guardar_recomendaciones(self, investigadores):
-        hoy = date.today()
+        hoy = self._fecha_hoy_peru()
 
         # Eliminar recomendaciones previas
         self.repositorio.eliminar_por_fecha_y_tipo(hoy, "asesor")
@@ -76,14 +82,14 @@ class RecomendacionServicio:
         return self.repositorio.obtener_recomendaciones()
 
     def obtener_recomendaciones_por_id_y_fecha(self, id_investigador):
-        return self.repositorio.obtener_recomendaciones_por_id_y_fecha(id_investigador, date.today())
+        return self.repositorio.obtener_recomendaciones_por_id_y_fecha(id_investigador, self._fecha_hoy_peru())
     
     def obtener_recomendaciones_por_id(self, id_investigador):
         return self.repositorio.obtener_recomendaciones_por_id(id_investigador)
     
     def obtener_recomendaciones_por_id_y_fecha_asesor(self, id_investigador):
-        return self.repositorio.obtener_recomendaciones_por_id_y_fecha_asesor(id_investigador, date.today())
+        return self.repositorio.obtener_recomendaciones_por_id_y_fecha_asesor(id_investigador, self._fecha_hoy_peru())
 
     def obtener_recomendaciones_por_id_y_fecha_tesista(self, id_investigador):
-        return self.repositorio.obtener_recomendaciones_por_id_y_fecha_tesista(id_investigador, date.today())    
+        return self.repositorio.obtener_recomendaciones_por_id_y_fecha_tesista(id_investigador, self._fecha_hoy_peru())    
     

@@ -6,3 +6,4 @@ export * from './models/EspecialidadUsuario.entity';
 export * from './models/PublicacionUsuario.entity'; 
 export * from './models/Publicacion.entity'; 
 export * from './models/CarreraProfesional.entity'; 
+export * from './models/Universidad.entity'; 
