@@ -3,6 +3,7 @@ import { DomainUsuario } from "../../../../domain/entities/usuario";
 import { GradoAcademico } from './GradoAcademico.entity';
 import { EspecialidadUsuario } from './EspecialidadUsuario.entity';
 import { CarreraProfesional } from './CarreraProfesional.entity';  // Asegúrate de importar CarreraProfesional
+import { Universidad } from './Universidad.entity';  // Asegúrate de importar CarreraProfesional
 
 @Entity()
 export class Usuario extends DomainUsuario {
@@ -19,6 +20,11 @@ export class Usuario extends DomainUsuario {
     type: 'int'
   })
   id_carrera_profesional: number;
+
+  @Column({
+    type: 'int'
+  })
+  id_universidad: number;
 
   @Column({
     type: 'tinyint',
@@ -125,5 +131,14 @@ export class Usuario extends DomainUsuario {
   )
   @JoinColumn({ name: 'id_carrera_profesional' }) 
   carrera_profesional: CarreraProfesional;
+
+    // Relación ManyToOne con Universidad
+  @ManyToOne(
+    () => Universidad,
+    (Universidad) => Universidad.id, // Referencia a la propiedad 'usuarios' en Universidad
+    { cascade: false, eager: true }
+  )
+  @JoinColumn({ name: 'id_universidad' }) 
+  Universidad: Universidad;
 
 }
