@@ -105,6 +105,7 @@ export class AuthDatasourceImpl implements AuthDatasource {
                 usuario.linea_investigacion,
                 usuarioRegistrado.grado_academico,
                 usuarioRegistrado.carrera_profesional,
+                usuarioRegistrado.Universidad,
                 especialidades,
                 publicaciones
             );
@@ -162,6 +163,7 @@ export class AuthDatasourceImpl implements AuthDatasource {
                 usuario.linea_investigacion,
                 usuario.grado_academico,
                 usuario.carrera_profesional,
+                usuario.Universidad,
                 especialidades,
                 publicaciones
             );
@@ -220,6 +222,7 @@ export class AuthDatasourceImpl implements AuthDatasource {
                 usuario.linea_investigacion,
                 usuario.grado_academico,
                 usuario.carrera_profesional,
+                usuario.Universidad,
                 especialidades,
                 publicaciones
             );
