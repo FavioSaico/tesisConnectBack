@@ -120,6 +120,7 @@ export class AuthDatasourceImpl implements AuthDatasource {
 
         try {
             const usuario = await this.usuarioRepository.findOneBy({ correo });
+
             if (!usuario) throw CustomError.badRequest('Correo no registrado');
 
             if (!this.comparePassword(contrasena, usuario.contrasena)) {
