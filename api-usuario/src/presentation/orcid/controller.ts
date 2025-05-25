@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { GetOrcidUserUseCase } from "../../application/use-cases/orcid/ObtenerOrcidInfo.use-case";
+import { GetOrcidUser } from "../../application/use-cases/orcid/ObtenerOrcidInfo.use-case";
 import { OrcidRepository } from "../../domain/repositories/orcidRepository";
 
 export class OrcidController {
@@ -8,7 +8,7 @@ export class OrcidController {
   public getUserById = async (req: Request, res: Response) => {
     try {
       const orcid = req.params.id;
-      const useCase = new GetOrcidUserUseCase(this.repository);
+      const useCase = new GetOrcidUser(this.repository);
       const user = await useCase.execute(orcid);
       res.json(user);
     } catch (error) {

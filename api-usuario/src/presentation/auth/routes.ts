@@ -26,6 +26,8 @@ export class AuthRoutes{
 
             router.get('/informacion/:id', controller.conseguirInformacionPorID);
 
+            router.post('/informacion/', controller.usuariosPorIds);
+
 
         } catch (error) {
             console.log(error)

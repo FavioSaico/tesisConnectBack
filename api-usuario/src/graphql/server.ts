@@ -3,6 +3,10 @@ import { resolvers } from './resolver';
 import { typeDefs } from './typeDefs';
 import { AuthDatasourceImpl, AuthRepositoryImpl } from '../infrastructure';
 import { GraphQLContext } from './types/context';
+import { GeneralRepositoryImpl } from '../infrastructure/repositories/general.repository.impl';
+import { GeneralDatasourceImpl } from '../infrastructure/datasources/general.datasource.impl';
+import { OrcidDatasourceImpl } from '../infrastructure/datasources/orcid-api.datasource';
+import { OrcidRepositoryImpl } from '../infrastructure/repositories/orcid.repository';
 
 interface Options{
     port?: number;
@@ -23,11 +27,19 @@ export class ServerGraphQL {
     const authDatasource = new AuthDatasourceImpl();
     const authRepository = new AuthRepositoryImpl(authDatasource);
 
+    const generalDatasource = new GeneralDatasourceImpl();
+    const generalRepository = new GeneralRepositoryImpl(generalDatasource);
+
+    const orcidDatasource = new OrcidDatasourceImpl();
+    const orcidRepository = new OrcidRepositoryImpl(orcidDatasource);
+
     this.app = new ApolloServer({
       typeDefs,
       resolvers,
       context: (): GraphQLContext => ({
-        authRepository
+        authRepository,
+        generalRepository,
+        orcidRepository
       }),
       cors: {
             origin: '*',

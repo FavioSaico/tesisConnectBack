@@ -28,6 +28,7 @@ const inputTypeAuth = `
     linea_investigacion: String!
     id_grado_academico: Int!
     id_carrera_profesional: Int!
+    id_universidad: Int!
     especialidades: [especialidadInput]
     publicaciones: [pulicacionInput]
   }
@@ -54,6 +55,10 @@ const typesEntitys = `
     id: String!
     nombre: String!
   }
+  type Universidad {
+    id: String!
+    nombre: String!
+  }
   type User {
     id: String!
     nombres: String!
@@ -64,10 +69,11 @@ const typesEntitys = `
     rol_asesor: Boolean
     orcid: String!
     linea_investigacion: String!
-    especialidades: [Especialidad]
-    publicaciones: [Pulicacion]
+    universidad: Universidad
     grado_academico: GradoAcademico
     carrera_profesional: CarreraProfesional
+    especialidades: [Especialidad]
+    publicaciones: [Pulicacion]
   }
   type AuthResponse {
     token: String!
@@ -79,7 +85,8 @@ export const typeDefsAuth = gql`
   ${typesEntitys}
   ${inputTypeAuth}
   type Query {
-    getUser: String
+    getUser(id: Int!): User
+    getUsers(ids: [Int]!): [User]
   }
   type Mutation {
     login(loginDto: loginInput!): AuthResponse

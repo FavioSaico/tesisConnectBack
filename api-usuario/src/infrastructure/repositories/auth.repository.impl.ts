@@ -1,4 +1,4 @@
-import { CustomError, RegisterUserDto,AuthRepository, AuthDatasource } from '../../domain';
+import { RegisterUserDto,AuthRepository, AuthDatasource } from '../../domain';
 import { AuthResponseDto } from '../../domain/dtos/auth/auth-response.dto';
 import { LoginUserDto } from '../../domain/dtos/auth/login-user.dto';
 
@@ -18,6 +18,10 @@ export class AuthRepositoryImpl implements AuthRepository{
 
     async conseguirInformacionPorID(id: number): Promise<AuthResponseDto> {
         return this.authDatasource.conseguirInformacionPorID(id); // Delegación al datasource
+    }
+
+    async usuariosPorIds(ids: number[]): Promise<AuthResponseDto[]> {
+        return this.authDatasource.usuariosPorIds(ids)
     }
 }
 

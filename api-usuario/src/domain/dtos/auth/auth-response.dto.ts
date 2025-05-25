@@ -17,7 +17,7 @@ export class AuthResponseDto {
     public linea_investigacion: string,
     public grado_academico: GradoAcademico,
     public carrera_profesional: CarreraProfesional,
-    public universidad: Universidad, // <-- nuevo campo
+    public universidad: Universidad,
     public readonly especialidades: {
       idEspecialidad: number;
       nombreEspecialidad: string; 
