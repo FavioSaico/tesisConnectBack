@@ -9,13 +9,13 @@ async function main() {
 
     await initDatabase()
 
-    // new Server({
-    //     port: envs.PORT,
-    //     routes: AppRoutes.routes,
-    // }).start();
+    new Server({
+        port: envs.PORT,
+        routes: AppRoutes.routes,
+    }).start();
     
     new ServerGraphQL({
-        port: envs.PORT,
+        port: 4000,
     }).start();
 }
 

@@ -33,7 +33,7 @@ const inputTypeAuth = `
   }
 `
 
-export const typeDefsAuth = gql`
+const typesEntitys = `
   type Especialidad {
     idEspecialidad: Int!
     nombreEspecialidad: String!
@@ -55,6 +55,7 @@ export const typeDefsAuth = gql`
     nombre: String!
   }
   type User {
+    id: String!
     nombres: String!
     apellidos: String!
     correo: String!
@@ -68,11 +69,15 @@ export const typeDefsAuth = gql`
     grado_academico: GradoAcademico
     carrera_profesional: CarreraProfesional
   }
-
   type AuthResponse {
     token: String!
     usuario: User
   }
+`
+
+export const typeDefsAuth = gql`
+  ${typesEntitys}
+  ${inputTypeAuth}
   type Query {
     getUser: String
   }
@@ -80,25 +85,4 @@ export const typeDefsAuth = gql`
     login(loginDto: loginInput!): AuthResponse
     register(registerDto: registerInput!): AuthResponse
   }
-
-  ${inputTypeAuth}
 `;
-
-/*
-
-  type Mutation {
-    createUser(name: String!, email: String!): User!
-  }
-
-  type User {
-    id: ID!
-    name: String!
-    email: String!
-  }
-
-  type Query {
-    users: [User!]!
-    user(id: ID!): User
-  }
-
-*/
