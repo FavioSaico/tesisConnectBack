@@ -85,7 +85,7 @@ def obtener_comentario(id_publicacion:int, id_comentario: str, use_case: Obtener
         raise HTTPException(status_code=400, detail="Formato de id_comentario incompatible")
     try:
         comentario = use_case.ejecutar(id_comentario, id_publicacion)
-        return comentario.__dict__
+        return comentario
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
@@ -127,7 +127,7 @@ def obtener_comentarios_por_publicacion(id_publicacion: int, use_case: ObtenerCo
         resultado = use_case.ejecutar(id_publicacion)
         return {
             "total": resultado["total"],
-            "comentarios": [c.__dict__ for c in resultado["comentarios"]]
+            "comentarios": resultado["comentarios"]
         }
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
