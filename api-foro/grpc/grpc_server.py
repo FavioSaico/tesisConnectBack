@@ -3,7 +3,7 @@ from concurrent import futures
 
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'proto_generated')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'grpc-test', 'proto_generated')))
 
 import user_pb2
 import user_pb2_grpc
