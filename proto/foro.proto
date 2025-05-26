@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package foro;
+
+service ForoService {
+  rpc GetPost (PostRequest) returns (PostResponse);
+}
+
+message PostRequest {
+  string post_id = 1;
+  string user_id = 2;
+}
+
+message PostResponse {
+  string title = 1;
+  string content = 2;
+  string author_name = 3;
+}
