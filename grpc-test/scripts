@@ -1,6 +1,5 @@
-#Instalar gRPC:
-pip install grpcio grpcio-tools
-
 #Compilar .proto:
 ..\tesisConnectBack\grpc-test> 
-python -m grpc_tools.protoc -Iproto --python_out=proto_generated --grpc_python_out=proto_generated proto/user.proto proto/user.proto
+python -m grpc_tools.protoc -Iproto --python_out=proto_generated --grpc_python_out=proto_generated proto/user.proto
+
+python -m grpc_tools.protoc -Iproto --python_out=proto_generated --grpc_python_out=proto_generated proto/foro.proto
