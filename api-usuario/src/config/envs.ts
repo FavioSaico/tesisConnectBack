@@ -13,5 +13,6 @@ export const envs = {
   MYSQL_DB_NAME: get('MYSQL_DB_NAME').required().asString(),
   MYSQL_PASS: get('MYSQL_PASS').required().asString(),
   MYSQL_INSTANCE_CLOUD: get('MYSQL_INSTANCE_CLOUD').asString() || '', // No lo marcamos como required por si es local
-  JWT_SEED: get('JWT_SEED').required().asString()
+  JWT_SEED: get('JWT_SEED').required().asString(),
+  API_MODE: get('API_MODE').required().asString()
 };
