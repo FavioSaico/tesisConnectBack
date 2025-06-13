@@ -3,7 +3,7 @@ import { OrcidDatasource } from "../../domain/datasources/orcid.datasource";
 import { OrcidUser } from "../../domain/entities/orcid-info";
 import { OrcidWork } from "../../domain/entities/orcid-work";
 
-export class OrcidApiDatasource implements OrcidDatasource {
+export class OrcidDatasourceImpl implements OrcidDatasource {
   async getUserById(orcid: string): Promise<OrcidUser> {
     const url = `https://pub.orcid.org/v3.0/${orcid}/record`;
 

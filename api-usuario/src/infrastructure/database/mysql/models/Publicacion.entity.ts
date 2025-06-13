@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { DomainPublicacion } from "../../../../domain/entities/Publicacion";
+import { PublicacionUsuario } from "./PublicacionUsuario.entity";
 
 @Entity()
 export class Publicacion extends DomainPublicacion {
@@ -21,4 +22,9 @@ export class Publicacion extends DomainPublicacion {
 
   @Column({ type: 'text', nullable: false })
   url_publicacion: string;
+
+  @OneToMany(() => PublicacionUsuario, 
+    (publicacionUsuario) => publicacionUsuario.publicacion
+  )
+  publicacionUsuario: PublicacionUsuario[];
 }

@@ -5,6 +5,7 @@ import { LoginUserDto } from "../../domain/dtos/auth/login-user.dto";
 import { LoginUser } from "../../application/use-cases/auth/login-user.use-case";
 import { plainToInstance } from "class-transformer";
 import { UserByIdUseCase } from "../../application/use-cases/auth/user-by-id.use-case";
+import { UsersByIdsUseCase } from "../../application/use-cases/auth/users-by-ids.use-case";
 
 export class AuthController {
 
@@ -57,8 +58,25 @@ export class AuthController {
             .execute(id)
             .then(data => res.json(data))
             .catch(error => this.handleError(error, res));
-            // const result = await this.authRepostory.conseguirInformacionPorID(id);
-            // return res.json(result);
+            
+        } catch (error) {
+            return res.status(error.statusCode || 500).json({ message: error.message || 'Error interno del servidor' });
+        }
+    }
+
+    usuariosPorIds = async (req: Request, res: Response): Promise<any> => {
+        try {
+            const { ids }=  req.body;
+
+            if (!Array.isArray(ids)) {
+                throw CustomError.badRequest('ids debe ser un arreglo');
+            }
+            
+            new UsersByIdsUseCase(this.authRepostory)
+                .execute(ids)
+                .then(data => res.json(data))
+                .catch(error => this.handleError(error, res));
+
         } catch (error) {
             return res.status(error.statusCode || 500).json({ message: error.message || 'Error interno del servidor' });
         }

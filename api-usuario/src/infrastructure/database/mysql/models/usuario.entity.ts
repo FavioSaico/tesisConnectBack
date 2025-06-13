@@ -4,6 +4,7 @@ import { GradoAcademico } from './GradoAcademico.entity';
 import { EspecialidadUsuario } from './EspecialidadUsuario.entity';
 import { CarreraProfesional } from './CarreraProfesional.entity';  // Asegúrate de importar CarreraProfesional
 import { Universidad } from './Universidad.entity';  // Asegúrate de importar CarreraProfesional
+import { PublicacionUsuario } from "./PublicacionUsuario.entity";
 
 @Entity()
 export class Usuario extends DomainUsuario {
@@ -22,7 +23,9 @@ export class Usuario extends DomainUsuario {
   id_carrera_profesional: number;
 
   @Column({
-    type: 'int'
+    type: 'int',
+    nullable: true,
+    default: null
   })
   id_universidad: number;
 
@@ -120,7 +123,11 @@ export class Usuario extends DomainUsuario {
   @JoinColumn({ name: 'id_grado_academico' })
   grado_academico: GradoAcademico;
 
-  @OneToMany(() => EspecialidadUsuario, (especialidadUsuario) => especialidadUsuario.usuario)
+  @OneToMany(
+    () => EspecialidadUsuario, 
+    (especialidadUsuario) => especialidadUsuario.usuario, 
+    { cascade: false, eager: true }
+  )
   especialidades_usuario: EspecialidadUsuario[];
 
   // Relación ManyToOne con CarreraProfesional
@@ -141,4 +148,9 @@ export class Usuario extends DomainUsuario {
   @JoinColumn({ name: 'id_universidad' }) 
   Universidad: Universidad;
 
+  @OneToMany(() => PublicacionUsuario, 
+    (publicacionUsuario) => publicacionUsuario.usuario,
+    { cascade: true, eager: true }
+  )
+  publicacionUsuario: PublicacionUsuario[];
 }
