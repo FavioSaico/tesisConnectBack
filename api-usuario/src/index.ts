@@ -19,6 +19,16 @@ async function main() {
             port: envs.PORT,
         }).start();
     }
+
+    // new Server({
+    //     port: 4000,
+    //     routes: AppRoutes.routes,
+    // }).start();
+
+    // new ServerGraphQL({
+    //     port: envs.PORT,
+    // }).start();   
+
 }
 
 (()=>{

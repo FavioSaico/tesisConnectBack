@@ -80,10 +80,7 @@ const typesEntitys = `
     usuario: User
   }
 `
-
-export const typeDefsAuth = gql`
-  ${typesEntitys}
-  ${inputTypeAuth}
+const queryAndMutations = `
   type Query {
     getUser(id: Int!): User
     getUsers(ids: [Int]!): [User]
@@ -92,4 +89,10 @@ export const typeDefsAuth = gql`
     login(loginDto: loginInput!): AuthResponse
     register(registerDto: registerInput!): AuthResponse
   }
+`
+
+export const typeDefsAuth = gql`
+  ${typesEntitys}
+  ${inputTypeAuth}
+  ${queryAndMutations}
 `;
