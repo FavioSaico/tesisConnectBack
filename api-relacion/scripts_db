@@ -1,0 +1,31 @@
+CREAR DB:
+CREATE DATABASE IF NOT EXISTS relaciones_db;
+USE relaciones_db;
+
+CREATE TABLE usuarios (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(100) NOT NULL,
+  rol ENUM('tesista', 'asesor') NOT NULL
+);
+
+CREATE TABLE relaciones (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  tesista_id INT NOT NULL,
+  asesor_id INT NOT NULL,
+  FOREIGN KEY (tesista_id) REFERENCES usuarios(id),
+  FOREIGN KEY (asesor_id) REFERENCES usuarios(id),
+  UNIQUE (tesista_id, asesor_id)
+);
+
+INSERTAR:
+
+INSERT INTO usuarios (nombre, rol) VALUES
+('Juan Pérez', 'tesista'),
+('Laura Gómez', 'tesista'),
+('Dr. Rodríguez', 'asesor'),
+('Dra. Martínez', 'asesor');
+
+CONSULTAS:
+SELECT id, nombre, rol FROM usuarios WHERE id IN (1, 2);
+
+SELECT * FROM relaciones;
