@@ -1,6 +1,6 @@
-import * as express from 'express';
+import express from 'express';
 import { Router } from 'express';
-import * as cors from "cors";
+import cors from "cors";
 
 interface Options{
     port?: number;

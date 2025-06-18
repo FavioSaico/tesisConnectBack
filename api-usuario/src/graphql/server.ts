@@ -41,10 +41,10 @@ export class ServerGraphQL {
         generalRepository,
         orcidRepository
       }),
-      cors: {
-            origin: '*',
-            credentials: true
-        }
+      // cors: {
+      //       origin: '*',
+      //       credentials: true
+      //   }
     });
 
     this.app.listen({ port: this.port }).then(({ url }) => {
