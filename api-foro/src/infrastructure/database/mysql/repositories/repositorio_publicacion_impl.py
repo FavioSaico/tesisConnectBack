@@ -1,7 +1,7 @@
 import re
 from typing import List, Optional
 from sqlalchemy.orm import Session
-from sqlalchemy import and_, or_, func
+from sqlalchemy import and_, or_, func, asc, desc
 from domain.entities.publicacion import Publicacion
 from infrastructure.database.mysql.models.publicacion_model import PublicacionModel
 from application.mappers.publicacion_mapper import model_a_entidad, entidad_a_model, actualizar_model
@@ -11,7 +11,7 @@ class RepositorioPublicacionImpl(RepositorioPublicacion):
     def __init__(self, db: Session):
         self.db = db
 
-    def listar(self, texto: Optional[str], id_categoria: Optional[List[int]], id_estado: Optional[List[int]]) -> List[Publicacion]:
+    def listar(self, texto: Optional[str], id_categoria: Optional[List[int]], id_estado: Optional[List[int]], orden: Optional[str] = 'recientes') -> List[Publicacion]:
         query = self.db.query(PublicacionModel).filter_by(visible=True)
         if texto:
             texto_limpio = re.sub(r'[^\w\s]', '', texto)
@@ -32,10 +32,18 @@ class RepositorioPublicacionImpl(RepositorioPublicacion):
                     )
                 )
             query = query.filter(and_(*condiciones))
+
         if id_categoria:
             query = query.filter(PublicacionModel.idCategoria.in_(id_categoria))
+
         if id_estado:
             query = query.filter(PublicacionModel.idEstado.in_(id_estado))
+
+        if orden == 'antiguos':
+            query = query.order_by(asc(PublicacionModel.fechaCreacion))
+        else:
+            query = query.order_by(desc(PublicacionModel.fechaCreacion))
+
         modelos = query.all()
         return [model_a_entidad(m) for m in modelos]
 
