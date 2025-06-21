@@ -6,6 +6,7 @@ import { AuthResponseDto } from '../../domain/dtos/auth/auth-response.dto';
 import { EspecialidadUsuario } from '../database/mysql/models/EspecialidadUsuario.entity';
 import { Publicacion } from '../database/mysql/models/Publicacion.entity';
 import { PublicacionUsuario } from '../database/mysql/models/PublicacionUsuario.entity';
+import { In } from 'typeorm';
 
 // IMPLEMENTACION CON MYSQL
 
@@ -67,31 +68,21 @@ export class AuthDatasourceImpl implements AuthDatasource {
                 }
             }
 
-            const especialidadesUsuario = await this.especialidadUsuarioRepository.find({
-                where: { id_usuario: usuario.id },
-                relations: ['especialidad']
-            });
+            const usuarioRegistrado = await this.usuarioRepository.findOneBy({ correo: correo });
 
-            const especialidades = especialidadesUsuario.map(eu => ({
+            const especialidades = usuarioRegistrado.especialidades_usuario.map(eu => ({
                 idEspecialidad: eu.id_especialidad,
                 nombreEspecialidad: eu.especialidad?.nombre ?? '',
                 aniosExperiencia: eu.anios_experiencia
             }));
 
-            const publicacionesUsuario = await this.publicacionUsuarioRepository.find({
-                where: { id_usuario: usuario.id },
-                relations: ['publicacion']
-            });
-
-            const publicaciones = publicacionesUsuario.map(pu => ({
+            const publicaciones = usuarioRegistrado.publicacionUsuario.map(pu => ({
                 titulo: pu.publicacion.titulo,
                 baseDatosBibliografica: pu.publicacion.base_datos_bibliografica,
                 revista: pu.publicacion.revista,
                 anioPublicacion: pu.publicacion.anio_publicacion,
                 urlPublicacion: pu.publicacion.url_publicacion
             }));
-
-            const usuarioRegistrado = await this.usuarioRepository.findOneBy({ correo: correo });
 
             return new AuthResponseDto(
                 usuario.id,
@@ -105,6 +96,7 @@ export class AuthDatasourceImpl implements AuthDatasource {
                 usuario.linea_investigacion,
                 usuarioRegistrado.grado_academico,
                 usuarioRegistrado.carrera_profesional,
+                usuarioRegistrado.Universidad,
                 especialidades,
                 publicaciones
             );
@@ -120,29 +112,20 @@ export class AuthDatasourceImpl implements AuthDatasource {
 
         try {
             const usuario = await this.usuarioRepository.findOneBy({ correo });
+
             if (!usuario) throw CustomError.badRequest('Correo no registrado');
 
             if (!this.comparePassword(contrasena, usuario.contrasena)) {
                 throw CustomError.badRequest('Correo o contraseña incorrectos');
             }
 
-            const especialidadesUsuario = await this.especialidadUsuarioRepository.find({
-                where: { id_usuario: usuario.id },
-                relations: ['especialidad']
-            });
-
-            const especialidades = especialidadesUsuario.map(eu => ({
+            const especialidades = usuario.especialidades_usuario.map(eu => ({
                 idEspecialidad: eu.id_especialidad,
                 nombreEspecialidad: eu.especialidad?.nombre ?? '',
                 aniosExperiencia: eu.anios_experiencia
             }));
 
-            const publicacionesUsuario = await this.publicacionUsuarioRepository.find({
-                where: { id_usuario: usuario.id },
-                relations: ['publicacion']
-            });
-
-            const publicaciones = publicacionesUsuario.map(pu => ({
+            const publicaciones = usuario.publicacionUsuario.map(pu => ({
                 titulo: pu.publicacion.titulo,
                 baseDatosBibliografica: pu.publicacion.base_datos_bibliografica,
                 revista: pu.publicacion.revista,
@@ -162,6 +145,7 @@ export class AuthDatasourceImpl implements AuthDatasource {
                 usuario.linea_investigacion,
                 usuario.grado_academico,
                 usuario.carrera_profesional,
+                usuario.Universidad,
                 especialidades,
                 publicaciones
             );
@@ -181,25 +165,13 @@ export class AuthDatasourceImpl implements AuthDatasource {
 
             if (!usuario) throw CustomError.badRequest('Usuario no encontrado');
 
-            // 2. Obtener las especialidades del usuario
-            const especialidadesUsuario = await this.especialidadUsuarioRepository.find({
-                where: { id_usuario: usuario.id },
-                relations: ['especialidad']
-            });
-
-            const especialidades = especialidadesUsuario.map(eu => ({
+            const especialidades = usuario.especialidades_usuario.map(eu => ({
                 idEspecialidad: eu.id_especialidad,
                 nombreEspecialidad: eu.especialidad?.nombre ?? '',
                 aniosExperiencia: eu.anios_experiencia
             }));
 
-            // 3. Obtener las publicaciones del usuario
-            const publicacionesUsuario = await this.publicacionUsuarioRepository.find({
-                where: { id_usuario: usuario.id },
-                relations: ['publicacion']
-            });
-
-            const publicaciones = publicacionesUsuario.map(pu => ({
+            const publicaciones = usuario.publicacionUsuario.map(pu => ({
                 titulo: pu.publicacion.titulo,
                 baseDatosBibliografica: pu.publicacion.base_datos_bibliografica,
                 revista: pu.publicacion.revista,
@@ -220,13 +192,61 @@ export class AuthDatasourceImpl implements AuthDatasource {
                 usuario.linea_investigacion,
                 usuario.grado_academico,
                 usuario.carrera_profesional,
+                usuario.Universidad,
                 especialidades,
                 publicaciones
             );
         } catch (error) {
-            // console.error('Error interno:', error);
+            
             if (error instanceof CustomError) throw error;
-            throw CustomError.internalServer(); // Este es el que oculta el error si no haces el console.log
+            throw CustomError.internalServer();
+        }
+    }
+
+    async usuariosPorIds(ids: number[]): Promise<AuthResponseDto[]> {
+        try {
+
+            const usuarios = await this.usuarioRepository.find({
+                where: {
+                    id: In(ids)
+                }
+            });
+
+            if (!usuarios) throw CustomError.badRequest('Usuario no encontrado');
+            
+            const usuariosResponse: AuthResponseDto[] = usuarios.map(user => ({
+                id: user.id,
+                nombres: user.nombres,
+                apellidos: user.apellidos,
+                correo: user.correo,
+                descripcion: user.descripcion,
+                rol_tesista: user.rol_tesista,
+                rol_asesor: user.rol_asesor,
+                orcid: user.orcid ?? '',
+                linea_investigacion: user.linea_investigacion,
+                grado_academico: user.grado_academico,
+                carrera_profesional: user.carrera_profesional,
+                universidad: user.Universidad,
+                especialidades: user.especialidades_usuario.map((es) => ({
+                    idEspecialidad: es.especialidad.id,
+                    nombreEspecialidad: es.especialidad.nombre, 
+                    aniosExperiencia: es.anios_experiencia
+                })),
+                publicaciones: user.publicacionUsuario.map((pu) => ({
+                    titulo: pu.publicacion.titulo,
+                    baseDatosBibliografica: pu.publicacion.base_datos_bibliografica,
+                    revista: pu.publicacion.revista,
+                    anioPublicacion: pu.publicacion.anio_publicacion,
+                    urlPublicacion: pu.publicacion.url_publicacion
+                })),
+            }))
+
+            return usuariosResponse;
+
+        } catch (error) {
+            
+            if (error instanceof CustomError) throw error;
+            throw CustomError.internalServer();
         }
     }
 }

@@ -15,6 +15,11 @@ class RepositorioComentario(ABC):
         pass
 
     @abstractmethod
+    def obtener_con_respuestas_por_id(self, id_comentario: str) -> Optional[List[Comentario]]:
+        """Devuelve el comentario con dicho id y sus respuestas, solo si es visible."""
+        pass
+
+    @abstractmethod
     def eliminar(self, id_comentario: str) -> bool:
         """Elimina el comentario con dicho id. [.eliminar()]."""
         pass

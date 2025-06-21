@@ -1,20 +1,24 @@
-import { EspecialidadDatasource } from '../../domain/datasources/EspecialidadDatasource';
-import { GradoAcademicoDatasource } from '../../domain/datasources/GradoAcademicoDatasource';
-import { EspecialidadRepository } from '../../domain/repositories/EspecialidadRepository';
-import { GradoAcademicoRepository } from '../../domain/repositories/GradoAcademicoRepository';
+import { GeneralDatasource } from '../../domain/datasources/general.datasource';
+import { GeneralRepository } from '../../domain/repositories/general.repository';
 
-export class GeneralRepositoryImpl implements EspecialidadRepository, GradoAcademicoRepository {
+export class GeneralRepositoryImpl implements GeneralRepository {
   
   constructor(
-    private readonly especialidadDatasource: EspecialidadDatasource,
-    private readonly gradoAcademicoDatasource: GradoAcademicoDatasource
+    private readonly generalDatasource: GeneralDatasource
   ) {}
 
   obtenerEspecialidades(): Promise<{ id: number; nombre: string }[]> {
-    return this.especialidadDatasource.obtenerEspecialidades();
+    return this.generalDatasource.obtenerEspecialidades();
   }
 
   obtenerGradosAcademicos(): Promise<{ id: number; nombre: string }[]> {
-    return this.gradoAcademicoDatasource.obtenerGradosAcademicos();
+    return this.generalDatasource.obtenerGradosAcademicos();
+  }
+
+  obtenerUniversidades(): Promise<{ id: number; nombre: string; }[]> {
+    return this.generalDatasource.obtenerUniversidades()
+  }
+  obtenerCarreraProfesional(): Promise<{ id: number; nombre: string; }[]> {
+    return this.generalDatasource.obtenerCarreraProfesional()
   }
 }

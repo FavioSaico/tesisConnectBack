@@ -8,6 +8,7 @@ import { EspecialidadUsuario } from "./models/EspecialidadUsuario.entity";
 import { Publicacion } from "./models/Publicacion.entity";
 import { PublicacionUsuario } from "./models/PublicacionUsuario.entity";
 import { CarreraProfesional } from "./models/CarreraProfesional.entity";
+import { Universidad } from "./models/Universidad.entity";
 
 
 //const isProduction = envs.NODE_ENV === 'production';
@@ -24,7 +25,7 @@ export const AppDataSource = new DataSource({
     synchronize: true,
     // synchronize: isProduction ? false : true,
     logging: false,
-    entities: [Usuario, GradoAcademico,Especialidad, EspecialidadUsuario, Publicacion, PublicacionUsuario, CarreraProfesional],
+    entities: [Usuario, GradoAcademico,Especialidad, EspecialidadUsuario, Publicacion, PublicacionUsuario, CarreraProfesional, Universidad],
     migrations: [],
     subscribers: [],
     // ...(isProduction && {

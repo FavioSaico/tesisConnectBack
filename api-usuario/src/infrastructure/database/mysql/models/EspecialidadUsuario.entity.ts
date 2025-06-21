@@ -20,11 +20,19 @@ export class EspecialidadUsuario extends DomainEspecialidadUsuario {
   @Column({ type: 'int', nullable: false })
   anios_experiencia: number;
 
-  @ManyToOne(() => Especialidad, (especialidad) => especialidad.especialidades_usuario, { onDelete: 'CASCADE' })
+  @ManyToOne(
+    () => Especialidad, 
+    (especialidad) => especialidad.especialidades_usuario, 
+    { onDelete: 'CASCADE', cascade: true, eager: true }
+  )
   @JoinColumn({ name: 'id_especialidad' })
   especialidad: Especialidad;
 
-  @ManyToOne(() => Usuario, (usuario) => usuario.especialidades_usuario, { onDelete: 'CASCADE' })
+  @ManyToOne(
+    () => Usuario, 
+    (usuario) => usuario.especialidades_usuario, 
+    { onDelete: 'CASCADE' }
+  )
   @JoinColumn({ name: 'id_usuario' })
   usuario: Usuario;
 }

@@ -1,7 +1,7 @@
-import { EspecialidadRepository } from "../../../domain/repositories/EspecialidadRepository";
+import { GeneralRepository } from "../../../domain/repositories/general.repository";
 
 export class ObtenerEspecialidades {
-  constructor(private readonly repository: EspecialidadRepository) {}
+  constructor(private readonly repository: GeneralRepository) {}
 
   execute(): Promise<{ id: number; nombre: string }[]> {
     return this.repository.obtenerEspecialidades();

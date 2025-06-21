@@ -1,7 +1,7 @@
-import { GradoAcademicoRepository } from "../../../domain/repositories/GradoAcademicoRepository";
+import { GeneralRepository } from "../../../domain/repositories/general.repository";
 
 export class ObtenerGradosAcademicos {
-  constructor(private readonly repository: GradoAcademicoRepository) {}
+  constructor(private readonly repository: GeneralRepository) {}
 
   execute(): Promise<{ id: number; nombre: string }[]> {
     return this.repository.obtenerGradosAcademicos();

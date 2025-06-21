@@ -31,7 +31,7 @@ export class RelationesDatasourceImpl implements RelationesDatasource {
       destinatario.correo = usuarioDestinatario.correo;
       destinatario.nombre = usuarioDestinatario.nombres + " " + usuarioDestinatario.apellidos;
 
-      await this.enviarNotificacion(remitente, destinatario, tituloProyecto, areaInvestigacion);
+      await this.publicarEventoNotificacion(remitente, destinatario, tituloProyecto, areaInvestigacion);
 
       return {
         message: "Notificación enviada"
@@ -44,7 +44,7 @@ export class RelationesDatasourceImpl implements RelationesDatasource {
 
   }
 
-  async enviarNotificacion( remitente: UsuarioNotificacionDto, destinatario: UsuarioNotificacionDto, proyecto: string, area: string ) {
+  async publicarEventoNotificacion( remitente: UsuarioNotificacionDto, destinatario: UsuarioNotificacionDto, proyecto: string, area: string ) {
     const pubsub = new PubSub();
 
     const topicName = 'projects/metal-node-424103-e4/topics/tesisconnect-notificaciones';

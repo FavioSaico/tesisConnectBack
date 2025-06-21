@@ -34,10 +34,11 @@ def listar_publicaciones(
     texto: Optional[str] = Query(None),
     id_categoria: Optional[List[int]] = Query(None),
     id_estado: Optional[List[int]] = Query(None),
+    orden: Optional[str] = Query('recientes', regex="^(antiguos|recientes)$"),
     use_case: ListarPublicacionesUseCase = Depends(get_listar_publicaciones_use_case)
 ):
     try:
-        publicaciones = use_case.ejecutar(texto, id_categoria, id_estado)
+        publicaciones = use_case.ejecutar(texto, id_categoria, id_estado, orden)
         return [p.__dict__ for p in publicaciones]
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -85,7 +86,7 @@ def obtener_comentario(id_publicacion:int, id_comentario: str, use_case: Obtener
         raise HTTPException(status_code=400, detail="Formato de id_comentario incompatible")
     try:
         comentario = use_case.ejecutar(id_comentario, id_publicacion)
-        return comentario.__dict__
+        return comentario
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
@@ -104,7 +105,7 @@ def eliminar_comentario(id_publicacion:int, id_comentario: str, use_case: CrearC
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/{id_publicacion}/desmarcar_respuesta")
-def marcar_comentario_como_respuesta(id_publicacion: int, use_case: DesmarcarComentarioComoRespuestaUseCase = Depends(get_desmarcar_respuesta_use_case)):
+def desmarcar_comentario_como_respuesta(id_publicacion: int, use_case: DesmarcarComentarioComoRespuestaUseCase = Depends(get_desmarcar_respuesta_use_case)):
     try:
         resultado = use_case.ejecutar(id_publicacion)
         return resultado
@@ -127,7 +128,7 @@ def obtener_comentarios_por_publicacion(id_publicacion: int, use_case: ObtenerCo
         resultado = use_case.ejecutar(id_publicacion)
         return {
             "total": resultado["total"],
-            "comentarios": [c.__dict__ for c in resultado["comentarios"]]
+            "comentarios": resultado["comentarios"]
         }
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))

@@ -1,17 +1,16 @@
 import { Request, Response } from "express"
-import { AuthRepository, CustomError, RegisterUserDto } from "../../domain";
+import { CustomError } from "../../domain";
 import { ObtenerEspecialidades } from "../../application/use-cases/general/ObtenerEspecialides.use-case";
-import { EspecialidadRepository } from '../../domain/repositories/EspecialidadRepository';
 import { ObtenerGradosAcademicos } from "../../application/use-cases/general/ObtenerGradosAcademicos.use-case";
-import { GradoAcademicoRepository } from '../../domain/repositories/GradoAcademicoRepository';
+import { GeneralRepository } from "../../domain/repositories/general.repository";
+import { ObtenerUniversidades } from "../../application/use-cases/general/ObtenerUniversidades.use-case";
+import { ObtenerCarreras } from "../../application/use-cases/general/ObtenerCarreras.use-case";
 
 
-export class AuthController {
+export class GeneralController {
 
     constructor(
-        // inyectamos la abstracción (clase abstracta), no la implementación
-        private readonly especialidadRepository: EspecialidadRepository,
-        private readonly gradoAcademicoRepository: GradoAcademicoRepository
+        private readonly generalRepository: GeneralRepository
     ) { }
 
     private handleError = (error: unknown, res: Response) => {
@@ -26,17 +25,29 @@ export class AuthController {
     }
 
     getEspecialidades = async (req: Request, res: Response): Promise<any> => {
-        const useCase = new ObtenerEspecialidades(this.especialidadRepository);
+        const useCase = new ObtenerEspecialidades(this.generalRepository);
         useCase.execute()
             .then(data => res.json(data))
             .catch(error => this.handleError(error, res));
     };
     getGradosAcademicos = async (req: Request, res: Response): Promise<any> => {
-        const useCase = new ObtenerGradosAcademicos(this.gradoAcademicoRepository);
+        const useCase = new ObtenerGradosAcademicos(this.generalRepository);
         useCase.execute()
             .then(data => res.json(data))
             .catch(error => this.handleError(error, res));
     };
 
+    getUniversidades = async (req: Request, res: Response): Promise<any> => {
+        const useCase = new ObtenerUniversidades(this.generalRepository);
+        useCase.execute()
+            .then(data => res.json(data))
+            .catch(error => this.handleError(error, res));
+    };
+    getCarrerasProfesionales = async (req: Request, res: Response): Promise<any> => {
+        const useCase = new ObtenerCarreras(this.generalRepository);
+        useCase.execute()
+            .then(data => res.json(data))
+            .catch(error => this.handleError(error, res));
+    };
 
 }
