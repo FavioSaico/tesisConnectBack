@@ -1,6 +1,8 @@
 # src/infrastructure/repositories/RepositorioRecomendacionImpl.py
+import pytz
 from sqlalchemy import desc, text
 from datetime import date
+from datetime import datetime
 from src.infrastructure.db import SessionLocal
 from src.domain.repositories.RepositorioRecomendacion import RepositorioRecomendacion
 from src.domain.entities.Recomendacion import Recomendacion
@@ -10,14 +12,19 @@ class RepositorioRecomendacionImpl(RepositorioRecomendacion):
     def __init__(self):
         self.db = SessionLocal()
 
+    def _fecha_hoy_peru(self):
+        tz = pytz.timezone("America/Lima")
+        return datetime.now(tz).date()
+    
     def guardar_recomendaciones(self, recomendaciones):
+     hoy = self._fecha_hoy_peru()
      for rec in recomendaciones:
         if rec.idInvestigador != rec.idUsuarioRecomendado:  # Evita guardar auto-recomendaciones
             self.db.add(RecomendacionDB(
                 id_investigador=rec.idInvestigador,
                 id_usuario_recomendado=rec.idUsuarioRecomendado,
                 puntaje=rec.puntaje,
-                fecha=rec.fecha,
+                fecha=hoy,
                 tipo=rec.tipo
             ))
         self.db.commit()
