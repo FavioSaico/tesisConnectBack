@@ -42,7 +42,15 @@ export class AuthController {
         // caso de uso
         new LoginUser(this.authRepostory)
             .execute(loginUserDto!)
-            .then(data => res.json(data))
+            .then(data => {
+                res.cookie('accessToken', data.token, {
+                    httpOnly: true,
+                    secure: false, // ✅ solo en HTTPS en prod
+                    sameSite: 'lax', // o 'strict'
+                    maxAge: 15 * 60 * 1000
+                });
+                res.json(data)
+            })
             .catch(error => this.handleError(error, res));
     }
     

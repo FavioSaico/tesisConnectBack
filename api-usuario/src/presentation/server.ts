@@ -27,17 +27,6 @@ export class Server {
         this.app.use(express.json()) // serializamos la data como JSON, para peticion tipo raw
         this.app.use(express.urlencoded({extended:true})) // serializamos la data como JSON, para peticiones en x-www-form-urlencoded
 
-        // CORS
-        // const  whitelist = ['*', 'http://localhost:3000']
-        // const  corsOptions = {
-        //     origin: function (origin, callback) {
-        //         if (whitelist.indexOf(origin) !== -1) {
-        //             callback(null, true)
-        //         } else {
-        //             callback(new Error('Not allowed by CORS'))
-        //         }
-        //     }
-        // }
         this.app.use(cors())
 
         

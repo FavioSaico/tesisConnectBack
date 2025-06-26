@@ -17,6 +17,7 @@ async function main() {
     }else {
         new ServerGraphQL({
             port: envs.PORT,
+            routes: AppRoutes.routes,
         }).start();
     }
 
