@@ -49,7 +49,10 @@ export class AuthController {
                     sameSite: 'lax', // o 'strict'
                     maxAge: 15 * 60 * 1000
                 });
-                res.json(data)
+                res.json({
+                    usuario: data.usuario,
+                    token: ''
+                })
             })
             .catch(error => this.handleError(error, res));
     }

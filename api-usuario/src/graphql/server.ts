@@ -60,15 +60,6 @@ export class ServerGraphQL {
       typeDefs,
       resolvers,
       plugins: [ApolloServerPluginDrainHttpServer({ httpServer })]
-      // context: (): GraphQLContext => ({
-      //   authRepository,
-      //   generalRepository,
-      //   orcidRepository
-      // }),
-      // cors: {
-      //       origin: '*',
-      //       credentials: true
-      //   }
     });
 
     
@@ -80,7 +71,12 @@ export class ServerGraphQL {
     this.app.use(
       '/graphql',
       expressMiddleware(server,{
-        context: async ({ }: ExpressContextFunctionArgument): Promise<GraphQLContext>  => {
+        context: async ({ req, res }: ExpressContextFunctionArgument): Promise<GraphQLContext>  => {
+
+          const token = req.cookies['accessToken'] || req.headers['authorization']?.split(' ')[1];
+
+          console.log(token)
+
           return {
             authRepository,
             generalRepository,
@@ -90,63 +86,8 @@ export class ServerGraphQL {
       })
     );
 
-    /*
-    , {
-        context: async ({ req: Request, res: Response }: ExpressContextFunctionArgument): Promise<GraphQLContext>  => {
-          return {
-            authRepository,
-            generalRepository,
-            orcidRepository
-          };
-        }
-      }
-    */
-
-    // server.applyMiddleware({
-    //   this.app,
-    //   path: '/graphql',
-    //   cors: {
-    //     origin: '*', // frontend
-    //     credentials: true
-    //   }
-    // });
-
-    // this.app.use('/graphql', expressMiddleware(server, {
-    //   context: async ({ req }) => {
-    //     const token = req.cookies['accessToken'];
-    //     if (!token) return { user: null };
-
-    //     try {
-    //       const payload = jwt.verify(token, process.env.ACCESS_SECRET!);
-    //       return { user: payload };
-    //     } catch (err) {
-    //       return { user: null };
-    //     }
-    //   }
-    // }));
-    // this.app.post('/login', async (req, res) => {
-    //   const { email, password } = req.body;
-
-    //   // Validación de usuario omitida
-    //   const userId = "123";
-    //   const token = jwt.sign({ id: userId, email }, process.env.ACCESS_SECRET!, { expiresIn: '15m' });
-
-    //   res.cookie('accessToken', token, {
-    //     httpOnly: true,
-    //     secure: false,
-    //     sameSite: 'lax',
-    //     maxAge: 15 * 60 * 1000
-    //   });
-
-    //   res.send({ ok: true });
-    // });
-
     this.app.listen(this.port, () => {
-      console.log('GraphQL API on http://localhost:4000/graphql');
+      console.log(`Apolo Server listo en ${this.port}`);
     });
-
-    // this.app.listen({ port: this.port }).then(({ url }) => {
-    //   console.log(`Apolo Server listo en ${url}`);
-    // });
   }
 }
