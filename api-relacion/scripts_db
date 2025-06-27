@@ -17,8 +17,9 @@ CREATE TABLE relaciones (
   UNIQUE (tesista_id, asesor_id)
 );
 
-INSERTAR:
+ALTER TABLE relaciones ADD COLUMN fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP;
 
+INSERTAR:
 INSERT INTO usuarios (nombre, rol) VALUES
 ('Juan Pérez', 'tesista'),
 ('Laura Gómez', 'tesista'),
@@ -26,6 +27,6 @@ INSERT INTO usuarios (nombre, rol) VALUES
 ('Dra. Martínez', 'asesor');
 
 CONSULTAS:
-SELECT id, nombre, rol FROM usuarios WHERE id IN (1, 2);
 
-SELECT * FROM relaciones;
+USE relaciones_db
+SELECT * FROM relaciones

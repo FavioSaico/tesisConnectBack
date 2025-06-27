@@ -1,6 +1,6 @@
 const crearRelacion = require('../../application/use-cases/crearRelacion');
-const SQLrelacionRepository = require('../../intrastructure/database/SQLrelacionRepository');
-const SQLusuarioRepository = require('../../intrastructure/database/SQLusuarioRepository');
+const SQLrelacionRepository = require('../../infrastructure/database/repositories/SQLrelacionRepository');
+const SQLusuarioRepository = require('../../infrastructure/database/repositories/SQLusuarioRepository');
 const obtenerRelaciones = require('../../application/use-cases/obtenerRelaciones');
 const eliminarRelacion = require('../../application/use-cases/eliminarRelacion');
 

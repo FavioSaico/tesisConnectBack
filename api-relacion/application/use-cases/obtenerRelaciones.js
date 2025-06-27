@@ -5,7 +5,7 @@ async function obtenerRelaciones(relacionRepo) {
 
   // Convertimos cada fila en una entidad Relacion
   const relaciones = relacionesData.map(r => {
-    const relacion = new Relacion(r.id, r.tesista_id, r.asesor_id);
+    const relacion = new Relacion(r.id, r.tesista_id, r.asesor_id, r.fecha_creacion, r.activa);
     relacion.setNombres(r.tesista, r.asesor);
     return relacion;
   });

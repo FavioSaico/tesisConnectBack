@@ -29,7 +29,7 @@ async function crearRelacion({ tesista_id, asesor_id }, relacionRepo, usuarioRep
   const nuevaRelacionData = await relacionRepo.crearRelacion(tesista_id, asesor_id);
 
   // 6. Retornar una entidad Relacion (opcional, si prefieres devolver una clase y no solo un JSON)
-  return new Relacion(nuevaRelacionData.id, tesista_id, asesor_id);
+  return new Relacion(nuevaRelacionData.id, tesista_id, asesor_id, nuevaRelacionData.fecha_creacion);
 }
 
 module.exports = crearRelacion;
