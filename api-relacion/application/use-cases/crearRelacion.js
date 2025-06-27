@@ -1,29 +1,35 @@
-// Caso de uso: crear una relación entre tesista y asesor
-async function crearRelacion({ tesista_id, asesor_id }, relacionRepo, usuarioRepo) {
-  // Validar que los usuarios existen
-  const usuarios = await usuarioRepo.obtenerUsuariosPorIds([tesista_id, asesor_id]);
+const Usuario = require('../../domain/entities/Usuario');
+const Relacion = require('../../domain/entities/Relacion');
 
-  if (usuarios.length !== 2) {
+async function crearRelacion({ tesista_id, asesor_id }, relacionRepo, usuarioRepo) {
+  // 1. Obtener los usuarios por ID
+  const usuariosData = await usuarioRepo.obtenerUsuariosPorIds([tesista_id, asesor_id]);
+
+  if (usuariosData.length !== 2) {
     throw new Error('Usuarios no encontrados');
   }
 
+  // 2. Convertir los datos planos en entidades Usuario
+  const usuarios = usuariosData.map(u => new Usuario(u.id, u.nombre, u.rol));
   const tesista = usuarios.find(u => u.id === tesista_id);
   const asesor = usuarios.find(u => u.id === asesor_id);
 
-  if (tesista.rol !== 'tesista' || asesor.rol !== 'asesor') {
+  // 3. Validar roles usando métodos de la entidad Usuario
+  if (!tesista.esTesista() || !asesor.esAsesor()) {
     throw new Error('Roles incorrectos para la relación');
   }
 
-  // Verificar si ya existe
+  // 4. Verificar si la relación ya existe
   const existe = await relacionRepo.existeRelacion(tesista_id, asesor_id);
   if (existe) {
     throw new Error('La relación ya existe');
   }
 
-  // Crear relación
-  const nuevaRelacion = await relacionRepo.crearRelacion(tesista_id, asesor_id);
+  // 5. Crear la relación en la base de datos
+  const nuevaRelacionData = await relacionRepo.crearRelacion(tesista_id, asesor_id);
 
-  return nuevaRelacion;
+  // 6. Retornar una entidad Relacion (opcional, si prefieres devolver una clase y no solo un JSON)
+  return new Relacion(nuevaRelacionData.id, tesista_id, asesor_id);
 }
 
 module.exports = crearRelacion;

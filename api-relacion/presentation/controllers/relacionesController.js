@@ -1,7 +1,8 @@
 const crearRelacion = require('../../application/use-cases/crearRelacion');
 const SQLrelacionRepository = require('../../intrastructure/database/SQLrelacionRepository');
 const SQLusuarioRepository = require('../../intrastructure/database/SQLusuarioRepository');
-const obtenerRelaciones = require('../../application/use-cases/obtenRelaciones');
+const obtenerRelaciones = require('../../application/use-cases/obtenerRelaciones');
+const eliminarRelacion = require('../../application/use-cases/eliminarRelacion');
 
 const relacionRepo = new SQLrelacionRepository();
 const usuarioRepo = new SQLusuarioRepository();
@@ -20,6 +21,17 @@ exports.obtenerRelaciones = async (req, res) => {
     const relaciones = await obtenerRelaciones(relacionRepo);
     res.json(relaciones);
   } catch (err) {
+    console.error('[ERROR OBTENER RELACIONES]', err);
     res.status(500).json({ error: 'Error al obtener relaciones' });
+  }
+};
+
+exports.eliminarRelacion = async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const resultado = await eliminarRelacion(id, relacionRepo);
+    res.json(resultado);
+  } catch (err) {
+    res.status(404).json({ error: err.message });
   }
 };
