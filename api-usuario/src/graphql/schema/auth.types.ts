@@ -83,6 +83,7 @@ const typesEntitys = `
 const queryAndMutations = `
   type Query {
     getUser(id: Int!): User
+    getUserAuthenticated: AuthResponse
     getUsers(ids: [Int]!): [User]
   }
   type Mutation {

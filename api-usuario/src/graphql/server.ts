@@ -40,11 +40,11 @@ export class ServerGraphQL {
     this.app.use(express.json());
     this.app.use(express.urlencoded({extended:true}));
     this.app.use(cors({
-      origin: '*',
+      origin: 'http://localhost:5173', // http://localhost:5173/
       credentials: true
     }));
 
-    this.app.use(express.json());
+    // this.app.use(express.json());
 
     const httpServer = http.createServer(this.app);
     const authDatasource = new AuthDatasourceImpl();
@@ -73,11 +73,9 @@ export class ServerGraphQL {
       expressMiddleware(server,{
         context: async ({ req, res }: ExpressContextFunctionArgument): Promise<GraphQLContext>  => {
 
-          const token = req.cookies['accessToken'] || req.headers['authorization']?.split(' ')[1];
-
-          console.log(token)
-
           return {
+            req,
+            res,
             authRepository,
             generalRepository,
             orcidRepository

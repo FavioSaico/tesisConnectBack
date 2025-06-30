@@ -4,6 +4,14 @@ import { RegisterUserDto, LoginUserDto, CustomError } from '../../domain';
 import { LoginUser, RegisterUser, UserByIdUseCase } from '../../application/use-cases/auth';
 import { GraphQLContext } from '../types/context';
 import { UsersByIdsUseCase } from '../../application/use-cases/auth/users-by-ids.use-case';
+import { AuthMiddleware } from '../../presentation/middleware/auth.middleware';
+import { AuthResponseDto } from '../../domain/dtos/auth/auth-response.dto';
+
+interface UserToken {
+    token: string;
+    usuario: AuthResponseDto
+}
+
 
 export const QueryAuth = {
   getUser: async (_: any, args: { id: number }, ctx: GraphQLContext) => {
@@ -13,8 +21,30 @@ export const QueryAuth = {
       throw CustomError.badRequest('Usuario no encontrado');
     }
 
+    const validToken = await AuthMiddleware.validateJWT(ctx.req, ctx.res, ctx.authRepository);
+
+    if(!validToken) {
+      return ctx.res.status(401).json({
+          message: "Token inválido",
+          errors: []
+      });
+    }
+
     return await new UserByIdUseCase(ctx.authRepository)
           .execute(id)
+  },
+
+  getUserAuthenticated: async (_: any, args: any, ctx: GraphQLContext)=> {
+
+    const validToken = await AuthMiddleware.validateJWT(ctx.req, ctx.res, ctx.authRepository);
+
+    if(!validToken || typeof validToken === 'boolean') {
+      throw CustomError.unauthorized('Token inválido');
+    }
+    return {
+      token: '-',
+      usuario: validToken.user
+    }
   },
   getUsers: async (_: any, args: { ids: number[] }, ctx: GraphQLContext) => {
 
@@ -22,7 +52,16 @@ export const QueryAuth = {
     if (!Array.isArray(ids)) {
       throw CustomError.badRequest('ids debe ser un arreglo');
     }
-    
+
+    const validToken = await AuthMiddleware.validateJWT(ctx.req, ctx.res, ctx.authRepository);
+
+    if(!validToken) {
+      return ctx.res.status(401).json({
+          message: "Token inválido",
+          errors: []
+      });
+    }
+
     return await new UsersByIdsUseCase(ctx.authRepository)
             .execute(ids)
   },

@@ -31,7 +31,18 @@ export class AuthController {
         // caso de uso
         new RegisterUser(this.authRepostory)
             .execute(registerUserDto!)
-            .then(data => res.json(data))
+            .then(data => {
+                res.cookie('accessToken', data.token, {
+                    httpOnly: true,
+                    secure: true, // ✅ solo en HTTPS en prod
+                    sameSite: 'lax', // o 'strict'
+                    maxAge: 1000 * 60 * 60 * 24
+                });
+                res.json({
+                    usuario: data.usuario,
+                    token: '-'
+                })
+            })
             .catch(error => this.handleError(error, res));
     }
 
@@ -45,13 +56,13 @@ export class AuthController {
             .then(data => {
                 res.cookie('accessToken', data.token, {
                     httpOnly: true,
-                    secure: false, // ✅ solo en HTTPS en prod
+                    secure: true, // ✅ solo en HTTPS en prod
                     sameSite: 'lax', // o 'strict'
-                    maxAge: 15 * 60 * 1000
+                    maxAge: 1000 * 60 * 60 * 24
                 });
                 res.json({
                     usuario: data.usuario,
-                    token: ''
+                    token: '-'
                 })
             })
             .catch(error => this.handleError(error, res));

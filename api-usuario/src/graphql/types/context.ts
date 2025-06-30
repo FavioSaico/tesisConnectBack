@@ -6,6 +6,6 @@ export interface GraphQLContext {
   authRepository: AuthRepository;
   generalRepository: GeneralRepositoryImpl;
   orcidRepository: OrcidRepository;
-  // req: Request;
-  // res: Response;
+  req: Request;
+  res: Response;
 }

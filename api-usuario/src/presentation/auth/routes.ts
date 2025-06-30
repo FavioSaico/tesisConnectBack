@@ -28,6 +28,18 @@ export class AuthRoutes{
 
             router.post('/informacion/', controller.usuariosPorIds);
 
+            router.post('/logout', (req, res) => {
+                res.cookie('accessToken', '', {
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: 'strict',
+                    expires: new Date(0),
+                    path: '/'
+                });
+
+                res.send({ success: true });
+            });   
+
 
         } catch (error) {
             console.log(error)
