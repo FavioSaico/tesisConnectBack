@@ -23,7 +23,7 @@ def entidad_a_modelo(entidad: Comentario) -> ComentarioModel:
         contenido=entidad.contenido,
         idUsuario=entidad.idUsuario,
         idPublicacion=entidad.idPublicacion,
-        idComentarioPadre=ObjectId(entidad.idComentarioPadre),
+        idComentarioPadre=ObjectId(entidad.idComentarioPadre) if entidad.idComentarioPadre is not None else None,
         fechaCreacion=entidad.fechaCreacion,
         visible=entidad.visible
     )

@@ -14,4 +14,4 @@ class MostrarComentarioDTO(BaseModel):
     contenido: str = Field(..., min_length=1, max_length=200)
     #idComentarioPadre: Optional[str] = None
     fechaCreacion: datetime
-    respuestas: List["MostrarComentarioDTO"] = [] # Recursivo
+    respuestas: List["MostrarComentarioDTO"] = []
