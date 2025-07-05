@@ -15,6 +15,9 @@ import express, { Router, Request, Response } from 'express';
 import cors from "cors";
 import cookieParser from 'cookie-parser';
 import http from 'http';
+import { metrics, trace, SpanStatusCode } from "@opentelemetry/api";
+import { startOTel } from '../otel';
+
 
 interface Options{
   port?: number;
@@ -40,7 +43,7 @@ export class ServerGraphQL {
     this.app.use(express.json());
     this.app.use(express.urlencoded({extended:true}));
     this.app.use(cors({
-      origin: 'http://localhost:5173', // http://localhost:5173/
+      origin: ['http://localhost:5173', 'https://tesis-connect.netlify.app'], // http://localhost:5173/
       credentials: true
     }));
 
@@ -66,12 +69,56 @@ export class ServerGraphQL {
     this.app.use(this.routes)
     
     await server.start();
+    startOTel()
 
+    const tracer = trace.getTracer("api-usuario");
+    const meter = metrics.getMeter("api-usuario");
+    const fibonacciInvocations = meter.createCounter("especialidad.invocations", {
+      description: "Número de invocaciones de especialidades",
+    });
+
+    function fibonacci(n: number) {
+      return tracer.startActiveSpan("especialidad", (span) => {
+        span.setAttribute("especialidad.n", n);
+
+        try {
+
+          if (n < 1 || n > 90 || isNaN(n)) {
+            throw new RangeError("n must be between 1 and 90");
+          }
+
+          var result = 1;
+          if (n > 2) {
+              var a = 0;
+              var b = 1;
+
+              for (var i = 1; i < n; i++) {
+                  result = a + b;
+                  a = b;
+                  b = result;
+              }
+          }
+
+          span.setAttribute("especialidad.result", result);
+          fibonacciInvocations.add(1, { "especialidad.valid.n": true });
+          return result;
+        } catch (ex) {
+          span.setStatus({ code: SpanStatusCode.ERROR, message: ex.message });
+          span.recordException(ex);
+          fibonacciInvocations.add(1, { "especialidad.valid.n": false });
+          throw ex;
+        } finally {
+          span.end();
+        }
+      });
+    };
 
     this.app.use(
       '/graphql',
       expressMiddleware(server,{
         context: async ({ req, res }: ExpressContextFunctionArgument): Promise<GraphQLContext>  => {
+
+          fibonacci(23);
 
           return {
             req,

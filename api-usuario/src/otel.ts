@@ -1,7 +1,7 @@
 // // src/otel.ts
 import { NodeSDK } from '@opentelemetry/sdk-node';
-import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-grpc';
-import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-grpc';
+import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-proto';
+import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-proto';
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
 import { Resource, resourceFromAttributes } from '@opentelemetry/resources';
 import { ATTR_SERVICE_NAME, SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
@@ -10,54 +10,66 @@ import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
 import { ExpressInstrumentation } from '@opentelemetry/instrumentation-express';
 import { GraphQLInstrumentation } from '@opentelemetry/instrumentation-graphql';
 import { ConsoleSpanExporter } from '@opentelemetry/sdk-trace-base';
+import { MongooseInstrumentation } from '@opentelemetry/instrumentation-mongoose';
+import { MySQL2Instrumentation } from '@opentelemetry/instrumentation-mysql2';
+import{ diag, DiagConsoleLogger, DiagLogLevel } from '@opentelemetry/api';
+diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.DEBUG);
 
-// const traceExporter = new OTLPTraceExporter({
-//   url: 'grpc://otlp.nr-data.net:4317',
-//   headers: {
-//     'api-key': process.env.NEW_RELIC_LICENSE_KEY!,
-//     'Content-Type': 'application/grpc'
-//   },
-// });
+const traceExporter = new OTLPTraceExporter({
+  url: 'https://otlp.nr-data.net/v1/traces', //'grpc://otlp.nr-data.net:4317'
+  headers: {
+    'api-key': process.env.NEW_RELIC_LICENSE_KEY!,
+    'Content-Type': 'application/json'
+    //'Content-Type': 'application/grpc'
+  },
+});
 
-// const metricExporter = new OTLPMetricExporter({
-//   // url: 'grpc://otlp.nr-data.net:4317',
-//   url: 'https://otlp.nr-data.net:4318/v1/metrics',
-//   headers: {
-//     'api-key': process.env.NEW_RELIC_LICENSE_KEY!,
-//     'Content-Type': 'application/json'
-//   },
-// });
+const metricExporter = new OTLPMetricExporter({
+  // url: 'grpc://otlp.nr-data.net:4317',
+  url: 'https://otlp.nr-data.net:4318/v1/metrics',
+  headers: {
+    'api-key': process.env.NEW_RELIC_LICENSE_KEY!,
+    'Content-Type': 'application/json'
+  },
+});
 
-// const sdk = new NodeSDK({
-//   resource: resourceFromAttributes({
-//     [ SemanticResourceAttributes.SERVICE_NAME]: 'unknown_service:C:\\Program Files\\nodejs\\node.exe',
-//   }),
-//   metricReader: new PeriodicExportingMetricReader({
-//     exporter: metricExporter,
-//     // exporter: new ConsoleMetricExporter(),
-//     exportIntervalMillis: 1000,
-//   }),
-//   // traceExporter: new ConsoleSpanExporter(),
-//   traceExporter: traceExporter,
-//   instrumentations: [
-//     new HttpInstrumentation(),
-//     new ExpressInstrumentation(),
-//     new GraphQLInstrumentation({
-//       // allowAttributes: true,
-//       allowValues: true,
-//       depth: 2,
-//       mergeItems: true,
-//     }),
-//     getNodeAutoInstrumentations()
-//   ],
-// });
+export const startOTel = () => {
+  const sdk = new NodeSDK({
+    resource: resourceFromAttributes({
+      // [ SemanticResourceAttributes.SERVICE_NAME]: 'unknown_service:C:\\Program Files\\nodejs\\node.exe',
+      [ SemanticResourceAttributes.SERVICE_NAME]: 'api-usuario',
+    }),
+    // resource: resource,
+    metricReader: new PeriodicExportingMetricReader({
+      exporter: metricExporter,
+      // exporter: new ConsoleMetricExporter(),
+      exportIntervalMillis: 5000,
+    }),
+    // traceExporter: new ConsoleSpanExporter(),
+    traceExporter: traceExporter,
+    instrumentations: [
+      // new HttpInstrumentation(),
+      // new ExpressInstrumentation(),
+      getNodeAutoInstrumentations(),
+      new GraphQLInstrumentation({
+        allowValues: true,
+        depth: 2,
+        // mergeItems: true,
+      }),
+      new MongooseInstrumentation(),
+      new MySQL2Instrumentation()
+    ],
+  });
 
-// try {
-//   sdk.start();
-//   console.log('OpenTelemetry iniciado');
-// } catch (err) {
-//   console.error('Error al iniciar OpenTelemetry:', err);
-// }
+  try {
+    sdk.start();
+    console.log('OpenTelemetry iniciado');
+  } catch (err) {
+    console.error('Error al iniciar OpenTelemetry:', err);
+  }
+}
+
+
 
 // import { metrics } from '@opentelemetry/api';
 // export const meter = metrics.getMeter('unknown_service:C:\\Program Files\\nodejs\\node.exe');
@@ -93,31 +105,32 @@ import { ConsoleSpanExporter } from '@opentelemetry/sdk-trace-base';
 // import { resourceFromAttributes } from '@opentelemetry/resources';
 // import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
 
-const exporter = new OTLPMetricExporter({
-  url: 'https://otlp.nr-data.net:4318/v1/metrics',
-  // url: 'http://localhost:4000/metrics',
-  headers: {
-    'api-key': process.env.NEW_RELIC_LICENSE_KEY!,
-  },
-});
+// const exporter = new OTLPMetricExporter({
+//   url: 'https://otlp.nr-data.net:4318/v1/metrics',
+//   // url: 'http://localhost:4000/metrics',
+//   headers: {
+//     'api-key': process.env.NEW_RELIC_LICENSE_KEY!,
+//   },
+// });
 
-const meterProvider = new MeterProvider({
-  resource: resourceFromAttributes({
-    [SemanticResourceAttributes.SERVICE_NAME]: 'mi-aplicacion-nodejs',
-  }),
-  readers: [
-    new PeriodicExportingMetricReader({
-      exporter: exporter,
-      exportIntervalMillis: 5000,
-    })
-  ],
-});
+// const meterProvider = new MeterProvider({
+//   resource: resourceFromAttributes({
+//     [SemanticResourceAttributes.SERVICE_NAME]: 'api-rest-tesis-2',
+//     [SemanticResourceAttributes.PROCESS_RUNTIME_DESCRIPTION]: 'Holamundo',
+//   }),
+//   readers: [
+//     new PeriodicExportingMetricReader({
+//       exporter: exporter,
+//       exportIntervalMillis: 5000,
+//     })
+//   ],
+// });
 
-const meter2 = meterProvider.getMeter('mi-aplicacion-nodejs');
+// const meter2 = meterProvider.getMeter('api-rest-tesis-2');
 
-const contador = meter2.createCounter('graphql_query_count_custom');
+// const contador = meter2.createCounter('graphql_query_count_custom');
 
-setInterval(() => {
-  contador.add(1, { endpoint: '/graphql' });
-  console.log('Incrementé el contador 🚀');
-}, 1000);
+// setInterval(() => {
+//   contador.add(1, { endpoint: '/graphql' });
+//   console.log('Incrementé el contador 🚀');
+// }, 1000);
