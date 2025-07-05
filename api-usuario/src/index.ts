@@ -4,6 +4,8 @@ import { AppRoutes } from "./presentation/routes";
 import { initDatabase } from "./infrastructure/database/mysql";
 import { envs } from "./config";
 import { ServerGraphQL } from "./graphql/server";
+// import './otel';
+// import newrelic from 'newrelic';
 
 async function main() {
 
@@ -20,6 +22,7 @@ async function main() {
             routes: AppRoutes.routes,
         }).start();
     }
+    // newrelic.addCustomSpanAttribute({test: 'value', test2: 'value2'})
 
     // new Server({
     //     port: 4000,

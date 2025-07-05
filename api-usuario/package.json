@@ -17,6 +17,15 @@
       "@apollo/server": "^4.12.2",
       "@as-integrations/express5": "^1.1.0",
       "@google-cloud/pubsub": "^5.0.0",
+      "@opentelemetry/api": "^1.9.0",
+      "@opentelemetry/auto-instrumentations-node": "^0.60.1",
+      "@opentelemetry/exporter-metrics-otlp-grpc": "^0.202.0",
+      "@opentelemetry/exporter-trace-otlp-grpc": "^0.202.0",
+      "@opentelemetry/instrumentation-graphql": "^0.50.0",
+      "@opentelemetry/resources": "^2.0.1",
+      "@opentelemetry/sdk-node": "^0.202.0",
+      "@opentelemetry/semantic-conventions": "^1.34.0",
+      "@types/newrelic": "^9.14.8",
       "apollo-server": "^3.13.0",
       "axios": "^1.9.0",
       "bcryptjs": "^3.0.2",
@@ -29,6 +38,7 @@
       "graphql": "^16.11.0",
       "jsonwebtoken": "^9.0.2",
       "mysql2": "^3.14.0",
+      "newrelic": "^12.23.0",
       "reflect-metadata": "^0.2.2",
       "rimraf": "^6.0.1",
       "ts-node-dev": "^2.0.0",
@@ -38,6 +48,8 @@
       "start": "ts-node src/index.ts",
       "dev": "tsnd --respawn --clear --env-file .env src/index.ts",
       "typeorm": "typeorm-ts-node-commonjs",
+      "start:prod": "node -r newrelic -r ./build/otel.js --env-file .env build/index",
+      "start:qa": "node -r ./build/otel.js -r newrelic --env-file .env build/index",
       "build": "rimraf ./dist && tsc"
    }
 }

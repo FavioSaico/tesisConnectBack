@@ -2,10 +2,16 @@ import { ObtenerCarreras } from "../../application/use-cases/general/ObtenerCarr
 import { ObtenerEspecialidades } from "../../application/use-cases/general/ObtenerEspecialides.use-case";
 import { ObtenerGradosAcademicos } from "../../application/use-cases/general/ObtenerGradosAcademicos.use-case";
 import { ObtenerUniversidades } from "../../application/use-cases/general/ObtenerUniversidades.use-case";
+// import { graphqlQueryCounter, graphqlQueryDuration } from "../../otel";
 import { GraphQLContext } from "../types/context"
 
 export const QueryGeneral = {
   getEspecialidades: async (_: any, args: any, ctx: GraphQLContext) => {
+
+    // const start = performance.now();
+    // // Tu lógica
+    // graphqlQueryCounter.add(1, { field: 'usuarios' });
+    // graphqlQueryDuration.record(performance.now() - start, { field: 'usuarios' });
 
     return await new ObtenerEspecialidades(ctx.generalRepository)
             .execute();
