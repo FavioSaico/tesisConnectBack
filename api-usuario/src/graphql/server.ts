@@ -2,7 +2,6 @@
 import { ApolloServer } from '@apollo/server';
 import { ExpressContextFunctionArgument, expressMiddleware } from '@as-integrations/express5';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
-// import { expressMiddleware } from 'apollo-server/express4';
 import { resolvers } from './resolver';
 import { typeDefs } from './typeDefs';
 import { AuthDatasourceImpl, AuthRepositoryImpl } from '../infrastructure';
@@ -15,8 +14,9 @@ import express, { Router, Request, Response } from 'express';
 import cors from "cors";
 import cookieParser from 'cookie-parser';
 import http from 'http';
-import { metrics, trace, SpanStatusCode } from "@opentelemetry/api";
+import { metrics, trace } from "@opentelemetry/api";
 import { startOTel } from '../otel';
+import { DocumentNode, OperationDefinitionNode, parse } from 'graphql';
 
 
 interface Options{
@@ -73,52 +73,61 @@ export class ServerGraphQL {
 
     const tracer = trace.getTracer("api-usuario");
     const meter = metrics.getMeter("api-usuario");
-    const fibonacciInvocations = meter.createCounter("especialidad.invocations", {
-      description: "Número de invocaciones de especialidades",
+
+    const rssGauge = meter.createObservableGauge('process.memory.heap.rss', {
+      description: 'Resident Set Size (RSS) Memory in MB',
     });
 
-    function fibonacci(n: number) {
-      return tracer.startActiveSpan("especialidad", (span) => {
-        span.setAttribute("especialidad.n", n);
+    const heapUsedGauge = meter.createObservableGauge('process.memory.heap.used', {
+      description: 'Resident Set Size (RSS) Memory in MB',
+    });
 
+    rssGauge.addCallback((observableResult) => {
+      const mem = process.memoryUsage();
+      observableResult.observe(mem.rss / 1024 / 1024);
+    });
+
+    heapUsedGauge.addCallback((observableResult) => {
+      const mem = process.memoryUsage();
+      observableResult.observe(mem.heapUsed / 1024 / 1024);
+    });
+
+
+    this.app.use('/graphql', async (req, res, next) => {
+      if (req.method === 'POST') {
+        const { query, operationName } = req.body;
+
+        let operationType = 'unknown';
         try {
-
-          if (n < 1 || n > 90 || isNaN(n)) {
-            throw new RangeError("n must be between 1 and 90");
+          const doc: DocumentNode = parse(query);
+          for (const def of doc.definitions) {
+            if (def.kind === 'OperationDefinition') {
+              operationType = (def as OperationDefinitionNode).operation;
+              break;
+            }
           }
-
-          var result = 1;
-          if (n > 2) {
-              var a = 0;
-              var b = 1;
-
-              for (var i = 1; i < n; i++) {
-                  result = a + b;
-                  a = b;
-                  b = result;
-              }
-          }
-
-          span.setAttribute("especialidad.result", result);
-          fibonacciInvocations.add(1, { "especialidad.valid.n": true });
-          return result;
-        } catch (ex) {
-          span.setStatus({ code: SpanStatusCode.ERROR, message: ex.message });
-          span.recordException(ex);
-          fibonacciInvocations.add(1, { "especialidad.valid.n": false });
-          throw ex;
-        } finally {
-          span.end();
+        } catch (err) {
+          console.error('Error parsing GraphQL query:', err);
         }
-      });
-    };
+
+        const span = tracer.startSpan('graphql.request', {
+          attributes: {
+            'graphql.operation.name': operationName || 'Anonymous',
+            'graphql.operation.type': operationType
+          }
+        });
+
+        res.on('finish', () => {
+          span.end();
+        });
+      }
+      next();
+    });
 
     this.app.use(
       '/graphql',
       expressMiddleware(server,{
         context: async ({ req, res }: ExpressContextFunctionArgument): Promise<GraphQLContext>  => {
-
-          fibonacci(23);
 
           return {
             req,
