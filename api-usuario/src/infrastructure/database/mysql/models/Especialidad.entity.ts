@@ -17,6 +17,7 @@ export class Especialidad extends DomainEspecialidad {
     nullable: false
   })
   nombre: string;
+  
   @OneToMany(() => EspecialidadUsuario, (especialidadUsuario) => especialidadUsuario.especialidad)
   especialidades_usuario: EspecialidadUsuario[];
 }

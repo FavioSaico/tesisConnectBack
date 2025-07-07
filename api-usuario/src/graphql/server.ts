@@ -17,6 +17,8 @@ import http from 'http';
 import { metrics, trace } from "@opentelemetry/api";
 import { startOTel } from '../otel';
 import { DocumentNode, OperationDefinitionNode, parse } from 'graphql';
+import { SearchDatasourceImpl } from '../infrastructure/datasources/searcher.datasource.impl';
+import { SearchRepositoryImpl } from '../infrastructure/repositories/searcher.repository.impl';
 
 
 interface Options{
@@ -58,6 +60,9 @@ export class ServerGraphQL {
 
     const orcidDatasource = new OrcidDatasourceImpl();
     const orcidRepository = new OrcidRepositoryImpl(orcidDatasource);
+
+    const searchDatasource = new SearchDatasourceImpl();
+    const searchRepository = new SearchRepositoryImpl(searchDatasource);
 
     const server = new ApolloServer<GraphQLContext>({
       typeDefs,
@@ -133,6 +138,7 @@ export class ServerGraphQL {
             req,
             res,
             authRepository,
+            searchRepository,
             generalRepository,
             orcidRepository
           };

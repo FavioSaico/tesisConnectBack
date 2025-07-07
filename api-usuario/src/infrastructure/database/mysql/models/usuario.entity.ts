@@ -139,7 +139,7 @@ export class Usuario extends DomainUsuario {
   @JoinColumn({ name: 'id_carrera_profesional' }) 
   carrera_profesional: CarreraProfesional;
 
-    // Relación ManyToOne con Universidad
+  // Relación ManyToOne con Universidad
   @ManyToOne(
     () => Universidad,
     (Universidad) => Universidad.id, // Referencia a la propiedad 'usuarios' en Universidad
