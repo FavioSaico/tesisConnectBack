@@ -50,7 +50,6 @@ export class ServerGraphQL {
     }));
 
     // this.app.use(express.json());
-
     const httpServer = http.createServer(this.app);
     const authDatasource = new AuthDatasourceImpl();
     const authRepository = new AuthRepositoryImpl(authDatasource);
@@ -70,8 +69,16 @@ export class ServerGraphQL {
       plugins: [ApolloServerPluginDrainHttpServer({ httpServer })]
     });
 
+    // this.app.options('*', cors());
     
+
     this.app.use(this.routes)
+    this.app.options('/api/notification/sendNotication',(req, res)=>{
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE");
+        res.header("Access-Control-Allow-Headers", "Content-Type");
+        res.status(204).send('Options');
+    });
     
     await server.start();
     startOTel()
@@ -128,7 +135,7 @@ export class ServerGraphQL {
       }
       next();
     });
-
+    
     this.app.use(
       '/graphql',
       expressMiddleware(server,{
