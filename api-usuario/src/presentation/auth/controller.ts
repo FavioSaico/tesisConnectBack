@@ -35,7 +35,7 @@ export class AuthController {
                 res.cookie('accessToken', data.token, {
                     httpOnly: true,
                     secure: true, // ✅ solo en HTTPS en prod
-                    sameSite: 'lax', // o 'strict'
+                    sameSite: 'none', // o 'strict'
                     maxAge: 1000 * 60 * 60 * 24
                 });
                 res.json({
@@ -57,7 +57,7 @@ export class AuthController {
                 res.cookie('accessToken', data.token, {
                     httpOnly: true,
                     secure: true, // ✅ solo en HTTPS en prod
-                    sameSite: 'lax', // o 'strict'
+                    sameSite: 'none', // o 'strict'
                     maxAge: 1000 * 60 * 60 * 24
                 });
                 res.json({
