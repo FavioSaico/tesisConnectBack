@@ -46,4 +46,5 @@ public class Usuario {
     private LocalDateTime fechaActualizacion;
 
     private String lineaInvestigacion;
+    private Integer idUniversidad;
 }
